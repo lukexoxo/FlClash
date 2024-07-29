@@ -12,6 +12,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:proxy/proxy_platform_interface.dart';
 
+// 在不同平台上设置代理，包括 HTTP、HTTPS 和 SOCKS
 class Proxy extends ProxyPlatform {
   static Proxy? _instance;
   late MethodChannel methodChannel;

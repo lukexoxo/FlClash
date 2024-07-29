@@ -43,6 +43,7 @@ Future<void> main() async {
   );
 }
 
+// 确保不会被树摇优化（编译优化，移除未使用的代码）去除
 @pragma('vm:entry-point')
 Future<void> vpnService() async {
   WidgetsFlutterBinding.ensureInitialized();
