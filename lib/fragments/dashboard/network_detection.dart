@@ -1,4 +1,3 @@
-import 'package:country_flags/country_flags.dart';
 import 'package:dio/dio.dart';
 import 'package:fl_clash/common/common.dart';
 import 'package:fl_clash/models/models.dart';
@@ -15,51 +14,53 @@ class NetworkDetection extends StatefulWidget {
 }
 
 class _NetworkDetectionState extends State<NetworkDetection> {
-  final ipInfoNotifier = ValueNotifier<IpInfo?>(null);
-  final timeoutNotifier = ValueNotifier<bool>(false);
+  final networkDetectionState = ValueNotifier<NetworkDetectionState>(
+    const NetworkDetectionState(
+      isTesting: true,
+      ipInfo: null,
+    ),
+  );
   bool? _preIsStart;
-  CancelToken? cancelToken;
   Function? _checkIpDebounce;
+  CancelToken? cancelToken;
 
-  _checkIp(
-    bool isInit,
-    bool isStart,
-  ) async {
+  _checkIp() async {
+    final appState = globalState.appController.appState;
+    final isInit = appState.isInit;
     if (!isInit) return;
-    timeoutNotifier.value = false;
+    final isStart = appState.isStart;
     if (_preIsStart == false && _preIsStart == isStart) return;
+    networkDetectionState.value = networkDetectionState.value.copyWith(
+      isTesting: true,
+      ipInfo: null,
+    );
+    _preIsStart = isStart;
     if (cancelToken != null) {
       cancelToken!.cancel();
       cancelToken = null;
     }
-    ipInfoNotifier.value = null;
-    final ipInfo = await request.checkIp(cancelToken);
-    if (ipInfo == null) {
-      timeoutNotifier.value = true;
-      return;
-    } else {
-      timeoutNotifier.value = false;
+    cancelToken = CancelToken();
+    try {
+      final ipInfo = await request.checkIp(cancelToken: cancelToken);
+      networkDetectionState.value = networkDetectionState.value.copyWith(
+        isTesting: false,
+        ipInfo: ipInfo,
+      );
+    } catch (_) {
+
     }
-    _preIsStart = isStart;
-    ipInfoNotifier.value = ipInfo;
   }
 
   _checkIpContainer(Widget child) {
-    _checkIpDebounce = debounce(_checkIp);
-    return Selector2<AppState, Config, CheckIpSelectorState>(
-      selector: (_, appState, config) {
-        return CheckIpSelectorState(
-          isInit: appState.isInit,
-          selectedMap: appState.selectedMap,
-          isStart: appState.isStart,
-          checkIpNum: appState.checkIpNum,
-        );
+    return Selector<AppState, num>(
+      selector: (_, appState) {
+        return appState.checkIpNum;
       },
-      builder: (_, state, __) {
+      builder: (_, checkIpNum, child) {
         if (_checkIpDebounce != null) {
-          _checkIpDebounce!([state.isInit, state.isStart]);
+          _checkIpDebounce!();
         }
-        return child;
+        return child!;
       },
       child: child,
     );
@@ -68,16 +69,28 @@ class _NetworkDetectionState extends State<NetworkDetection> {
   @override
   void dispose() {
     super.dispose();
-    ipInfoNotifier.dispose();
-    timeoutNotifier.dispose();
+    networkDetectionState.dispose();
+  }
+
+  String countryCodeToEmoji(String countryCode) {
+    final String code = countryCode.toUpperCase();
+    if (code.length != 2) {
+      return countryCode;
+    }
+    final int firstLetter = code.codeUnitAt(0) - 0x41 + 0x1F1E6;
+    final int secondLetter = code.codeUnitAt(1) - 0x41 + 0x1F1E6;
+    return String.fromCharCode(firstLetter) + String.fromCharCode(secondLetter);
   }
 
   @override
   Widget build(BuildContext context) {
+    _checkIpDebounce ??= debounce(_checkIp);
     return _checkIpContainer(
-      ValueListenableBuilder<IpInfo?>(
-        valueListenable: ipInfoNotifier,
-        builder: (_, ipInfo, __) {
+      ValueListenableBuilder<NetworkDetectionState>(
+        valueListenable: networkDetectionState,
+        builder: (_, state, __) {
+          final ipInfo = state.ipInfo;
+          final isTesting = state.isTesting;
           return CommonCard(
             onPressed: () {},
             child: Column(
@@ -98,37 +111,38 @@ class _NetworkDetectionState extends State<NetworkDetection> {
                         Flexible(
                           flex: 1,
                           child: FadeBox(
-                            child: ipInfo != null
-                                ? CountryFlag.fromCountryCode(
-                                    ipInfo.countryCode,
-                                    width: 24,
-                                    height: 24,
+                            child: isTesting
+                                ? Text(
+                                    appLocalizations.checking,
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                    style:
+                                        Theme.of(context).textTheme.titleMedium,
                                   )
-                                : ValueListenableBuilder(
-                                    valueListenable: timeoutNotifier,
-                                    builder: (_, timeout, __) {
-                                      if (timeout) {
-                                        return Text(
-                                          appLocalizations.checkError,
+                                : ipInfo != null
+                                    ? Container(
+                                        alignment: Alignment.centerLeft,
+                                        height: globalState.appController
+                                            .measure.titleMediumHeight,
+                                        child: Text(
+                                          countryCodeToEmoji(
+                                              ipInfo.countryCode),
                                           style: Theme.of(context)
                                               .textTheme
-                                              .titleMedium,
-                                          maxLines: 1,
-                                          overflow: TextOverflow.ellipsis,
-                                        );
-                                      }
-                                      return TooltipText(
-                                        text: Text(
-                                          appLocalizations.checking,
-                                          maxLines: 1,
-                                          overflow: TextOverflow.ellipsis,
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .titleMedium,
+                                              .titleLarge
+                                              ?.copyWith(
+                                                fontFamily: "Twemoji",
+                                              ),
                                         ),
-                                      );
-                                    },
-                                  ),
+                                      )
+                                    : Text(
+                                        appLocalizations.checkError,
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .titleMedium,
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
                           ),
                         ),
                       ],
@@ -161,28 +175,24 @@ class _NetworkDetectionState extends State<NetworkDetection> {
                               ),
                             ],
                           )
-                        : ValueListenableBuilder(
-                            valueListenable: timeoutNotifier,
-                            builder: (_, timeout, __) {
-                              if (timeout) {
-                                return Text(
-                                  "timeout",
-                                  style: context.textTheme.titleLarge
-                                      ?.copyWith(color: Colors.red)
-                                      .toSoftBold
-                                      .toMinus,
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
-                                );
-                              }
-                              return Container(
-                                padding: const EdgeInsets.all(2),
-                                child: const AspectRatio(
-                                  aspectRatio: 1,
-                                  child: CircularProgressIndicator(),
-                                ),
-                              );
-                            },
+                        : FadeBox(
+                            child: isTesting == false && ipInfo == null
+                                ? Text(
+                                    "timeout",
+                                    style: context.textTheme.titleLarge
+                                        ?.copyWith(color: Colors.red)
+                                        .toSoftBold
+                                        .toMinus,
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                  )
+                                : Container(
+                                    padding: const EdgeInsets.all(2),
+                                    child: const AspectRatio(
+                                      aspectRatio: 1,
+                                      child: CircularProgressIndicator(),
+                                    ),
+                                  ),
                           ),
                   ),
                 )

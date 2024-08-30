@@ -3,7 +3,8 @@ import 'dart:io';
 
 import 'package:animations/animations.dart';
 import 'package:fl_clash/clash/clash.dart';
-import 'package:fl_clash/plugins/proxy.dart';
+import 'package:fl_clash/plugins/service.dart';
+import 'package:fl_clash/plugins/vpn.dart';
 import 'package:fl_clash/widgets/scaffold.dart';
 import 'package:flutter/material.dart';
 import 'package:package_info_plus/package_info_plus.dart';
@@ -18,13 +19,17 @@ class GlobalState {
   Timer? timer;
   Timer? groupsUpdateTimer;
   var isVpnService = false;
+  var autoRun = false;
   late PackageInfo packageInfo;
   Function? updateCurrentDelayDebounce;
   PageController? pageController;
+  DateTime? startTime;
   final navigatorKey = GlobalKey<NavigatorState>();
   late AppController appController;
   GlobalKey<CommonScaffoldState> homeScaffoldKey = GlobalKey();
   List<Function> updateFunctionLists = [];
+
+  bool get isStart => startTime != null && startTime!.isBeforeNow;
 
   startListenUpdate() {
     if (timer != null && timer!.isActive == true) return;
@@ -45,15 +50,14 @@ class GlobalState {
     required Config config,
     bool isPatch = true,
   }) async {
-    final profilePath = await appPath.getProfilePath(config.currentProfileId);
     await config.currentProfile?.checkAndUpdate();
     final res = await clashCore.updateConfig(
       UpdateConfigParams(
-        profilePath: profilePath,
+        profileId: config.currentProfileId ?? "",
         config: clashConfig,
         params: ConfigExtendedParams(
           isPatch: isPatch,
-          isCompatible: config.isCompatible,
+          isCompatible: true,
           selectedMap: config.currentSelectedMap,
           testUrl: config.testUrl,
         ),
@@ -66,40 +70,32 @@ class GlobalState {
     appState.versionInfo = clashCore.getVersionInfo();
   }
 
-  Future<void> startSystemProxy({
-    required AppState appState,
+  handleStart({
     required Config config,
     required ClashConfig clashConfig,
   }) async {
-    if (!globalState.isVpnService && Platform.isAndroid) {
-      clashCore.setProps(
-        Props(
-          accessControl: config.isAccessControl ? config.accessControl : null,
-          allowBypass: config.allowBypass,
-          systemProxy: config.systemProxy,
-        ),
-      );
-      await proxy?.initService();
-    } else {
-      await proxyManager.startProxy(
-        port: clashConfig.mixedPort,
-      );
-    }
-    startListenUpdate();
-    if (Platform.isAndroid) {
+    clashCore.start();
+    if (globalState.isVpnService) {
+      await vpn?.startVpn(clashConfig.mixedPort);
+      startListenUpdate();
       return;
     }
-    applyProfile(
-      appState: appState,
-      config: config,
-      clashConfig: clashConfig,
-    ).then((_) {
-      globalState.appController.addCheckIpNumDebounce();
-    });
+    startTime ??= DateTime.now();
+    await service?.init();
+    startListenUpdate();
   }
 
-  Future<void> stopSystemProxy() async {
-    await proxyManager.stopProxy();
+  updateStartTime() {
+    startTime = clashCore.getRunTime();
+  }
+
+  handleStop() async {
+    clashCore.stop();
+    if (Platform.isAndroid) {
+      clashCore.stopTun();
+    }
+    await service?.destroy();
+    startTime = null;
     stopListenUpdate();
   }
 
@@ -113,8 +109,12 @@ class GlobalState {
       config: config,
       isPatch: false,
     );
-    clashCore.setProfileName(config.currentProfile?.label ?? '');
     await updateGroups(appState);
+    await updateProviders(appState);
+  }
+
+  updateProviders(AppState appState) async {
+    appState.providers = await clashCore.getExternalProviders();
   }
 
   init({
@@ -124,18 +124,21 @@ class GlobalState {
   }) async {
     appState.isInit = clashCore.isInit;
     if (!appState.isInit) {
-      if (Platform.isAndroid) {
-        clashCore.setProps(
-          Props(
-            accessControl: config.isAccessControl ? config.accessControl : null,
-            allowBypass: config.allowBypass,
-            systemProxy: config.systemProxy,
-          ),
-        );
-      }
       appState.isInit = await clashService.init(
         config: config,
         clashConfig: clashConfig,
+      );
+      clashCore.setState(
+        CoreState(
+          enable: config.vpnProps.enable,
+          accessControl: config.isAccessControl ? config.accessControl : null,
+          allowBypass: config.vpnProps.allowBypass,
+          systemProxy: config.vpnProps.systemProxy,
+          mixedPort: clashConfig.mixedPort,
+          onlyProxy: config.onlyProxy,
+          currentProfileName:
+              config.currentProfile?.label ?? config.currentProfileId ?? "",
+        ),
       );
     }
     updateCoreVersionInfo(appState);
@@ -160,11 +163,13 @@ class GlobalState {
               width: 300,
               constraints: const BoxConstraints(maxHeight: 200),
               child: SingleChildScrollView(
-                child: RichText(
-                  overflow: TextOverflow.visible,
-                  text: TextSpan(
+                child: SelectableText.rich(
+                  TextSpan(
                     style: Theme.of(context).textTheme.labelLarge,
                     children: [message],
+                  ),
+                  style: const TextStyle(
+                    overflow: TextOverflow.visible,
                   ),
                 ),
               ),
@@ -182,6 +187,22 @@ class GlobalState {
         },
       ),
     );
+  }
+
+  changeProxy({
+    required Config config,
+    required String groupName,
+    required String proxyName,
+  }) {
+    clashCore.changeProxy(
+      ChangeProxyParams(
+        groupName: groupName,
+        proxyName: proxyName,
+      ),
+    );
+    if (config.isCloseConnections) {
+      clashCore.closeConnections();
+    }
   }
 
   Future<T?> showCommonDialog<T>({
@@ -202,8 +223,8 @@ class GlobalState {
   }) {
     final traffic = clashCore.getTraffic();
     if (Platform.isAndroid && isVpnService == true) {
-      proxy?.startForeground(
-        title: clashCore.getProfileName(),
+      vpn?.startForeground(
+        title: clashCore.getState().currentProfileName,
         content: "$traffic",
       );
     } else {

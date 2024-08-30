@@ -430,10 +430,10 @@ class AppLocalizations {
     );
   }
 
-  /// `TUN mode`
+  /// `TUN`
   String get tun {
     return Intl.message(
-      'TUN mode',
+      'TUN',
       name: 'tun',
       desc: '',
       args: [],
@@ -715,6 +715,16 @@ class AppLocalizations {
     return Intl.message(
       'Minutes',
       name: 'minutes',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Seconds`
+  String get seconds {
+    return Intl.message(
+      'Seconds',
+      name: 'seconds',
       desc: '',
       args: [],
     );
@@ -1220,10 +1230,10 @@ class AppLocalizations {
     );
   }
 
-  /// `SystemProxy`
+  /// `System proxy`
   String get systemProxy {
     return Intl.message(
-      'SystemProxy',
+      'System proxy',
       name: 'systemProxy',
       desc: '',
       args: [],
@@ -1360,10 +1370,10 @@ class AppLocalizations {
     );
   }
 
-  /// `Sync data by WebDAV`
+  /// `Sync data via WebDAV or file`
   String get backupAndRecoveryDesc {
     return Intl.message(
-      'Sync data by WebDAV',
+      'Sync data via WebDAV or file',
       name: 'backupAndRecoveryDesc',
       desc: '',
       args: [],
@@ -1390,31 +1400,11 @@ class AppLocalizations {
     );
   }
 
-  /// `Backup local data to WebDAV`
-  String get backupDesc {
-    return Intl.message(
-      'Backup local data to WebDAV',
-      name: 'backupDesc',
-      desc: '',
-      args: [],
-    );
-  }
-
   /// `Recovery`
   String get recovery {
     return Intl.message(
       'Recovery',
       name: 'recovery',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Recovery data from WebDAV`
-  String get recoveryDesc {
-    return Intl.message(
-      'Recovery data from WebDAV',
-      name: 'recoveryDesc',
       desc: '',
       args: [],
     );
@@ -2200,11 +2190,311 @@ class AppLocalizations {
     );
   }
 
-  /// `Contributors`
-  String get contributors {
+  /// `Other contributors`
+  String get otherContributors {
     return Intl.message(
-      'Contributors',
-      name: 'contributors',
+      'Other contributors',
+      name: 'otherContributors',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Auto lose connections`
+  String get autoCloseConnections {
+    return Intl.message(
+      'Auto lose connections',
+      name: 'autoCloseConnections',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Auto close connections after change node`
+  String get autoCloseConnectionsDesc {
+    return Intl.message(
+      'Auto close connections after change node',
+      name: 'autoCloseConnectionsDesc',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Only statistics proxy`
+  String get onlyStatisticsProxy {
+    return Intl.message(
+      'Only statistics proxy',
+      name: 'onlyStatisticsProxy',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `When turned on, only statistics proxy traffic`
+  String get onlyStatisticsProxyDesc {
+    return Intl.message(
+      'When turned on, only statistics proxy traffic',
+      name: 'onlyStatisticsProxyDesc',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Sure you want to delete the current profile?`
+  String get deleteProfileTip {
+    return Intl.message(
+      'Sure you want to delete the current profile?',
+      name: 'deleteProfileTip',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Prue black mode`
+  String get prueBlackMode {
+    return Intl.message(
+      'Prue black mode',
+      name: 'prueBlackMode',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Tcp keep alive interval`
+  String get keepAliveIntervalDesc {
+    return Intl.message(
+      'Tcp keep alive interval',
+      name: 'keepAliveIntervalDesc',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// ` entries`
+  String get entries {
+    return Intl.message(
+      ' entries',
+      name: 'entries',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Local`
+  String get local {
+    return Intl.message(
+      'Local',
+      name: 'local',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Remote`
+  String get remote {
+    return Intl.message(
+      'Remote',
+      name: 'remote',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Backup local data to WebDAV`
+  String get remoteBackupDesc {
+    return Intl.message(
+      'Backup local data to WebDAV',
+      name: 'remoteBackupDesc',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Recovery data from WebDAV`
+  String get remoteRecoveryDesc {
+    return Intl.message(
+      'Recovery data from WebDAV',
+      name: 'remoteRecoveryDesc',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Backup local data to local`
+  String get localBackupDesc {
+    return Intl.message(
+      'Backup local data to local',
+      name: 'localBackupDesc',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Recovery data from file`
+  String get localRecoveryDesc {
+    return Intl.message(
+      'Recovery data from file',
+      name: 'localRecoveryDesc',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Mode`
+  String get mode {
+    return Intl.message(
+      'Mode',
+      name: 'mode',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Time`
+  String get time {
+    return Intl.message(
+      'Time',
+      name: 'time',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Source`
+  String get source {
+    return Intl.message(
+      'Source',
+      name: 'source',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `All apps`
+  String get allApps {
+    return Intl.message(
+      'All apps',
+      name: 'allApps',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Only third-party apps`
+  String get onlyOtherApps {
+    return Intl.message(
+      'Only third-party apps',
+      name: 'onlyOtherApps',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Action`
+  String get action {
+    return Intl.message(
+      'Action',
+      name: 'action',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Intelligent selection`
+  String get intelligentSelected {
+    return Intl.message(
+      'Intelligent selection',
+      name: 'intelligentSelected',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Clipboard import`
+  String get clipboardImport {
+    return Intl.message(
+      'Clipboard import',
+      name: 'clipboardImport',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Export clipboard`
+  String get clipboardExport {
+    return Intl.message(
+      'Export clipboard',
+      name: 'clipboardExport',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Layout`
+  String get layout {
+    return Intl.message(
+      'Layout',
+      name: 'layout',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Tight`
+  String get tight {
+    return Intl.message(
+      'Tight',
+      name: 'tight',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Standard`
+  String get standard {
+    return Intl.message(
+      'Standard',
+      name: 'standard',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Loose`
+  String get loose {
+    return Intl.message(
+      'Loose',
+      name: 'loose',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Profiles sort`
+  String get profilesSort {
+    return Intl.message(
+      'Profiles sort',
+      name: 'profilesSort',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Start`
+  String get start {
+    return Intl.message(
+      'Start',
+      name: 'start',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Stop`
+  String get stop {
+    return Intl.message(
+      'Stop',
+      name: 'stop',
       desc: '',
       args: [],
     );

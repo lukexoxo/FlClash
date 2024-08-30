@@ -19,7 +19,8 @@ class Window {
     await windowManager.ensureInitialized();
     WindowOptions windowOptions = WindowOptions(
       size: Size(props.width, props.height),
-      minimumSize: const Size(380, 600),
+      minimumSize: const Size(380, 500),
+      windowButtonVisibility: false,
       titleBarStyle: TitleBarStyle.hidden,
     );
     if (props.left != null || props.top != null) {
@@ -33,7 +34,7 @@ class Window {
     //   await windowManager.setTitleBarStyle(TitleBarStyle.hidden);
     // }
     await windowManager.waitUntilReadyToShow(windowOptions, () async {
-      await windowManager.setPreventClose(true);
+      // await windowManager.setPreventClose(true);
     });
   }
 

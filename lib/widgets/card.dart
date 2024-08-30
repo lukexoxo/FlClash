@@ -1,5 +1,6 @@
 import 'package:fl_clash/common/common.dart';
 import 'package:fl_clash/enum/enum.dart';
+import 'package:fl_clash/state.dart';
 import 'package:flutter/material.dart';
 
 import 'text.dart';
@@ -29,48 +30,46 @@ class InfoHeader extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(16),
       child: Row(
-        mainAxisSize: MainAxisSize.min,
+        mainAxisSize: MainAxisSize.max,
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              if (info.iconData != null) ...[
-                Icon(
-                  info.iconData,
-                  color: Theme
-                      .of(context)
-                      .colorScheme
-                      .primary,
-                ),
-                const SizedBox(
-                  width: 8,
-                ),
-              ],
-              Flexible(
-                child: TooltipText(
-                  text: Text(
-                    info.label,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: Theme
-                        .of(context)
-                        .textTheme
-                        .titleMedium,
-                  ),
-                ),
-              ),
-            ],
-          ),
-          Expanded(
+          Flexible(
             flex: 1,
             child: Row(
-              mainAxisSize: MainAxisSize.min,
-              mainAxisAlignment: MainAxisAlignment.end,
+              mainAxisSize: MainAxisSize.max,
               children: [
-                ...actions,
+                if (info.iconData != null) ...[
+                  Icon(
+                    info.iconData,
+                    color: Theme.of(context).colorScheme.primary,
+                  ),
+                  const SizedBox(
+                    width: 8,
+                  ),
+                ],
+                Flexible(
+                  flex: 1,
+                  child: TooltipText(
+                    text: Text(
+                      info.label,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: Theme.of(context).textTheme.titleMedium,
+                    ),
+                  ),
+                ),
               ],
             ),
+          ),
+          const SizedBox(
+            width: 8,
+          ),
+          Row(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              ...actions,
+            ],
           ),
         ],
       ),
@@ -86,6 +85,7 @@ class CommonCard extends StatelessWidget {
     this.onPressed,
     this.info,
     this.selectWidget,
+    this.radius = 12,
     required this.child,
   }) : isSelected = isSelected ?? false;
 
@@ -95,14 +95,13 @@ class CommonCard extends StatelessWidget {
   final Widget child;
   final Info? info;
   final CommonCardType type;
+  final double radius;
 
   BorderSide getBorderSide(BuildContext context, Set<WidgetState> states) {
     if (type == CommonCardType.filled) {
       return BorderSide.none;
     }
-    final colorScheme = Theme
-        .of(context)
-        .colorScheme;
+    final colorScheme = Theme.of(context).colorScheme;
     final hoverColor = isSelected
         ? colorScheme.primary.toLight()
         : colorScheme.primary.toLighter();
@@ -119,9 +118,7 @@ class CommonCard extends StatelessWidget {
   }
 
   Color? getBackgroundColor(BuildContext context, Set<WidgetState> states) {
-    final colorScheme = Theme
-        .of(context)
-        .colorScheme;
+    final colorScheme = Theme.of(context).colorScheme;
     switch (type) {
       case CommonCardType.plain:
         if (isSelected) {
@@ -130,8 +127,7 @@ class CommonCard extends StatelessWidget {
         if (states.isEmpty) {
           return colorScheme.secondaryContainer.toLittle();
         }
-        return Theme
-            .of(context)
+        return Theme.of(context)
             .outlinedButtonTheme
             .style
             ?.backgroundColor
@@ -155,52 +151,46 @@ class CommonCard extends StatelessWidget {
       childWidget = Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Flexible(
-            flex: 0,
-            child: InfoHeader(
-              info: info!,
-            ),
+          InfoHeader(
+            info: info!,
           ),
           Flexible(
+            flex: 1,
             child: child,
           ),
         ],
       );
     }
-
+    if (selectWidget != null && isSelected) {
+      final List<Widget> children = [];
+      children.add(childWidget);
+      children.add(
+        Positioned.fill(
+          child: selectWidget!,
+        ),
+      );
+      childWidget = Stack(
+        children: children,
+      );
+    }
     return OutlinedButton(
       clipBehavior: Clip.antiAlias,
       style: ButtonStyle(
         padding: const WidgetStatePropertyAll(EdgeInsets.zero),
         shape: WidgetStatePropertyAll(
           RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(radius),
           ),
         ),
         backgroundColor: WidgetStateProperty.resolveWith(
-              (states) => getBackgroundColor(context, states),
+          (states) => getBackgroundColor(context, states),
         ),
         side: WidgetStateProperty.resolveWith(
-              (states) => getBorderSide(context, states),
+          (states) => getBorderSide(context, states),
         ),
       ),
       onPressed: onPressed,
-      child: Builder(
-        builder: (_) {
-          List<Widget> children = [];
-          children.add(childWidget);
-          if (selectWidget != null && isSelected) {
-            children.add(
-              Positioned.fill(
-                child: selectWidget!,
-              ),
-            );
-          }
-          return Stack(
-            children: children,
-          );
-        },
-      ),
+      child: childWidget,
     );
   }
 }
@@ -211,10 +201,7 @@ class SelectIcon extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Material(
-      color: Theme
-          .of(context)
-          .colorScheme
-          .inversePrimary,
+      color: Theme.of(context).colorScheme.inversePrimary,
       shape: const CircleBorder(),
       child: Container(
         padding: const EdgeInsets.all(4),

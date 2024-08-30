@@ -1,9 +1,9 @@
 import 'dart:io';
 import 'dart:isolate';
+import 'dart:math';
 import 'dart:typed_data';
 
-import 'package:fl_clash/common/app_localizations.dart';
-import 'package:fl_clash/common/constant.dart';
+import 'package:fl_clash/common/common.dart';
 import 'package:fl_clash/enum/enum.dart';
 import 'package:flutter/material.dart';
 import 'package:zxing2/qrcode.dart';
@@ -83,7 +83,7 @@ class Other {
     if (charA == charB) {
       return sortByChar(a.substring(1), b.substring(1));
     } else {
-      return charA.compareTo(charB);
+      return charA.compareToLower(charB);
     }
   }
 
@@ -191,22 +191,21 @@ class Other {
     return ViewMode.desktop;
   }
 
-  int getColumns(ViewMode viewMode, int currentColumns) {
-    final targetColumnsArray = viewModeColumnsMap[viewMode]!;
-    if (targetColumnsArray.contains(currentColumns)) {
-      return currentColumns;
-    }
-    return targetColumnsArray.first;
+  int getProxiesColumns(double viewWidth, ProxiesLayout proxiesLayout) {
+    final columns = max((viewWidth / 300).ceil(), 2);
+    return switch (proxiesLayout) {
+      ProxiesLayout.tight => columns - 1,
+      ProxiesLayout.standard => columns,
+      ProxiesLayout.loose => columns + 1,
+    };
   }
 
-  String getColumnsTextForInt(int number){
-    return switch(number){
-      1 => appLocalizations.oneColumn,
-      2 => appLocalizations.twoColumns,
-      3 => appLocalizations.threeColumns,
-      4 => appLocalizations.fourColumns,
-      int() => throw UnimplementedError(),
-    };
+  int getProfilesColumns(double viewWidth) {
+    return max((viewWidth / 400).floor(), 1);
+  }
+
+  String getBackupFileName() {
+    return "${appName}_backup_${DateTime.now().show}.zip";
   }
 }
 

@@ -3,8 +3,8 @@ import 'dart:io';
 
 import 'package:fl_clash/clash/clash.dart';
 import 'package:fl_clash/plugins/app.dart';
-import 'package:fl_clash/plugins/proxy.dart';
 import 'package:fl_clash/plugins/tile.dart';
+import 'package:fl_clash/plugins/vpn.dart';
 import 'package:fl_clash/state.dart';
 import 'package:flutter/material.dart';
 import 'package:package_info_plus/package_info_plus.dart';
@@ -18,6 +18,7 @@ Future<void> main() async {
   clashCore.initMessage();
   globalState.packageInfo = await PackageInfo.fromPlatform();
   final config = await preferences.getConfig() ?? Config();
+  globalState.autoRun = config.autoRun;
   final clashConfig = await preferences.getClashConfig() ?? ClashConfig();
   await android?.init();
   await window?.init(config.windowProps);
@@ -48,6 +49,7 @@ Future<void> main() async {
 Future<void> vpnService() async {
   WidgetsFlutterBinding.ensureInitialized();
   globalState.isVpnService = true;
+  globalState.packageInfo = await PackageInfo.fromPlatform();
   final config = await preferences.getConfig() ?? Config();
   final clashConfig = await preferences.getClashConfig() ?? ClashConfig();
   final appState = AppState(
@@ -61,14 +63,14 @@ Future<void> vpnService() async {
     clashConfig: clashConfig,
   );
 
-  proxy?.setServiceMessageHandler(
+  vpn?.setServiceMessageHandler(
     ServiceMessageHandler(
       onProtect: (Fd fd) async {
-        await proxy?.setProtect(fd.value);
+        await vpn?.setProtect(fd.value);
         clashCore.setFdMap(fd.id);
       },
       onProcess: (Process process) async {
-        var packageName = await app?.resolverProcess(process);
+        final packageName = await app?.resolverProcess(process);
         clashCore.setProcessMap(
           ProcessMapItem(
             id: process.id,
@@ -76,8 +78,8 @@ Future<void> vpnService() async {
           ),
         );
       },
-      onStarted: (String runTime) {
-        globalState.applyProfile(
+      onStarted: (String runTime) async {
+        await globalState.applyProfile(
           appState: appState,
           config: config,
           clashConfig: clashConfig,
@@ -87,11 +89,10 @@ Future<void> vpnService() async {
         final currentSelectedMap = config.currentSelectedMap;
         final proxyName = currentSelectedMap[groupName];
         if (proxyName == null) return;
-        clashCore.changeProxy(
-          ChangeProxyParams(
-            groupName: groupName,
-            proxyName: proxyName,
-          ),
+        globalState.changeProxy(
+          config: config,
+          groupName: groupName,
+          proxyName: proxyName,
         );
       },
     ),
@@ -101,8 +102,7 @@ Future<void> vpnService() async {
         WidgetsBinding.instance.platformDispatcher.locale,
   );
   await app?.tip(appLocalizations.startVpn);
-  await globalState.startSystemProxy(
-    appState: appState,
+  await globalState.handleStart(
     config: config,
     clashConfig: clashConfig,
   );
@@ -111,7 +111,7 @@ Future<void> vpnService() async {
     TileListenerWithVpn(
       onStop: () async {
         await app?.tip(appLocalizations.stopVpn);
-        await globalState.stopSystemProxy();
+        await globalState.handleStop();
         clashCore.shutdown();
         exit(0);
       },
@@ -120,7 +120,7 @@ Future<void> vpnService() async {
 
   globalState.updateTraffic();
   globalState.updateFunctionLists = [
-        () {
+    () {
       globalState.updateTraffic();
     }
   ];
@@ -131,15 +131,14 @@ class ServiceMessageHandler with ServiceMessageListener {
   final Function(Fd fd) _onProtect;
   final Function(Process process) _onProcess;
   final Function(String runTime) _onStarted;
-  final Function(String groupName) _onLoaded;
+  final Function(String providerName) _onLoaded;
 
   const ServiceMessageHandler({
     required Function(Fd fd) onProtect,
     required Function(Process process) onProcess,
     required Function(String runTime) onStarted,
-    required Function(String groupName) onLoaded,
-  })
-      : _onProtect = onProtect,
+    required Function(String providerName) onLoaded,
+  })  : _onProtect = onProtect,
         _onProcess = onProcess,
         _onStarted = onStarted,
         _onLoaded = onLoaded;
@@ -160,8 +159,8 @@ class ServiceMessageHandler with ServiceMessageListener {
   }
 
   @override
-  onLoaded(String groupName) {
-    _onLoaded(groupName);
+  onLoaded(String providerName) {
+    _onLoaded(providerName);
   }
 }
 

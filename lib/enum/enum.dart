@@ -52,6 +52,8 @@ enum TunStack { gvisor, system, mixed }
 
 enum AccessControlMode { acceptSelected, rejectSelected }
 
+enum AccessSortType { none, name, time }
+
 enum ProfileType { file, url }
 
 enum ResultType { success, error }
@@ -83,5 +85,7 @@ enum ChipType { action, delete }
 enum CommonCardType { plain, filled }
 
 enum ProxiesType { tab, list }
+
+enum ProxiesLayout{ loose, standard, tight }
 
 enum ProxyCardType { expand, shrink, min }

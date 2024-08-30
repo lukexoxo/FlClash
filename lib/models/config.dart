@@ -18,6 +18,7 @@ class AccessControl with _$AccessControl {
     @Default(AccessControlMode.rejectSelected) AccessControlMode mode,
     @Default([]) List<String> acceptList,
     @Default([]) List<String> rejectList,
+    @Default(AccessSortType.none) AccessSortType sort,
     @Default(true) bool isFilterSystemApp,
   }) = _AccessControl;
 
@@ -25,15 +26,27 @@ class AccessControl with _$AccessControl {
       _$AccessControlFromJson(json);
 }
 
+extension AccessControlExt on AccessControl {
+  List<String> get currentList => switch (mode) {
+        AccessControlMode.acceptSelected => acceptList,
+        AccessControlMode.rejectSelected => rejectList,
+      };
+}
+
 @freezed
-class Props with _$Props {
-  const factory Props({
+class CoreState with _$CoreState {
+  const factory CoreState({
     AccessControl? accessControl,
+    required String currentProfileName,
+    required bool enable,
     required bool allowBypass,
     required bool systemProxy,
-  }) = _Props;
+    required int mixedPort,
+    required bool onlyProxy,
+  }) = _CoreState;
 
-  factory Props.fromJson(Map<String, Object?> json) => _$PropsFromJson(json);
+  factory CoreState.fromJson(Map<String, Object?> json) =>
+      _$CoreStateFromJson(json);
 }
 
 @freezed
@@ -46,10 +59,30 @@ class WindowProps with _$WindowProps {
   }) = _WindowProps;
 
   factory WindowProps.fromJson(Map<String, Object?>? json) =>
-      json == null ? defaultWindowProps : _$WindowPropsFromJson(json);
+      json == null ? const WindowProps() : _$WindowPropsFromJson(json);
 }
 
-const defaultWindowProps = WindowProps();
+@freezed
+class VpnProps with _$VpnProps {
+  const factory VpnProps({
+    @Default(true) bool enable,
+    @Default(false) bool systemProxy,
+    @Default(true) bool allowBypass,
+  }) = _VpnProps;
+
+  factory VpnProps.fromJson(Map<String, Object?>? json) =>
+      json == null ? const VpnProps() : _$VpnPropsFromJson(json);
+}
+
+@freezed
+class DesktopProps with _$DesktopProps {
+  const factory DesktopProps({
+    @Default(true) bool systemProxy,
+  }) = _DesktopProps;
+
+  factory DesktopProps.fromJson(Map<String, Object?>? json) =>
+      json == null ? const DesktopProps() : _$DesktopPropsFromJson(json);
+}
 
 @JsonSerializable()
 class Config extends ChangeNotifier {
@@ -69,21 +102,26 @@ class Config extends ChangeNotifier {
   AccessControl _accessControl;
   bool _isAnimateToPage;
   bool _autoCheckUpdate;
-  bool _allowBypass;
-  bool _systemProxy;
   bool _isExclude;
   DAV? _dav;
+  bool _isCloseConnections;
   ProxiesType _proxiesType;
   ProxyCardType _proxyCardType;
-  int _proxiesColumns;
+  ProxiesLayout _proxiesLayout;
   String _testUrl;
   WindowProps _windowProps;
+  bool _onlyProxy;
+  bool _prueBlack;
+  VpnProps _vpnProps;
+  DesktopProps _desktopProps;
+  bool _showLabel;
 
   Config()
       : _profiles = [],
         _autoLaunch = false,
         _silentLaunch = false,
         _autoRun = false,
+        _isCloseConnections = false,
         _themeMode = ThemeMode.system,
         _openLog = false,
         _isCompatible = true,
@@ -92,16 +130,19 @@ class Config extends ChangeNotifier {
         _isMinimizeOnExit = true,
         _isAccessControl = false,
         _autoCheckUpdate = true,
-        _systemProxy = false,
         _testUrl = defaultTestUrl,
         _accessControl = const AccessControl(),
         _isAnimateToPage = true,
-        _allowBypass = true,
         _isExclude = false,
         _proxyCardType = ProxyCardType.expand,
-        _windowProps = defaultWindowProps,
+        _windowProps = const WindowProps(),
         _proxiesType = ProxiesType.tab,
-        _proxiesColumns = 2;
+        _prueBlack = false,
+        _onlyProxy = false,
+        _proxiesLayout = ProxiesLayout.standard,
+        _vpnProps = const VpnProps(),
+        _desktopProps = const DesktopProps(),
+        _showLabel = false;
 
   deleteProfileById(String id) {
     _profiles = profiles.where((element) => element.id != id).toList();
@@ -303,6 +344,16 @@ class Config extends ChangeNotifier {
     }
   }
 
+  @JsonKey(defaultValue: ProxiesLayout.standard)
+  ProxiesLayout get proxiesLayout => _proxiesLayout;
+
+  set proxiesLayout(ProxiesLayout value) {
+    if (_proxiesLayout != value) {
+      _proxiesLayout = value;
+      notifyListeners();
+    }
+  }
+
   @JsonKey(defaultValue: true)
   bool get isMinimizeOnExit => _isMinimizeOnExit;
 
@@ -381,26 +432,38 @@ class Config extends ChangeNotifier {
     }
   }
 
-  @JsonKey(defaultValue: true)
-  bool get allowBypass {
-    return _allowBypass;
+  @JsonKey(defaultValue: false)
+  bool get onlyProxy {
+    return _onlyProxy;
   }
 
-  set allowBypass(bool value) {
-    if (_allowBypass != value) {
-      _allowBypass = value;
+  set onlyProxy(bool value) {
+    if (_onlyProxy != value) {
+      _onlyProxy = value;
       notifyListeners();
     }
   }
 
   @JsonKey(defaultValue: false)
-  bool get systemProxy {
-    return _systemProxy;
+  bool get prueBlack {
+    return _prueBlack;
   }
 
-  set systemProxy(bool value) {
-    if (_systemProxy != value) {
-      _systemProxy = value;
+  set prueBlack(bool value) {
+    if (_prueBlack != value) {
+      _prueBlack = value;
+      notifyListeners();
+    }
+  }
+
+  @JsonKey(defaultValue: false)
+  bool get isCloseConnections {
+    return _isCloseConnections;
+  }
+
+  set isCloseConnections(bool value) {
+    if (_isCloseConnections != value) {
+      _isCloseConnections = value;
       notifyListeners();
     }
   }
@@ -424,16 +487,6 @@ class Config extends ChangeNotifier {
   set proxyCardType(ProxyCardType value) {
     if (_proxyCardType != value) {
       _proxyCardType = value;
-      notifyListeners();
-    }
-  }
-
-  @JsonKey(defaultValue: 2)
-  int get proxiesColumns => _proxiesColumns;
-
-  set proxiesColumns(int value) {
-    if (_proxiesColumns != value) {
-      _proxiesColumns = value;
       notifyListeners();
     }
   }
@@ -467,6 +520,34 @@ class Config extends ChangeNotifier {
     }
   }
 
+  VpnProps get vpnProps => _vpnProps;
+
+  set vpnProps(VpnProps value) {
+    if (_vpnProps != value) {
+      _vpnProps = value;
+      notifyListeners();
+    }
+  }
+
+  DesktopProps get desktopProps => _desktopProps;
+
+  set desktopProps(DesktopProps value) {
+    if (_desktopProps != value) {
+      _desktopProps = value;
+      notifyListeners();
+    }
+  }
+
+  @JsonKey(defaultValue: false)
+  bool get showLabel => _showLabel;
+
+  set showLabel(bool value) {
+    if (_showLabel != value) {
+      _showLabel = value;
+      notifyListeners();
+    }
+  }
+
   update([
     Config? config,
     RecoveryOption recoveryOptions = RecoveryOption.all,
@@ -482,6 +563,7 @@ class Config extends ChangeNotifier {
       }
       if (onlyProfiles) return;
       _currentProfileId = config._currentProfileId;
+      _isCloseConnections = config._isCloseConnections;
       _isCompatible = config._isCompatible;
       _autoLaunch = config._autoLaunch;
       _silentLaunch = config._silentLaunch;
@@ -490,7 +572,6 @@ class Config extends ChangeNotifier {
       _openLog = config._openLog;
       _themeMode = config._themeMode;
       _locale = config._locale;
-      _allowBypass = config._allowBypass;
       _primaryColor = config._primaryColor;
       _proxiesSortType = config._proxiesSortType;
       _isMinimizeOnExit = config._isMinimizeOnExit;
@@ -498,9 +579,12 @@ class Config extends ChangeNotifier {
       _accessControl = config._accessControl;
       _isAnimateToPage = config._isAnimateToPage;
       _autoCheckUpdate = config._autoCheckUpdate;
+      _prueBlack = config._prueBlack;
       _testUrl = config._testUrl;
       _isExclude = config._isExclude;
       _windowProps = config._windowProps;
+      _vpnProps = config._vpnProps;
+      _desktopProps = config._desktopProps;
     }
     notifyListeners();
   }

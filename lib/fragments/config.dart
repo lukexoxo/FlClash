@@ -27,7 +27,6 @@ class _ConfigFragmentState extends State<ConfigFragment> {
         final mixedPort = int.parse(port);
         if (mixedPort < 1024 || mixedPort > 49151) throw "Invalid port";
         globalState.appController.clashConfig.mixedPort = mixedPort;
-        globalState.appController.updateClashConfigDebounce();
       } catch (e) {
         globalState.showMessage(
           title: appLocalizations.proxyPort,
@@ -62,7 +61,6 @@ class _ConfigFragmentState extends State<ConfigFragment> {
                       }
                       final appController = globalState.appController;
                       appController.clashConfig.logLevel = value;
-                      appController.updateClashConfigDebounce();
                       Navigator.of(context).pop();
                     },
                   ),
@@ -100,7 +98,6 @@ class _ConfigFragmentState extends State<ConfigFragment> {
                     onChanged: (String? value) {
                       final appController = globalState.appController;
                       appController.clashConfig.globalRealUa = value;
-                      appController.updateClashConfigDebounce();
                       Navigator.of(context).pop();
                     },
                   ),
@@ -125,6 +122,34 @@ class _ConfigFragmentState extends State<ConfigFragment> {
           throw "Invalid url";
         }
         globalState.appController.config.testUrl = newTestUrl;
+      } catch (e) {
+        globalState.showMessage(
+          title: appLocalizations.testUrl,
+          message: TextSpan(
+            text: e.toString(),
+          ),
+        );
+      }
+    }
+  }
+
+  _updateKeepAliveInterval(int keepAliveInterval) async {
+    final newKeepAliveIntervalString =
+        await globalState.showCommonDialog<String>(
+      child: KeepAliveIntervalFormDialog(
+        keepAliveInterval: keepAliveInterval,
+      ),
+    );
+    if (newKeepAliveIntervalString != null &&
+        newKeepAliveIntervalString != "$keepAliveInterval" &&
+        mounted) {
+      try {
+        final newKeepAliveInterval = int.parse(newKeepAliveIntervalString);
+        if (newKeepAliveInterval <= 0) {
+          throw "Invalid keepAliveInterval";
+        }
+        globalState.appController.clashConfig.keepAliveInterval =
+            newKeepAliveInterval;
         globalState.appController.updateClashConfigDebounce();
       } catch (e) {
         globalState.showMessage(
@@ -141,9 +166,9 @@ class _ConfigFragmentState extends State<ConfigFragment> {
     return generateSection(
       title: appLocalizations.app,
       items: [
-        if (Platform.isAndroid)
+        if (Platform.isAndroid) ...[
           Selector<Config, bool>(
-            selector: (_, config) => config.allowBypass,
+            selector: (_, config) => config.vpnProps.allowBypass,
             builder: (_, allowBypass, __) {
               return ListItem.switchItem(
                 leading: const Icon(Icons.arrow_forward_outlined),
@@ -152,16 +177,18 @@ class _ConfigFragmentState extends State<ConfigFragment> {
                 delegate: SwitchDelegate(
                   value: allowBypass,
                   onChanged: (bool value) async {
-                    final appController = globalState.appController;
-                    appController.config.allowBypass = value;
+                    final config = globalState.appController.config;
+                    final vpnProps = config.vpnProps;
+                    config.vpnProps = vpnProps.copyWith(
+                      allowBypass: value,
+                    );
                   },
                 ),
               );
             },
           ),
-        if (Platform.isAndroid)
           Selector<Config, bool>(
-            selector: (_, config) => config.systemProxy,
+            selector: (_, config) => config.vpnProps.systemProxy,
             builder: (_, systemProxy, __) {
               return ListItem.switchItem(
                 leading: const Icon(Icons.settings_ethernet),
@@ -170,31 +197,69 @@ class _ConfigFragmentState extends State<ConfigFragment> {
                 delegate: SwitchDelegate(
                   value: systemProxy,
                   onChanged: (bool value) async {
-                    final appController = globalState.appController;
-                    appController.config.systemProxy = value;
+                    final config = globalState.appController.config;
+                    final vpnProps = config.vpnProps;
+                    config.vpnProps = vpnProps.copyWith(
+                      systemProxy: value,
+                    );
                   },
                 ),
               );
             },
           ),
+        ],
         Selector<Config, bool>(
-          selector: (_, config) => config.isCompatible,
-          builder: (_, isCompatible, __) {
+          selector: (_, config) => config.isCloseConnections,
+          builder: (_, isCloseConnections, __) {
             return ListItem.switchItem(
-              leading: const Icon(Icons.expand_outlined),
-              title: Text(appLocalizations.compatible),
-              subtitle: Text(appLocalizations.compatibleDesc),
+              leading: const Icon(Icons.auto_delete_outlined),
+              title: Text(appLocalizations.autoCloseConnections),
+              subtitle: Text(appLocalizations.autoCloseConnectionsDesc),
               delegate: SwitchDelegate(
-                value: isCompatible,
+                value: isCloseConnections,
                 onChanged: (bool value) async {
                   final appController = globalState.appController;
-                  appController.config.isCompatible = value;
-                  await appController.applyProfile();
+                  appController.config.isCloseConnections = value;
                 },
               ),
             );
           },
         ),
+        Selector<Config, bool>(
+          selector: (_, config) => config.onlyProxy,
+          builder: (_, onlyProxy, __) {
+            return ListItem.switchItem(
+              leading: const Icon(Icons.data_usage_outlined),
+              title: Text(appLocalizations.onlyStatisticsProxy),
+              subtitle: Text(appLocalizations.onlyStatisticsProxyDesc),
+              delegate: SwitchDelegate(
+                value: onlyProxy,
+                onChanged: (bool value) async {
+                  final appController = globalState.appController;
+                  appController.config.onlyProxy = value;
+                },
+              ),
+            );
+          },
+        ),
+        // Selector<Config, bool>(
+        //   selector: (_, config) => config.isCompatible,
+        //   builder: (_, isCompatible, __) {
+        //     return ListItem.switchItem(
+        //       leading: const Icon(Icons.expand_outlined),
+        //       title: Text(appLocalizations.compatible),
+        //       subtitle: Text(appLocalizations.compatibleDesc),
+        //       delegate: SwitchDelegate(
+        //         value: isCompatible,
+        //         onChanged: (bool value) async {
+        //           final appController = globalState.appController;
+        //           appController.config.isCompatible = value;
+        //           await appController.applyProfile();
+        //         },
+        //       ),
+        //     );
+        //   },
+        // ),
       ],
     );
   }
@@ -225,6 +290,19 @@ class _ConfigFragmentState extends State<ConfigFragment> {
               subtitle: Text(value ?? appLocalizations.defaultText),
               onTap: () {
                 _showUaDialog(value);
+              },
+            );
+          },
+        ),
+        Selector<ClashConfig, int>(
+          selector: (_, config) => config.keepAliveInterval,
+          builder: (_, value, __) {
+            return ListItem(
+              leading: const Icon(Icons.timer_outlined),
+              title: Text(appLocalizations.keepAliveIntervalDesc),
+              subtitle: Text("$value ${appLocalizations.seconds}"),
+              onTap: () {
+                _updateKeepAliveInterval(value);
               },
             );
           },
@@ -275,7 +353,6 @@ class _ConfigFragmentState extends State<ConfigFragment> {
                 onChanged: (bool value) async {
                   final appController = globalState.appController;
                   appController.clashConfig.ipv6 = value;
-                  appController.updateClashConfigDebounce();
                 },
               ),
             );
@@ -293,7 +370,6 @@ class _ConfigFragmentState extends State<ConfigFragment> {
                 onChanged: (bool value) async {
                   final clashConfig = context.read<ClashConfig>();
                   clashConfig.allowLan = value;
-                  globalState.appController.updateClashConfigDebounce();
                 },
               ),
             );
@@ -311,7 +387,6 @@ class _ConfigFragmentState extends State<ConfigFragment> {
                 onChanged: (bool value) async {
                   final appController = globalState.appController;
                   appController.clashConfig.unifiedDelay = value;
-                  appController.updateClashConfigDebounce();
                 },
               ),
             );
@@ -331,7 +406,6 @@ class _ConfigFragmentState extends State<ConfigFragment> {
                   final appController = globalState.appController;
                   appController.clashConfig.findProcessMode =
                       value ? FindProcessMode.always : FindProcessMode.off;
-                  appController.updateClashConfigDebounce();
                 },
               ),
             );
@@ -349,7 +423,6 @@ class _ConfigFragmentState extends State<ConfigFragment> {
                 onChanged: (bool value) async {
                   final appController = globalState.appController;
                   appController.clashConfig.tcpConcurrent = value;
-                  appController.updateClashConfigDebounce();
                 },
               ),
             );
@@ -370,7 +443,6 @@ class _ConfigFragmentState extends State<ConfigFragment> {
                   appController.clashConfig.geodataLoader = value
                       ? geodataLoaderMemconservative
                       : geodataLoaderStandard;
-                  appController.updateClashConfigDebounce();
                 },
               ),
             );
@@ -390,7 +462,6 @@ class _ConfigFragmentState extends State<ConfigFragment> {
                   final appController = globalState.appController;
                   appController.clashConfig.externalController =
                       value ? defaultExternalController : '';
-                  appController.updateClashConfigDebounce();
                 },
               ),
             );
@@ -417,7 +488,6 @@ class _ConfigFragmentState extends State<ConfigFragment> {
                   onChanged: (bool value) async {
                     final clashConfig = context.read<ClashConfig>();
                     clashConfig.tun = Tun(enable: value);
-                    globalState.appController.updateClashConfigDebounce();
                   },
                 ),
               );
@@ -541,6 +611,68 @@ class _TestUrlFormDialogState extends State<TestUrlFormDialog> {
               controller: testUrlController,
               decoration: const InputDecoration(
                 border: OutlineInputBorder(),
+              ),
+            ),
+          ],
+        ),
+      ),
+      actions: [
+        TextButton(
+          onPressed: _handleUpdate,
+          child: Text(appLocalizations.submit),
+        )
+      ],
+    );
+  }
+}
+
+class KeepAliveIntervalFormDialog extends StatefulWidget {
+  final int keepAliveInterval;
+
+  const KeepAliveIntervalFormDialog({
+    super.key,
+    required this.keepAliveInterval,
+  });
+
+  @override
+  State<KeepAliveIntervalFormDialog> createState() =>
+      _KeepAliveIntervalFormDialogState();
+}
+
+class _KeepAliveIntervalFormDialogState
+    extends State<KeepAliveIntervalFormDialog> {
+  late TextEditingController keepAliveIntervalController;
+
+  @override
+  void initState() {
+    super.initState();
+    keepAliveIntervalController = TextEditingController(
+      text: "${widget.keepAliveInterval}",
+    );
+  }
+
+  _handleUpdate() async {
+    final keepAliveInterval = keepAliveIntervalController.value.text;
+    if (keepAliveInterval.isEmpty) return;
+    Navigator.of(context).pop<String>(keepAliveInterval);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      title: Text(appLocalizations.keepAliveIntervalDesc),
+      content: SizedBox(
+        width: 300,
+        child: Wrap(
+          runSpacing: 16,
+          children: [
+            TextField(
+              maxLines: 1,
+              minLines: 1,
+              controller: keepAliveIntervalController,
+              decoration: InputDecoration(
+                border: const OutlineInputBorder(),
+                suffixText: appLocalizations.seconds,
               ),
             ),
           ],

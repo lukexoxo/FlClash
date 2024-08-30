@@ -33,6 +33,14 @@ class ProxiesSettingWidget extends StatelessWidget {
     };
   }
 
+  String getTextForProxiesLayout(ProxiesLayout proxiesLayout) {
+    return switch (proxiesLayout) {
+      ProxiesLayout.tight => appLocalizations.tight,
+      ProxiesLayout.standard => appLocalizations.standard,
+      ProxiesLayout.loose => appLocalizations.loose,
+    };
+  }
+
   List<Widget> _buildStyleSetting() {
     return generateSection(
       title: appLocalizations.style,
@@ -132,36 +140,28 @@ class ProxiesSettingWidget extends StatelessWidget {
     );
   }
 
-  List<Widget> _buildColumnsSetting() {
+  List<Widget> _buildLayoutSetting() {
     return generateSection(
-      title: appLocalizations.columns,
+      title: appLocalizations.layout,
       items: [
         SingleChildScrollView(
           padding: const EdgeInsets.symmetric(
             horizontal: 16,
           ),
           scrollDirection: Axis.horizontal,
-          child: Selector2<AppState, Config, ColumnsSelectorState>(
-            selector: (_, appState, config) => ColumnsSelectorState(
-              columns: config.proxiesColumns,
-              viewMode: appState.viewMode,
-            ),
-            builder: (_, state, __) {
+          child: Selector< Config, ProxiesLayout>(
+            selector: (_, config) => config.proxiesLayout,
+            builder: (_, proxiesLayout, __) {
               final config = globalState.appController.config;
-              final targetColumnsArray = viewModeColumnsMap[state.viewMode]!;
-              final currentColumns = other.getColumns(
-                state.viewMode,
-                state.columns,
-              );
               return Wrap(
                 spacing: 16,
                 children: [
-                  for (final item in targetColumnsArray)
+                  for (final item in ProxiesLayout.values)
                     SettingTextCard(
-                      other.getColumnsTextForInt(item),
-                      isSelected: item == currentColumns,
+                      getTextForProxiesLayout(item),
+                      isSelected: item == proxiesLayout,
                       onPressed: () {
-                        config.proxiesColumns = item;
+                        config.proxiesLayout = item;
                       },
                     )
                 ],
@@ -183,79 +183,9 @@ class ProxiesSettingWidget extends StatelessWidget {
         children: [
           ..._buildStyleSetting(),
           ..._buildSortSetting(),
-          ..._buildColumnsSetting(),
+          ..._buildLayoutSetting(),
           ..._buildSizeSetting(),
         ],
-      ),
-    );
-  }
-}
-
-class SettingInfoCard extends StatelessWidget {
-  final Info info;
-  final bool? isSelected;
-  final VoidCallback onPressed;
-
-  const SettingInfoCard(
-    this.info, {
-    super.key,
-    this.isSelected,
-    required this.onPressed,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return CommonCard(
-      isSelected: isSelected,
-      onPressed: onPressed,
-      child: Padding(
-        padding: const EdgeInsets.all(12),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            Flexible(
-              child: Icon(info.iconData),
-            ),
-            const SizedBox(
-              width: 8,
-            ),
-            Flexible(
-              child: Text(
-                info.label,
-                style: context.textTheme.bodyMedium,
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class SettingTextCard extends StatelessWidget {
-  final String text;
-  final bool? isSelected;
-  final VoidCallback onPressed;
-
-  const SettingTextCard(
-    this.text, {
-    super.key,
-    this.isSelected,
-    required this.onPressed,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return CommonCard(
-      onPressed: onPressed,
-      isSelected: isSelected,
-      child: Padding(
-        padding: const EdgeInsets.all(12),
-        child: Text(
-          text,
-          style: context.textTheme.bodyMedium,
-        ),
       ),
     );
   }

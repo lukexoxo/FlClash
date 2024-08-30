@@ -102,22 +102,6 @@ class ClashCore {
     );
   }
 
-  setProfileName(String profileName) {
-    final profileNameChar = profileName.toNativeUtf8().cast<Char>();
-    clashFFI.setCurrentProfileName(
-      profileNameChar,
-    );
-    malloc.free(profileNameChar);
-  }
-
-  getProfileName() {
-    final currentProfileNameRaw = clashFFI.getCurrentProfileName();
-    final currentProfileName =
-        currentProfileNameRaw.cast<Utf8>().toDartString();
-    clashFFI.freeCString(currentProfileNameRaw);
-    return currentProfileName;
-  }
-
   Future<List<Group>> getProxiesGroups() {
     final proxiesRaw = clashFFI.getProxies();
     final proxiesRawString = proxiesRaw.cast<Utf8>().toDartString();
@@ -130,8 +114,7 @@ class ClashCore {
         UsedProxy.GLOBAL.name,
         ...(proxies[UsedProxy.GLOBAL.name]["all"] as List).where((e) {
           final proxy = proxies[e] ?? {};
-          return GroupTypeExtension.valueList.contains(proxy['type']) &&
-              proxy['hidden'] != true;
+          return GroupTypeExtension.valueList.contains(proxy['type']);
         })
       ];
       final groupsRaw = groupNames.map((groupName) {
@@ -144,7 +127,11 @@ class ClashCore {
             .toList();
         return group;
       }).toList();
-      return groupsRaw.map((e) => Group.fromJson(e)).toList();
+      return groupsRaw
+          .map(
+            (e) => Group.fromJson(e),
+          )
+          .toList();
     });
   }
 
@@ -164,9 +151,46 @@ class ClashCore {
     });
   }
 
-  Future<String> updateExternalProvider({
+  ExternalProvider? getExternalProvider(String externalProviderName) {
+    final externalProviderNameChar =
+        externalProviderName.toNativeUtf8().cast<Char>();
+    final externalProviderRaw =
+        clashFFI.getExternalProvider(externalProviderNameChar);
+    malloc.free(externalProviderNameChar);
+    final externalProviderRawString =
+        externalProviderRaw.cast<Utf8>().toDartString();
+    clashFFI.freeCString(externalProviderRaw);
+    if(externalProviderRawString.isEmpty) return null;
+    return ExternalProvider.fromJson(json.decode(externalProviderRawString));
+  }
+
+  Future<String> updateGeoData({
+    required String geoType,
+    required String geoName,
+  }) {
+    final completer = Completer<String>();
+    final receiver = ReceivePort();
+    receiver.listen((message) {
+      if (!completer.isCompleted) {
+        completer.complete(message);
+        receiver.close();
+      }
+    });
+    final geoTypeChar = geoType.toNativeUtf8().cast<Char>();
+    final geoNameChar = geoName.toNativeUtf8().cast<Char>();
+    clashFFI.updateGeoData(
+      geoTypeChar,
+      geoNameChar,
+      receiver.sendPort.nativePort,
+    );
+    malloc.free(geoTypeChar);
+    malloc.free(geoNameChar);
+    return completer.future;
+  }
+
+  Future<String> sideLoadExternalProvider({
     required String providerName,
-    required String providerType,
+    required String data,
   }) {
     final completer = Completer<String>();
     final receiver = ReceivePort();
@@ -177,14 +201,34 @@ class ClashCore {
       }
     });
     final providerNameChar = providerName.toNativeUtf8().cast<Char>();
-    final providerTypeChar = providerType.toNativeUtf8().cast<Char>();
-    clashFFI.updateExternalProvider(
+    final dataChar = data.toNativeUtf8().cast<Char>();
+    clashFFI.sideLoadExternalProvider(
       providerNameChar,
-      providerTypeChar,
+      dataChar,
       receiver.sendPort.nativePort,
     );
     malloc.free(providerNameChar);
-    malloc.free(providerTypeChar);
+    malloc.free(dataChar);
+    return completer.future;
+  }
+
+  Future<String> updateExternalProvider({
+    required String providerName,
+  }) {
+    final completer = Completer<String>();
+    final receiver = ReceivePort();
+    receiver.listen((message) {
+      if (!completer.isCompleted) {
+        completer.complete(message);
+        receiver.close();
+      }
+    });
+    final providerNameChar = providerName.toNativeUtf8().cast<Char>();
+    clashFFI.updateExternalProvider(
+      providerNameChar,
+      receiver.sendPort.nativePort,
+    );
+    malloc.free(providerNameChar);
     return completer.future;
   }
 
@@ -193,6 +237,14 @@ class ClashCore {
     final paramsChar = params.toNativeUtf8().cast<Char>();
     clashFFI.changeProxy(paramsChar);
     malloc.free(paramsChar);
+  }
+
+  start() {
+    clashFFI.start();
+  }
+
+  stop() {
+    clashFFI.stop();
   }
 
   Future<Delay> getDelay(String proxyName) {
@@ -215,21 +267,13 @@ class ClashCore {
       receiver.sendPort.nativePort,
     );
     malloc.free(delayParamsChar);
-    Future.delayed(httpTimeoutDuration + moreDuration, () {
-      receiver.close();
-      if (!completer.isCompleted) {
-        completer.complete(
-          Delay(name: proxyName, value: -1),
-        );
-      }
-    });
     return completer.future;
   }
 
-  clearEffect(String path) {
-    final pathChar = path.toNativeUtf8().cast<Char>();
-    clashFFI.clearEffect(pathChar);
-    malloc.free(pathChar);
+  clearEffect(String profileId) {
+    final profileIdChar = profileId.toNativeUtf8().cast<Char>();
+    clashFFI.clearEffect(profileIdChar);
+    malloc.free(profileIdChar);
   }
 
   VersionInfo getVersionInfo() {
@@ -239,19 +283,19 @@ class ClashCore {
     return VersionInfo.fromJson(versionInfo);
   }
 
-  setProps(Props props) {
-    final propsChar = json.encode(props).toNativeUtf8().cast<Char>();
-    clashFFI.setAndroidProps(propsChar);
-    malloc.free(propsChar);
+  setState(CoreState state) {
+    final stateChar = json.encode(state).toNativeUtf8().cast<Char>();
+    clashFFI.setState(stateChar);
+    malloc.free(stateChar);
   }
 
-  Props getProps() {
-    final androidPropsRaw = clashFFI.getAndroidProps();
-    final androidProps = json.decode(
-      androidPropsRaw.cast<Utf8>().toDartString(),
+  CoreState getState() {
+    final stateRaw = clashFFI.getState();
+    final state = json.decode(
+      stateRaw.cast<Utf8>().toDartString(),
     );
-    clashFFI.freeCString(androidPropsRaw);
-    return Props.fromJson(androidProps);
+    clashFFI.freeCString(stateRaw);
+    return CoreState.fromJson(state);
   }
 
   Traffic getTraffic() {
@@ -321,10 +365,14 @@ class ClashCore {
     return connectionsRaw.map((e) => Connection.fromJson(e)).toList();
   }
 
-  closeConnections(String id) {
+  closeConnection(String id) {
     final idChar = id.toNativeUtf8().cast<Char>();
     clashFFI.closeConnection(idChar);
     malloc.free(idChar);
+  }
+
+  closeConnections() {
+    clashFFI.closeConnections();
   }
 }
 

@@ -1,7 +1,6 @@
 import 'package:fl_clash/common/common.dart';
 import 'package:fl_clash/state.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
 class CommonScaffold extends StatefulWidget {
   final Widget body;
@@ -86,7 +85,7 @@ class CommonScaffoldState extends State<CommonScaffold> {
   }
 
   @override
-  void didUpdateWidget(covariant CommonScaffold oldWidget) {
+  void didUpdateWidget(CommonScaffold oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (oldWidget.title != widget.title) {
       _actions.value = [];
@@ -94,6 +93,8 @@ class CommonScaffoldState extends State<CommonScaffold> {
   }
 
   Widget? get _sideNavigationBar => widget.sideNavigationBar;
+
+  Widget get body => SafeArea(child: widget.body);
 
   @override
   Widget build(BuildContext context) {
@@ -134,7 +135,7 @@ class CommonScaffoldState extends State<CommonScaffold> {
           ],
         ),
       ),
-      body: widget.body,
+      body: body,
       bottomNavigationBar: widget.bottomNavigationBar,
     );
     return _sideNavigationBar != null

@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'dart:ui';
 
 import 'package:fl_clash/enum/enum.dart';
@@ -8,7 +7,7 @@ import 'system.dart';
 
 const appName = "FlClash";
 const coreName = "clash.meta";
-const packageName = "FlClash";
+const packageName = "com.follow.clash";
 const httpTimeoutDuration = Duration(milliseconds: 5000);
 const moreDuration = Duration(milliseconds: 100);
 const animateDuration = Duration(milliseconds: 100);
@@ -17,7 +16,7 @@ const mmdbFileName = "geoip.metadb";
 const asnFileName = "ASN.mmdb";
 const geoIpFileName = "GeoIP.dat";
 const geoSiteFileName = "GeoSite.dat";
-final double kHeaderHeight = system.isDesktop ? (Platform.isMacOS ? 28 : 40) : 0;
+final double kHeaderHeight = system.isDesktop ? 40 : 0;
 const GeoXMap defaultGeoXMap = {
   "mmdb":
       "https://github.com/MetaCubeX/meta-rules-dat/releases/download/latest/geoip.metadb",

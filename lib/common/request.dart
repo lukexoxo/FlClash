@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:math';
 
 import 'package:dio/dio.dart';
 import 'package:dio/io.dart';
@@ -13,9 +14,6 @@ class Request {
 
   Request() {
     _dio = Dio();
-    _dio.options = BaseOptions(
-      headers: {"User-Agent": globalState.appController.clashConfig.globalUa},
-    );
     _dio.interceptors.add(
       InterceptorsWrapper(
         onRequest: (options, handler) {
@@ -52,11 +50,14 @@ class Request {
         .get(
           url,
           options: Options(
+            headers: {
+              "User-Agent": globalState.appController.clashConfig.globalUa
+            },
             responseType: ResponseType.bytes,
           ),
         )
         .timeout(
-          httpTimeoutDuration * 2,
+          httpTimeoutDuration * 6,
         );
     return response;
   }
@@ -85,11 +86,14 @@ class Request {
     "https://ipinfo.io/json/": IpInfo.fromIpInfoIoJson,
   };
 
-  Future<IpInfo?> checkIp(CancelToken? cancelToken) async {
-    for (final source in _ipInfoSources.entries) {
+  Future<IpInfo?> checkIp({CancelToken? cancelToken}) async {
+    for (final source in _ipInfoSources.entries.toList()..shuffle(Random())) {
       try {
         final response = await _dio
-            .get<Map<String, dynamic>>(source.key, cancelToken: cancelToken)
+            .get<Map<String, dynamic>>(
+              source.key,
+              cancelToken: cancelToken,
+            )
             .timeout(
               httpTimeoutDuration,
             );
@@ -97,6 +101,9 @@ class Request {
           return source.value(response.data!);
         }
       } catch (e) {
+        if(cancelToken?.isCancelled  == true){
+          throw "cancelled";
+        }
         continue;
       }
     }

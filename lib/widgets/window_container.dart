@@ -20,11 +20,17 @@ class WindowContainer extends StatefulWidget {
 }
 
 class _WindowContainerState extends State<WindowContainer> with WindowListener {
+  Function? updateLaunchDebounce;
+
   _autoLaunchContainer(Widget child) {
-    return Selector<Config, bool>(
-      selector: (_, config) => config.autoLaunch,
-      builder: (_, isAutoLaunch, child) {
-        autoLaunch?.updateStatus(isAutoLaunch);
+    return Selector2<Config, ClashConfig, AutoLaunchState>(
+      selector: (_, config, clashConfig) => AutoLaunchState(
+          isAutoLaunch: config.autoLaunch, isOpenTun: clashConfig.tun.enable),
+      builder: (_, state, child) {
+        updateLaunchDebounce ??= debounce((AutoLaunchState state) {
+          autoLaunch?.updateStatus(state);
+        });
+        updateLaunchDebounce!([state]);
         return child!;
       },
       child: child,
@@ -33,22 +39,7 @@ class _WindowContainerState extends State<WindowContainer> with WindowListener {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        Column(
-          children: [
-            SizedBox(
-              height: kHeaderHeight,
-            ),
-            Expanded(
-              flex: 1,
-              child: _autoLaunchContainer(widget.child),
-            ),
-          ],
-        ),
-        const WindowHeader(),
-      ],
-    );
+    return _autoLaunchContainer(widget.child);
   }
 
   @override
@@ -95,6 +86,35 @@ class _WindowContainerState extends State<WindowContainer> with WindowListener {
   Future<void> dispose() async {
     windowManager.removeListener(this);
     super.dispose();
+  }
+}
+
+class WindowHeaderContainer extends StatelessWidget {
+  final Widget child;
+
+  const WindowHeaderContainer({
+    super.key,
+    required this.child,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      children: [
+        Column(
+          children: [
+            SizedBox(
+              height: kHeaderHeight,
+            ),
+            Expanded(
+              flex: 1,
+              child: child,
+            ),
+          ],
+        ),
+        const WindowHeader(),
+      ],
+    );
   }
 }
 
@@ -188,7 +208,7 @@ class _WindowHeaderState extends State<WindowHeader> {
         ),
         IconButton(
           onPressed: () {
-            windowManager.close();
+            globalState.appController.handleBackOrExit();
           },
           icon: const Icon(Icons.close),
         ),
@@ -214,22 +234,20 @@ class _WindowHeaderState extends State<WindowHeader> {
                 _updateMaximized();
               },
               child: Container(
-                color: context.colorScheme.surface,
+                color: context.colorScheme.secondary.toSoft(),
                 alignment: Alignment.centerLeft,
                 height: kHeaderHeight,
               ),
             ),
           ),
-          if (!Platform.isMacOS) ...[
-            const Positioned(
-              left: 0,
-              child: AppIcon(),
-            ),
-            Positioned(
-              right: 0,
-              child: _buildActions(),
-            ),
-          ]
+          const Positioned(
+            left: 0,
+            child: AppIcon(),
+          ),
+          Positioned(
+            right: 0,
+            child: _buildActions(),
+          ),
         ],
       ),
     );

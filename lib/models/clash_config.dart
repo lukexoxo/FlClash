@@ -119,6 +119,7 @@ class ClashConfig extends ChangeNotifier {
   String _externalController;
   Mode _mode;
   FindProcessMode _findProcessMode;
+  int _keepAliveInterval;
   bool _unifiedDelay;
   bool _tcpConcurrent;
   Tun _tun;
@@ -139,6 +140,7 @@ class ClashConfig extends ChangeNotifier {
         _unifiedDelay = false,
         _geodataLoader = geodataLoaderMemconservative,
         _externalController = '',
+        _keepAliveInterval = 30,
         _dns = Dns(),
         _geoXUrl = defaultGeoXMap,
         _rules = [];
@@ -199,6 +201,16 @@ class ClashConfig extends ChangeNotifier {
   set externalController(String value) {
     if (_externalController != value) {
       _externalController = value;
+      notifyListeners();
+    }
+  }
+
+  @JsonKey(name: "keep-alive-interval", defaultValue: 30)
+  int get keepAliveInterval => _keepAliveInterval;
+
+  set keepAliveInterval(int value) {
+    if (_keepAliveInterval != value) {
+      _keepAliveInterval = value;
       notifyListeners();
     }
   }
@@ -275,7 +287,7 @@ class ClashConfig extends ChangeNotifier {
     }
   }
 
-  @JsonKey(name: "global-ua", defaultValue: null)
+  @JsonKey(name: "global-ua", includeFromJson: false, includeToJson: true)
   String get globalUa {
     if (_globalRealUa == null) {
       return globalState.packageInfo.ua;
@@ -320,7 +332,6 @@ class ClashConfig extends ChangeNotifier {
       _geodataLoader = clashConfig._geodataLoader;
       _dns = clashConfig._dns;
       _rules = clashConfig._rules;
-      _globalRealUa = clashConfig.globalRealUa;
     }
     notifyListeners();
   }
