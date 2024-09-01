@@ -14,6 +14,7 @@ abstract mixin class TileListener {
   }
 }
 
+// Android 磁贴
 class Tile {
   StreamSubscription? subscription;
 

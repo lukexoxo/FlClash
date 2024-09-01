@@ -16,14 +16,14 @@ import 'models/models.dart';
 import 'common/common.dart';
 
 class GlobalState {
-  Timer? timer;
+  Timer? timer; // 更新定时器，流量更新，运行时间更新
   Timer? groupsUpdateTimer;
-  var isVpnService = false;
-  var autoRun = false;
+  var isVpnService = false; // 是否是VPN服务，Android
+  var autoRun = false; // 应用打开时自动运行
   late PackageInfo packageInfo;
   Function? updateCurrentDelayDebounce;
-  PageController? pageController;
-  DateTime? startTime;
+  PageController? pageController; // 主页PageView控制器
+  DateTime? startTime; // 启动时间
   final navigatorKey = GlobalKey<NavigatorState>();
   late AppController appController;
   GlobalKey<CommonScaffoldState> homeScaffoldKey = GlobalKey();
@@ -45,6 +45,7 @@ class GlobalState {
     timer?.cancel();
   }
 
+  // 更新Clash配置
   Future<void> updateClashConfig({
     required ClashConfig clashConfig,
     required Config config,

@@ -8,7 +8,7 @@ import 'package:fl_clash/enum/enum.dart';
 import 'package:fl_clash/models/models.dart';
 import 'package:flutter/services.dart';
 
-// 在不同平台上设置代理，包括 HTTP、HTTPS 和 SOCKS
+// Android平台的VPN服务
 class Vpn {
   static Vpn? _instance;
   late MethodChannel methodChannel;
