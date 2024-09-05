@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
+// 安卓版窗口容器
 class AndroidContainer extends StatefulWidget {
   final Widget child;
 
@@ -30,6 +31,7 @@ class _AndroidContainerState extends State<AndroidContainer>
     );
   }
 
+  // 设置状态栏和导航栏样式
   Widget _systemUiOverlayContainer(Widget child) {
     return AnnotatedRegion(
       value: SystemUiOverlayStyle(
@@ -47,6 +49,7 @@ class _AndroidContainerState extends State<AndroidContainer>
   @override
   void initState() {
     super.initState();
+    // edgeToEdge 沉浸式模式
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
     WidgetsBinding.instance.addObserver(this);
   }

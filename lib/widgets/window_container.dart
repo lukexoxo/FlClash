@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:window_manager/window_manager.dart';
 
+// 桌面版窗口容器
 class WindowContainer extends StatefulWidget {
   final Widget child;
 

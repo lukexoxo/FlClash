@@ -28,6 +28,7 @@ runAppWithPreferences(
       ChangeNotifierProvider<Config>(
         create: (_) => config,
       ),
+      // 依赖于 ClashConfig 和 Config，并随依赖的变化而变化
       ChangeNotifierProxyProvider2<Config, ClashConfig, AppState>(
         create: (_) => appState,
         update: (_, config, clashConfig, appState) {
@@ -54,6 +55,7 @@ class Application extends StatefulWidget {
 class ApplicationState extends State<Application> {
   late SystemColorSchemes systemColorSchemes;
 
+  // 页面切换动画
   final _pageTransitionsTheme = const PageTransitionsTheme(
     builders: <TargetPlatform, PageTransitionsBuilder>{
       TargetPlatform.android: CupertinoPageTransitionsBuilder(),
