@@ -84,6 +84,7 @@ class DesktopProps with _$DesktopProps {
       json == null ? const DesktopProps() : _$DesktopPropsFromJson(json);
 }
 
+// 应用程序的配置
 @JsonSerializable()
 class Config extends ChangeNotifier {
   List<Profile> _profiles;
@@ -93,16 +94,16 @@ class Config extends ChangeNotifier {
   bool _silentLaunch;
   bool _autoRun;
   bool _openLog;
-  ThemeMode _themeMode;
-  String? _locale;
-  int? _primaryColor;
+  ThemeMode _themeMode; // 主题模式
+  String? _locale; // 语言
+  int? _primaryColor; // 主题色彩
   ProxiesSortType _proxiesSortType;
   bool _isMinimizeOnExit;
   bool _isAccessControl;
-  AccessControl _accessControl;
+  AccessControl _accessControl; // Android的应用访问控制
   bool _isAnimateToPage;
   bool _autoCheckUpdate;
-  bool _isExclude;
+  bool _isExclude; // 是否从最近任务中隐藏应用
   DAV? _dav;
   bool _isCloseConnections;
   ProxiesType _proxiesType;
@@ -110,9 +111,9 @@ class Config extends ChangeNotifier {
   ProxiesLayout _proxiesLayout;
   String _testUrl;
   WindowProps _windowProps;
-  bool _onlyProxy;
-  bool _prueBlack;
-  VpnProps _vpnProps;
+  bool _onlyProxy; // 是否只统计代理流量
+  bool _prueBlack; // 是否纯黑模式
+  VpnProps _vpnProps; // VPN配置：启用、允许应用绕过VPN、系统代理（为VPNService附加HTTP代理）
   DesktopProps _desktopProps;
   bool _showLabel;
 

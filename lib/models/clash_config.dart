@@ -109,24 +109,26 @@ class Dns {
 
 typedef GeoXMap = Map<String, String>;
 
+// Clash配置
+// https://wiki.metacubex.one/config/
 @JsonSerializable()
 class ClashConfig extends ChangeNotifier {
-  int _mixedPort;
-  bool _allowLan;
-  bool _ipv6;
-  String _geodataLoader;
-  LogLevel _logLevel;
-  String _externalController;
-  Mode _mode;
-  FindProcessMode _findProcessMode;
-  int _keepAliveInterval;
-  bool _unifiedDelay;
-  bool _tcpConcurrent;
-  Tun _tun;
+  int _mixedPort; // 混合端口
+  bool _allowLan; // 是否允许局域网访问代理
+  bool _ipv6; // 是否开启IPv6
+  String _geodataLoader; // GEO低内存模式
+  LogLevel _logLevel; // 日志等级
+  String _externalController; // 外部控制器，开启后可通过9090端口访问
+  Mode _mode; // 模式：全局、规则、直连
+  FindProcessMode _findProcessMode; // 查找进程模式
+  int _keepAliveInterval; // TCP保活间隔
+  bool _unifiedDelay; // 统一延迟，去除握手等额外延迟
+  bool _tcpConcurrent; // 是否允许TCP并发
+  Tun _tun; // tun模式
   Dns _dns;
   GeoXMap _geoXUrl;
   List<String> _rules;
-  String? _globalRealUa;
+  String? _globalRealUa; // http的userAgent
 
   ClashConfig()
       : _mixedPort = 7890,

@@ -137,6 +137,7 @@ class ApplicationState extends State<Application> {
               prueBlack: config.prueBlack,
             ),
             builder: (_, state, child) {
+              // 从系统动态颜色中生成 ColorScheme
               return DynamicColorBuilder(
                 builder: (lightDynamic, darkDynamic) {
                   _updateSystemColorSchemes(lightDynamic, darkDynamic);

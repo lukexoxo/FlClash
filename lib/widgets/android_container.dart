@@ -54,6 +54,7 @@ class _AndroidContainerState extends State<AndroidContainer>
     WidgetsBinding.instance.addObserver(this);
   }
 
+  // 监听应用生命周期
   @override
   Future<void> didChangeAppLifecycleState(AppLifecycleState state) async {
     final isPaused = state == AppLifecycleState.paused;

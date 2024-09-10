@@ -23,6 +23,7 @@ class _ClashContainerState extends State<ClashContainer>
     with AppMessageListener {
   Function? updateClashConfigDebounce;
 
+  // 更新Clash配置
   Widget _updateContainer(Widget child) {
     return Selector<ClashConfig, ClashConfigState>(
       selector: (_, clashConfig) => ClashConfigState(
@@ -57,6 +58,7 @@ class _ClashContainerState extends State<ClashContainer>
     );
   }
 
+  // 更新Clash CoreState
   Widget _updateCoreState(Widget child) {
     return Selector2<Config, ClashConfig, CoreState>(
       selector: (_, config, clashConfig) => CoreState(
@@ -89,6 +91,7 @@ class _ClashContainerState extends State<ClashContainer>
     });
   }
 
+  // 改变Clash配置文件
   Widget _changeProfileContainer(Widget child) {
     return Selector<Config, String?>(
       selector: (_, config) => config.currentProfileId,
