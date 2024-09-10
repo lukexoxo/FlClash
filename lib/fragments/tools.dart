@@ -4,7 +4,7 @@ import 'package:fl_clash/enum/enum.dart';
 import 'package:fl_clash/fragments/about.dart';
 import 'package:fl_clash/fragments/access.dart';
 import 'package:fl_clash/fragments/application_setting.dart';
-import 'package:fl_clash/fragments/config.dart';
+import 'package:fl_clash/fragments/config/config.dart';
 import 'package:fl_clash/l10n/l10n.dart';
 import 'package:fl_clash/models/models.dart';
 import 'package:fl_clash/state.dart';
@@ -82,44 +82,23 @@ class _ToolboxFragmentState extends State<ToolsFragment> {
           builder: (_, localeString, __) {
             final subTitle = localeString ?? appLocalizations.defaultText;
             final currentLocale = other.getLocaleForString(localeString);
-            return ListTile(
+            return ListItem<Locale?>.options(
               leading: const Icon(Icons.language_outlined),
               title: Text(appLocalizations.language),
               subtitle: Text(Intl.message(subTitle)),
-              onTap: () {
-                globalState.showCommonDialog(
-                  child: AlertDialog(
-                    title: Text(appLocalizations.language),
-                    contentPadding: const EdgeInsets.symmetric(
-                      horizontal: 8,
-                      vertical: 16,
-                    ),
-                    content: SizedBox(
-                      width: 250,
-                      child: Wrap(
-                        children: [
-                          for (final locale in [
-                            null,
-                            ...AppLocalizations.delegate.supportedLocales
-                          ])
-                            ListItem.radio(
-                              delegate: RadioDelegate<Locale?>(
-                                value: locale,
-                                groupValue: currentLocale,
-                                onChanged: (Locale? value) {
-                                  final config = context.read<Config>();
-                                  config.locale = value?.toString();
-                                  Navigator.of(context).pop();
-                                },
-                              ),
-                              title: Text(_getLocaleString(locale)),
-                            )
-                        ],
-                      ),
-                    ),
-                  ),
-                );
-              },
+              delegate: OptionsDelegate(
+                title: appLocalizations.language,
+                options: [
+                  null,
+                  ...AppLocalizations.delegate.supportedLocales
+                ],
+                onChanged: (Locale? value) {
+                  final config = context.read<Config>();
+                  config.locale = value?.toString();
+                },
+                textBuilder: (locale) => _getLocaleString(locale),
+                value: currentLocale,
+              ),
             );
           },
         ),
@@ -159,11 +138,10 @@ class _ToolboxFragmentState extends State<ToolsFragment> {
           delegate: OpenDelegate(
             title: appLocalizations.override,
             widget: const ConfigFragment(),
-            extendPageWidth: 360,
           ),
         ),
         ListItem.open(
-          leading: const Icon(Icons.settings_applications),
+          leading: const Icon(Icons.settings),
           title: Text(appLocalizations.application),
           subtitle: Text(appLocalizations.applicationDesc),
           delegate: OpenDelegate(

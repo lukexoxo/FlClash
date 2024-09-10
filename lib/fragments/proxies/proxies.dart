@@ -29,11 +29,11 @@ class _ProxiesFragmentState extends State<ProxiesFragment> {
           IconButton(
             onPressed: () {
               showExtendPage(
-                forceNotSide: true,
+                isScaffold: true,
                 extendPageWidth: 360,
                 context,
                 body: const Providers(),
-                title: appLocalizations.externalResources,
+                title: appLocalizations.providers,
               );
             },
             icon: const Icon(

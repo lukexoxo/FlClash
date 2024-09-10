@@ -50,6 +50,17 @@ class CoreState with _$CoreState {
 }
 
 @freezed
+class VPNState with _$VPNState {
+  const factory VPNState({
+    required AccessControl? accessControl,
+    required VpnProps vpnProps,
+  }) = _VPNState;
+
+  factory VPNState.fromJson(Map<String, Object?> json) =>
+      _$VPNStateFromJson(json);
+}
+
+@freezed
 class WindowProps with _$WindowProps {
   const factory WindowProps({
     @Default(1000) double width,
@@ -84,6 +95,21 @@ class DesktopProps with _$DesktopProps {
       json == null ? const DesktopProps() : _$DesktopPropsFromJson(json);
 }
 
+const defaultCustomFontSizeScale = 1.0;
+
+const defaultScaleProps = ScaleProps();
+
+@freezed
+class ScaleProps with _$ScaleProps {
+  const factory ScaleProps({
+    @Default(false) bool custom,
+    @Default(defaultCustomFontSizeScale) double scale,
+  }) = _ScaleProps;
+
+  factory ScaleProps.fromJson(Map<String, Object?>? json) =>
+      json == null ? defaultScaleProps : _$ScalePropsFromJson(json);
+}
+
 // 应用程序的配置
 @JsonSerializable()
 class Config extends ChangeNotifier {
@@ -114,8 +140,10 @@ class Config extends ChangeNotifier {
   bool _onlyProxy; // 是否只统计代理流量
   bool _prueBlack; // 是否纯黑模式
   VpnProps _vpnProps; // VPN配置：启用、允许应用绕过VPN、系统代理（为VPNService附加HTTP代理）
+  ScaleProps _scaleProps;
   DesktopProps _desktopProps;
   bool _showLabel;
+  bool _overrideDns;
 
   Config()
       : _profiles = [],
@@ -143,7 +171,9 @@ class Config extends ChangeNotifier {
         _proxiesLayout = ProxiesLayout.standard,
         _vpnProps = const VpnProps(),
         _desktopProps = const DesktopProps(),
-        _showLabel = false;
+        _showLabel = false,
+        _overrideDns = false,
+        _scaleProps = const ScaleProps();
 
   deleteProfileById(String id) {
     _profiles = profiles.where((element) => element.id != id).toList();
@@ -539,12 +569,31 @@ class Config extends ChangeNotifier {
     }
   }
 
+  ScaleProps get scaleProps => _scaleProps;
+
+  set scaleProps(ScaleProps value) {
+    if (_scaleProps != value) {
+      _scaleProps = value;
+      notifyListeners();
+    }
+  }
+
   @JsonKey(defaultValue: false)
   bool get showLabel => _showLabel;
 
   set showLabel(bool value) {
     if (_showLabel != value) {
       _showLabel = value;
+      notifyListeners();
+    }
+  }
+
+  @JsonKey(defaultValue: false)
+  bool get overrideDns => _overrideDns;
+
+  set overrideDns(bool value) {
+    if (_overrideDns != value) {
+      _overrideDns = value;
       notifyListeners();
     }
   }
@@ -567,6 +616,7 @@ class Config extends ChangeNotifier {
       _isCloseConnections = config._isCloseConnections;
       _isCompatible = config._isCompatible;
       _autoLaunch = config._autoLaunch;
+      _dav = config._dav;
       _silentLaunch = config._silentLaunch;
       _autoRun = config._autoRun;
       _proxiesType = config._proxiesType;
@@ -585,6 +635,7 @@ class Config extends ChangeNotifier {
       _isExclude = config._isExclude;
       _windowProps = config._windowProps;
       _vpnProps = config._vpnProps;
+      _overrideDns = config._overrideDns;
       _desktopProps = config._desktopProps;
     }
     notifyListeners();

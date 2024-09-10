@@ -2,23 +2,15 @@
 
 import 'dart:io';
 
+import 'package:fl_clash/common/common.dart';
 import 'package:fl_clash/common/other.dart';
 import 'package:fl_clash/state.dart';
 import 'package:lpinyin/lpinyin.dart';
 
 void main() {
-  print(PinyinHelper.getPinyin("ABC"));
-  print(PinyinHelper.getPinyin("阿里巴巴"));
+  final res = [1, 2, 3, 4, 5, 6,7,8,9,10,11];
 
-  // final globalState = GlobalState();
-  // final globalState2 = GlobalState();
-
-  print(globalState.hashCode);
-  print(globalState.hashCode);
-  // print(globalState2.appController.);
-
-  print('a'.compareTo('B'));
-  print('A'.compareTo('B'));
+  print(res.batch(5));
 }
 
 startService() async {

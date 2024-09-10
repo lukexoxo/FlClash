@@ -26,88 +26,93 @@ class Tun with _$Tun {
   factory Tun.fromJson(Map<String, Object?> json) => _$TunFromJson(json);
 }
 
-@JsonSerializable()
-class Dns {
-  bool enable;
-  bool ipv6;
-  @JsonKey(name: "default-nameserver")
-  List<String> defaultNameserver;
-  @JsonKey(name: "enhanced-mode")
-  String enhancedMode;
-  @JsonKey(name: "fake-ip-range")
-  String fakeIpRange;
-  @JsonKey(name: "use-hosts")
-  bool useHosts;
-  List<String> nameserver;
-  List<String> fallback;
-  @JsonKey(name: "fake-ip-filter")
-  List<String> fakeIpFilter;
+@freezed
+class FallbackFilter with _$FallbackFilter {
+  const factory FallbackFilter({
+    @Default(true) bool geoip,
+    @Default("CN") @JsonKey(name: "geoip-code") String geoipCode,
+    @Default(["gfw"]) List<String> geosite,
+    @Default(["240.0.0.0/4"]) List<String> ipcidr,
+    @Default([
+      "+.google.com",
+      "+.facebook.com",
+      "+.youtube.com",
+    ])
+    List<String> domain,
+  }) = _FallbackFilter;
 
-  Dns()
-      : enable = true,
-        ipv6 = false,
-        defaultNameserver = [
-          "223.5.5.5",
-          "119.29.29.29",
-          "8.8.4.4",
-          "1.0.0.1",
-        ],
-        enhancedMode = "fake-ip",
-        fakeIpRange = "198.18.0.1/16",
-        useHosts = true,
-        nameserver = [
-          "8.8.8.8",
-          "114.114.114.114",
-          "https://doh.pub/dns-query",
-          "https://dns.alidns.com/dns-query",
-        ],
-        fallback = [
-          'https://doh.dns.sb/dns-query',
-          'https://dns.cloudflare.com/dns-query',
-          'https://dns.twnic.tw/dns-query',
-          'tls://8.8.4.4:853',
-        ],
-        fakeIpFilter = [
-          // Stun Services
-          "+.stun.*.*",
-          "+.stun.*.*.*",
-          "+.stun.*.*.*.*",
-          "+.stun.*.*.*.*.*",
+  factory FallbackFilter.fromJson(Map<String, Object?> json) =>
+      _$FallbackFilterFromJson(json);
+}
 
-          // Google Voices
-          "lens.l.google.com",
+@freezed
+class Dns with _$Dns {
+  const factory Dns({
+    @Default(true) bool enable,
+    @Default(false) @JsonKey(name: "prefer-h3") bool preferH3,
+    @Default(true) @JsonKey(name: "use-hosts") bool useHosts,
+    @Default(true) @JsonKey(name: "use-system-hosts") bool useSystemHosts,
+    @Default(true) @JsonKey(name: "respect-rules") bool respectRules,
+    @Default(false) bool ipv6,
+    @Default(["223.5.5.5"])
+    @JsonKey(name: "default-nameserver")
+    List<String> defaultNameserver,
+    @Default(DnsMode.fakeIp)
+    @JsonKey(name: "enhanced-mode")
+    DnsMode enhancedMode,
+    @Default("198.18.0.1/16")
+    @JsonKey(name: "fake-ip-range")
+    String fakeIpRange,
+    @Default([
+      "*.lan",
+      "localhost.ptlogin2.qq.com",
+    ])
+    @JsonKey(name: "fake-ip-filter")
+    List<String> fakeIpFilter,
+    @Default({
+      "www.baidu.com": "114.114.114.114",
+      "+.internal.crop.com": "10.0.0.1",
+      "geosite:cn": "https://doh.pub/dns-query"
+    })
+    @JsonKey(name: "nameserver-policy")
+    Map<String, String> nameserverPolicy,
+    @Default([
+      "https://doh.pub/dns-query",
+      "https://dns.alidns.com/dns-query",
+    ])
+    List<String> nameserver,
+    @Default([
+      "tls://8.8.4.4",
+      "tls://1.1.1.1",
+    ])
+    List<String> fallback,
+    @Default([
+      "https://doh.pub/dns-query",
+    ])
+    @JsonKey(name: "proxy-server-nameserver")
+    List<String> proxyServerNameserver,
+    @Default(FallbackFilter())
+    @JsonKey(name: "fallback-filter")
+    FallbackFilter fallbackFilter,
+  }) = _Dns;
 
-          // Nintendo Switch STUN
-          "*.n.n.srv.nintendo.net",
+  factory Dns.fromJson(Map<String, Object?> json) => _$DnsFromJson(json);
 
-          // PlayStation STUN
-          "+.stun.playstation.net",
-
-          // XBox
-          "xbox.*.*.microsoft.com",
-          "*.*.xboxlive.com",
-
-          // Microsoft Captive Portal
-          "*.msftncsi.com",
-          "*.msftconnecttest.com",
-
-          // Bilibili CDN
-          "*.mcdn.bilivideo.cn",
-
-          // Windows Default LAN WorkGroup
-          "WORKGROUP",
-        ];
-
-  factory Dns.fromJson(Map<String, dynamic> json) {
-    return _$DnsFromJson(json);
-  }
-
-  Map<String, dynamic> toJson() {
-    return _$DnsToJson(this);
+  factory Dns.safeDnsFromJson(Map<String, Object?> json) {
+    try {
+      return Dns.fromJson(json);
+    } catch (_) {
+      return const Dns();
+    }
   }
 }
 
 typedef GeoXMap = Map<String, String>;
+
+typedef HostsMap = Map<String, String>;
+
+const defaultMixedPort = 7890;
+const defaultKeepAliveInterval = 30;
 
 // Clash配置
 // https://wiki.metacubex.one/config/
@@ -129,9 +134,10 @@ class ClashConfig extends ChangeNotifier {
   GeoXMap _geoXUrl;
   List<String> _rules;
   String? _globalRealUa; // http的userAgent
+  HostsMap _hosts;
 
   ClashConfig()
-      : _mixedPort = 7890,
+      : _mixedPort = defaultMixedPort,
         _mode = Mode.rule,
         _ipv6 = false,
         _findProcessMode = FindProcessMode.off,
@@ -142,12 +148,13 @@ class ClashConfig extends ChangeNotifier {
         _unifiedDelay = false,
         _geodataLoader = geodataLoaderMemconservative,
         _externalController = '',
-        _keepAliveInterval = 30,
-        _dns = Dns(),
+        _keepAliveInterval = defaultKeepAliveInterval,
+        _dns = const Dns(),
         _geoXUrl = defaultGeoXMap,
-        _rules = [];
+        _rules = [],
+        _hosts = {};
 
-  @JsonKey(name: "mixed-port", defaultValue: 7890)
+  @JsonKey(name: "mixed-port", defaultValue: defaultMixedPort)
   int get mixedPort => _mixedPort;
 
   set mixedPort(int value) {
@@ -207,7 +214,7 @@ class ClashConfig extends ChangeNotifier {
     }
   }
 
-  @JsonKey(name: "keep-alive-interval", defaultValue: 30)
+  @JsonKey(name: "keep-alive-interval", defaultValue: defaultKeepAliveInterval)
   int get keepAliveInterval => _keepAliveInterval;
 
   set keepAliveInterval(int value) {
@@ -271,6 +278,7 @@ class ClashConfig extends ChangeNotifier {
     }
   }
 
+  @JsonKey(fromJson: Dns.safeDnsFromJson)
   Dns get dns => _dns;
 
   set dns(Dns value) {
@@ -318,10 +326,21 @@ class ClashConfig extends ChangeNotifier {
     }
   }
 
+  @JsonKey(defaultValue: {})
+  HostsMap get hosts => _hosts;
+
+  set hosts(HostsMap value) {
+    if (!const MapEquality<String, String>().equals(value, _hosts)) {
+      _hosts = value;
+      notifyListeners();
+    }
+  }
+
   update([ClashConfig? clashConfig]) {
     if (clashConfig != null) {
       _mixedPort = clashConfig._mixedPort;
       _allowLan = clashConfig._allowLan;
+      _hosts = clashConfig._hosts;
       _mode = clashConfig._mode;
       _logLevel = clashConfig._logLevel;
       _tun = clashConfig._tun;

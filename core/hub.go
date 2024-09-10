@@ -5,9 +5,11 @@ package main
 */
 import "C"
 import (
+	"context"
 	bridge "core/dart-bridge"
 	"encoding/json"
 	"fmt"
+	"github.com/metacubex/mihomo/common/utils"
 	"os"
 	"runtime"
 	"sort"
@@ -18,7 +20,6 @@ import (
 	"github.com/metacubex/mihomo/adapter"
 	"github.com/metacubex/mihomo/adapter/outboundgroup"
 	"github.com/metacubex/mihomo/adapter/provider"
-	"github.com/metacubex/mihomo/common/utils"
 	"github.com/metacubex/mihomo/component/updater"
 	"github.com/metacubex/mihomo/config"
 	"github.com/metacubex/mihomo/constant"
@@ -27,7 +28,6 @@ import (
 	"github.com/metacubex/mihomo/log"
 	"github.com/metacubex/mihomo/tunnel"
 	"github.com/metacubex/mihomo/tunnel/statistic"
-	"golang.org/x/net/context"
 )
 
 var currentRawConfig = config.DefaultRawConfig()
@@ -48,9 +48,11 @@ func start() {
 //export stop
 func stop() {
 	runLock.Lock()
-	defer runLock.Unlock()
-	isRunning = false
-	stopListeners()
+	go func() {
+		defer runLock.Unlock()
+		isRunning = false
+		stopListeners()
+	}()
 }
 
 //export initClash
@@ -223,11 +225,13 @@ func asyncTestDelay(s *C.char, port C.longlong) {
 		var params = &TestDelayParams{}
 		err := json.Unmarshal([]byte(paramsString), params)
 		if err != nil {
+			bridge.SendToPort(i, "")
 			return false, nil
 		}
 
 		expectedStatus, err := utils.NewUnsignedRanges[uint16]("")
 		if err != nil {
+			bridge.SendToPort(i, "")
 			return false, nil
 		}
 

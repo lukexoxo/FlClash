@@ -552,6 +552,189 @@ abstract class _CoreState implements CoreState {
       throw _privateConstructorUsedError;
 }
 
+VPNState _$VPNStateFromJson(Map<String, dynamic> json) {
+  return _VPNState.fromJson(json);
+}
+
+/// @nodoc
+mixin _$VPNState {
+  AccessControl? get accessControl => throw _privateConstructorUsedError;
+  VpnProps get vpnProps => throw _privateConstructorUsedError;
+
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+  @JsonKey(ignore: true)
+  $VPNStateCopyWith<VPNState> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $VPNStateCopyWith<$Res> {
+  factory $VPNStateCopyWith(VPNState value, $Res Function(VPNState) then) =
+      _$VPNStateCopyWithImpl<$Res, VPNState>;
+  @useResult
+  $Res call({AccessControl? accessControl, VpnProps vpnProps});
+
+  $AccessControlCopyWith<$Res>? get accessControl;
+  $VpnPropsCopyWith<$Res> get vpnProps;
+}
+
+/// @nodoc
+class _$VPNStateCopyWithImpl<$Res, $Val extends VPNState>
+    implements $VPNStateCopyWith<$Res> {
+  _$VPNStateCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? accessControl = freezed,
+    Object? vpnProps = null,
+  }) {
+    return _then(_value.copyWith(
+      accessControl: freezed == accessControl
+          ? _value.accessControl
+          : accessControl // ignore: cast_nullable_to_non_nullable
+              as AccessControl?,
+      vpnProps: null == vpnProps
+          ? _value.vpnProps
+          : vpnProps // ignore: cast_nullable_to_non_nullable
+              as VpnProps,
+    ) as $Val);
+  }
+
+  @override
+  @pragma('vm:prefer-inline')
+  $AccessControlCopyWith<$Res>? get accessControl {
+    if (_value.accessControl == null) {
+      return null;
+    }
+
+    return $AccessControlCopyWith<$Res>(_value.accessControl!, (value) {
+      return _then(_value.copyWith(accessControl: value) as $Val);
+    });
+  }
+
+  @override
+  @pragma('vm:prefer-inline')
+  $VpnPropsCopyWith<$Res> get vpnProps {
+    return $VpnPropsCopyWith<$Res>(_value.vpnProps, (value) {
+      return _then(_value.copyWith(vpnProps: value) as $Val);
+    });
+  }
+}
+
+/// @nodoc
+abstract class _$$VPNStateImplCopyWith<$Res>
+    implements $VPNStateCopyWith<$Res> {
+  factory _$$VPNStateImplCopyWith(
+          _$VPNStateImpl value, $Res Function(_$VPNStateImpl) then) =
+      __$$VPNStateImplCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call({AccessControl? accessControl, VpnProps vpnProps});
+
+  @override
+  $AccessControlCopyWith<$Res>? get accessControl;
+  @override
+  $VpnPropsCopyWith<$Res> get vpnProps;
+}
+
+/// @nodoc
+class __$$VPNStateImplCopyWithImpl<$Res>
+    extends _$VPNStateCopyWithImpl<$Res, _$VPNStateImpl>
+    implements _$$VPNStateImplCopyWith<$Res> {
+  __$$VPNStateImplCopyWithImpl(
+      _$VPNStateImpl _value, $Res Function(_$VPNStateImpl) _then)
+      : super(_value, _then);
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? accessControl = freezed,
+    Object? vpnProps = null,
+  }) {
+    return _then(_$VPNStateImpl(
+      accessControl: freezed == accessControl
+          ? _value.accessControl
+          : accessControl // ignore: cast_nullable_to_non_nullable
+              as AccessControl?,
+      vpnProps: null == vpnProps
+          ? _value.vpnProps
+          : vpnProps // ignore: cast_nullable_to_non_nullable
+              as VpnProps,
+    ));
+  }
+}
+
+/// @nodoc
+@JsonSerializable()
+class _$VPNStateImpl implements _VPNState {
+  const _$VPNStateImpl({required this.accessControl, required this.vpnProps});
+
+  factory _$VPNStateImpl.fromJson(Map<String, dynamic> json) =>
+      _$$VPNStateImplFromJson(json);
+
+  @override
+  final AccessControl? accessControl;
+  @override
+  final VpnProps vpnProps;
+
+  @override
+  String toString() {
+    return 'VPNState(accessControl: $accessControl, vpnProps: $vpnProps)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$VPNStateImpl &&
+            (identical(other.accessControl, accessControl) ||
+                other.accessControl == accessControl) &&
+            (identical(other.vpnProps, vpnProps) ||
+                other.vpnProps == vpnProps));
+  }
+
+  @JsonKey(ignore: true)
+  @override
+  int get hashCode => Object.hash(runtimeType, accessControl, vpnProps);
+
+  @JsonKey(ignore: true)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$VPNStateImplCopyWith<_$VPNStateImpl> get copyWith =>
+      __$$VPNStateImplCopyWithImpl<_$VPNStateImpl>(this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$VPNStateImplToJson(
+      this,
+    );
+  }
+}
+
+abstract class _VPNState implements VPNState {
+  const factory _VPNState(
+      {required final AccessControl? accessControl,
+      required final VpnProps vpnProps}) = _$VPNStateImpl;
+
+  factory _VPNState.fromJson(Map<String, dynamic> json) =
+      _$VPNStateImpl.fromJson;
+
+  @override
+  AccessControl? get accessControl;
+  @override
+  VpnProps get vpnProps;
+  @override
+  @JsonKey(ignore: true)
+  _$$VPNStateImplCopyWith<_$VPNStateImpl> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
 WindowProps _$WindowPropsFromJson(Map<String, dynamic> json) {
   return _WindowProps.fromJson(json);
 }
@@ -1055,5 +1238,161 @@ abstract class _DesktopProps implements DesktopProps {
   @override
   @JsonKey(ignore: true)
   _$$DesktopPropsImplCopyWith<_$DesktopPropsImpl> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+ScaleProps _$ScalePropsFromJson(Map<String, dynamic> json) {
+  return _ScaleProps.fromJson(json);
+}
+
+/// @nodoc
+mixin _$ScaleProps {
+  bool get custom => throw _privateConstructorUsedError;
+  double get scale => throw _privateConstructorUsedError;
+
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+  @JsonKey(ignore: true)
+  $ScalePropsCopyWith<ScaleProps> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $ScalePropsCopyWith<$Res> {
+  factory $ScalePropsCopyWith(
+          ScaleProps value, $Res Function(ScaleProps) then) =
+      _$ScalePropsCopyWithImpl<$Res, ScaleProps>;
+  @useResult
+  $Res call({bool custom, double scale});
+}
+
+/// @nodoc
+class _$ScalePropsCopyWithImpl<$Res, $Val extends ScaleProps>
+    implements $ScalePropsCopyWith<$Res> {
+  _$ScalePropsCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? custom = null,
+    Object? scale = null,
+  }) {
+    return _then(_value.copyWith(
+      custom: null == custom
+          ? _value.custom
+          : custom // ignore: cast_nullable_to_non_nullable
+              as bool,
+      scale: null == scale
+          ? _value.scale
+          : scale // ignore: cast_nullable_to_non_nullable
+              as double,
+    ) as $Val);
+  }
+}
+
+/// @nodoc
+abstract class _$$ScalePropsImplCopyWith<$Res>
+    implements $ScalePropsCopyWith<$Res> {
+  factory _$$ScalePropsImplCopyWith(
+          _$ScalePropsImpl value, $Res Function(_$ScalePropsImpl) then) =
+      __$$ScalePropsImplCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call({bool custom, double scale});
+}
+
+/// @nodoc
+class __$$ScalePropsImplCopyWithImpl<$Res>
+    extends _$ScalePropsCopyWithImpl<$Res, _$ScalePropsImpl>
+    implements _$$ScalePropsImplCopyWith<$Res> {
+  __$$ScalePropsImplCopyWithImpl(
+      _$ScalePropsImpl _value, $Res Function(_$ScalePropsImpl) _then)
+      : super(_value, _then);
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? custom = null,
+    Object? scale = null,
+  }) {
+    return _then(_$ScalePropsImpl(
+      custom: null == custom
+          ? _value.custom
+          : custom // ignore: cast_nullable_to_non_nullable
+              as bool,
+      scale: null == scale
+          ? _value.scale
+          : scale // ignore: cast_nullable_to_non_nullable
+              as double,
+    ));
+  }
+}
+
+/// @nodoc
+@JsonSerializable()
+class _$ScalePropsImpl implements _ScaleProps {
+  const _$ScalePropsImpl(
+      {this.custom = false, this.scale = defaultCustomFontSizeScale});
+
+  factory _$ScalePropsImpl.fromJson(Map<String, dynamic> json) =>
+      _$$ScalePropsImplFromJson(json);
+
+  @override
+  @JsonKey()
+  final bool custom;
+  @override
+  @JsonKey()
+  final double scale;
+
+  @override
+  String toString() {
+    return 'ScaleProps(custom: $custom, scale: $scale)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$ScalePropsImpl &&
+            (identical(other.custom, custom) || other.custom == custom) &&
+            (identical(other.scale, scale) || other.scale == scale));
+  }
+
+  @JsonKey(ignore: true)
+  @override
+  int get hashCode => Object.hash(runtimeType, custom, scale);
+
+  @JsonKey(ignore: true)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$ScalePropsImplCopyWith<_$ScalePropsImpl> get copyWith =>
+      __$$ScalePropsImplCopyWithImpl<_$ScalePropsImpl>(this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$ScalePropsImplToJson(
+      this,
+    );
+  }
+}
+
+abstract class _ScaleProps implements ScaleProps {
+  const factory _ScaleProps({final bool custom, final double scale}) =
+      _$ScalePropsImpl;
+
+  factory _ScaleProps.fromJson(Map<String, dynamic> json) =
+      _$ScalePropsImpl.fromJson;
+
+  @override
+  bool get custom;
+  @override
+  double get scale;
+  @override
+  @JsonKey(ignore: true)
+  _$$ScalePropsImplCopyWith<_$ScalePropsImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

@@ -10,7 +10,8 @@ showExtendPage(
   required Widget body,
   required String title,
   double? extendPageWidth,
-  bool forceNotSide = false,
+  bool isScaffold = false,
+  bool isBlur = true,
   Widget? action,
 }) {
   final NavigatorState navigator = Navigator.of(context);
@@ -21,7 +22,18 @@ showExtendPage(
   );
   final isMobile =
       globalState.appController.appState.viewMode == ViewMode.mobile;
-  final isNotSide = isMobile || forceNotSide;
+  if (isMobile) {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (_) => CommonScaffold(
+          title: title,
+          body: uniqueBody,
+        ),
+      ),
+    );
+    return;
+  }
+  final isNotSide = isMobile || isScaffold;
   navigator.push(
     ModalSideSheetRoute(
       modalBarrierColor: Colors.black38,
@@ -46,7 +58,7 @@ showExtendPage(
         );
       },
       constraints: const BoxConstraints(),
-      filter: filter,
+      filter: isBlur ? filter : null,
     ),
   );
 }

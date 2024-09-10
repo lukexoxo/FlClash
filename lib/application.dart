@@ -111,6 +111,17 @@ class ApplicationState extends State<Application> {
     );
   }
 
+  _buildPage(Widget page) {
+    if (system.isDesktop) {
+      return WindowHeaderContainer(
+        child: page,
+      );
+    }
+    return VpnContainer(
+      child: page,
+    );
+  }
+
   _updateSystemColorSchemes(
     ColorScheme? lightDynamic,
     ColorScheme? darkDynamic,
@@ -150,10 +161,9 @@ class ApplicationState extends State<Application> {
                       GlobalWidgetsLocalizations.delegate
                     ],
                     builder: (_, child) {
-                      if (system.isDesktop) {
-                        return WindowHeaderContainer(child: child!);
-                      }
-                      return child!;
+                      return MediaContainer(
+                        child: _buildPage(child!),
+                      );
                     },
                     scrollBehavior: BaseScrollBehavior(),
                     title: appName,

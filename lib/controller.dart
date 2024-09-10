@@ -8,7 +8,6 @@ import 'package:fl_clash/common/archive.dart';
 import 'package:fl_clash/enum/enum.dart';
 import 'package:fl_clash/state.dart';
 import 'package:flutter/material.dart';
-import 'package:lpinyin/lpinyin.dart';
 import 'package:path/path.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -22,7 +21,6 @@ class AppController {
   late AppState appState;
   late Config config;
   late ClashConfig clashConfig;
-  late Measure measure;
   late Function updateClashConfigDebounce;
   late Function updateGroupDebounce;
   late Function addCheckIpNumDebounce;
@@ -44,7 +42,6 @@ class AppController {
     updateGroupDebounce = debounce(() async {
       await updateGroups();
     });
-    measure = Measure.of(context);
   }
 
   updateStatus(bool isStart) async {
@@ -105,6 +102,7 @@ class AppController {
         final updateId = config.profiles.first.id;
         changeProfile(updateId);
       } else {
+        changeProfile(null);
         updateStatus(false);
       }
     }
@@ -232,6 +230,7 @@ class AppController {
 
   handleExit() async {
     await updateStatus(false);
+    await proxy?.stopProxy();
     await savePreferences();
     clashCore.shutdown();
     system.exit();
@@ -310,6 +309,14 @@ class AppController {
     }
     autoUpdateProfiles();
     autoCheckUpdate();
+  }
+
+  updateTray() {
+    globalState.updateTray(
+      appState: appState,
+      config: config,
+      clashConfig: clashConfig,
+    );
   }
 
   setDelay(Delay delay) {
@@ -433,8 +440,8 @@ class AppController {
     return List.of(proxies)
       ..sort(
         (a, b) => other.sortByChar(
-          PinyinHelper.getPinyin(a.name),
-          PinyinHelper.getPinyin(b.name),
+          other.getPinyin(a.name),
+          other.getPinyin(b.name),
         ),
       );
   }

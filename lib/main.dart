@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:fl_clash/clash/clash.dart';
+import 'package:fl_clash/common/http.dart';
 import 'package:fl_clash/plugins/app.dart';
 import 'package:fl_clash/plugins/tile.dart';
 import 'package:fl_clash/plugins/vpn.dart';
@@ -31,11 +32,17 @@ Future<void> main() async {
     openLogs: config.openLogs,
     hasProxies: false,
   );
+  globalState.updateTray(
+    appState: appState,
+    config: config,
+    clashConfig: clashConfig,
+  );
   await globalState.init(
     appState: appState,
     config: config,
     clashConfig: clashConfig,
   );
+  HttpOverrides.global = FlClashHttpOverrides();
   runAppWithPreferences(
     const Application(),
     appState: appState,
