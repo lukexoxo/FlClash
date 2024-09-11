@@ -4,6 +4,7 @@ import 'package:fl_clash/state.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+// 缩放比例
 class MediaContainer extends StatelessWidget {
   final Widget child;
 
