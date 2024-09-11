@@ -31,13 +31,13 @@ class AppState with ChangeNotifier {
   Mode _mode; // 出站模式
   DelayMap _delayMap; // 延迟数据存储
   SelectedMap _selectedMap;
-  bool _isCompatible;
-  List<Group> _groups;
-  double _viewWidth;
+  bool _isCompatible; // 兼容模式？
+  List<Group> _groups; // 策略组：Selector（手动选择）, URLTest（自动选择）, Fallback（自动回退）, LoadBalance（负载均衡）, Relay（链式代理）
+  double _viewWidth; // 视图宽度
   List<Connection> _requests;
   num _checkIpNum;
-  List<ExternalProvider> _providers;
-  List<Package> _packages;
+  List<ExternalProvider> _providers; // 提供者：代理提供者、规则提供者
+  List<Package> _packages; // 安装包信息
 
   AppState({
     required Mode mode,

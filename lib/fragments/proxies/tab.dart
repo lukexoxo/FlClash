@@ -22,7 +22,7 @@ class ProxiesTabFragment extends StatefulWidget {
 class ProxiesTabFragmentState extends State<ProxiesTabFragment>
     with TickerProviderStateMixin {
   TabController? _tabController;
-  final _hasMoreButtonNotifier = ValueNotifier<bool>(false);
+  final _hasMoreButtonNotifier = ValueNotifier<bool>(false); // 分组显示更多按钮
   GroupNameKeyMap _keyMap = {};
 
   @override
@@ -31,11 +31,13 @@ class ProxiesTabFragmentState extends State<ProxiesTabFragment>
     _tabController?.dispose();
   }
 
+  // 滚动到选中的Proxy
   scrollToGroupSelected() {
     final currentGroupName = globalState.appController.config.currentGroupName;
     _keyMap[currentGroupName]?.currentState?.scrollToSelected();
   }
 
+  // 更多分组的按钮
   _buildMoreButton() {
     return Selector<AppState, bool>(
       selector: (_, appState) => appState.viewMode == ViewMode.mobile,
@@ -54,6 +56,7 @@ class ProxiesTabFragmentState extends State<ProxiesTabFragment>
     );
   }
 
+  // 设置
   _showMoreMenu() {
     showSheet(
       context: context,

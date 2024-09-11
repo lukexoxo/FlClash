@@ -5,13 +5,14 @@ import 'package:fl_clash/widgets/scaffold.dart';
 import 'package:flutter/material.dart';
 import 'side_sheet.dart';
 
+// 展示新页面
 showExtendPage(
   BuildContext context, {
   required Widget body,
   required String title,
   double? extendPageWidth,
   bool isScaffold = false,
-  bool isBlur = true,
+  bool isBlur = true, // 是否模糊背景
   Widget? action,
 }) {
   final NavigatorState navigator = Navigator.of(context);

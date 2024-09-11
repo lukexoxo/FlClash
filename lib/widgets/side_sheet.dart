@@ -402,6 +402,7 @@ class _ModalSideSheetState<T> extends State<_ModalSideSheet<T>> {
   }
 }
 
+// 侧边弹出式页面
 class ModalSideSheetRoute<T> extends PopupRoute<T> {
   ModalSideSheetRoute(
       {required this.builder,
@@ -560,6 +561,7 @@ class ModalSideSheetRoute<T> extends PopupRoute<T> {
   }
 }
 
+// Side Sheet，对应Material的BottomSheet
 Future<T?> showModalSideSheet<T>({
   required BuildContext context,
   required Widget body,

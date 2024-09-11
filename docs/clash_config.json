@@ -1,0 +1,80 @@
+{
+  "mixed-port": 7890,
+  "mode": "global",
+  "find-process-mode": "off",
+  "allow-lan": false,
+  "log-level": "info",
+  "external-controller": "",
+  "keep-alive-interval": 30,
+  "ipv6": false,
+  "geodata-loader": "memconservative",
+  "unified-delay": false,
+  "tcp-concurrent": false,
+  "tun": {
+    "enable": true,
+    "device": "FlClash",
+    "stack": "gvisor",
+    "dns-hijack": ["any:53"]
+  },
+  "dns": {
+    "enable": true,
+    "prefer-h3": false,
+    "use-hosts": true,
+    "use-system-hosts": true,
+    "respect-rules": true,
+    "ipv6": false,
+    "default-nameserver": ["223.5.5.5", "119.29.29.29", "8.8.4.4", "1.0.0.1"],
+    "enhanced-mode": "fake-ip",
+    "fake-ip-range": "198.18.0.1/16",
+    "fake-ip-filter": [
+      "+.stun.*.*",
+      "+.stun.*.*.*",
+      "+.stun.*.*.*.*",
+      "+.stun.*.*.*.*.*",
+      "lens.l.google.com",
+      "*.n.n.srv.nintendo.net",
+      "+.stun.playstation.net",
+      "xbox.*.*.microsoft.com",
+      "*.*.xboxlive.com",
+      "*.msftncsi.com",
+      "*.msftconnecttest.com",
+      "*.mcdn.bilivideo.cn",
+      "WORKGROUP"
+    ],
+    "nameserver-policy": {
+      "www.baidu.com": "114.114.114.114",
+      "+.internal.crop.com": "10.0.0.1",
+      "geosite:cn": "https://doh.pub/dns-query"
+    },
+    "nameserver": [
+      "8.8.8.8",
+      "114.114.114.114",
+      "https://doh.pub/dns-query",
+      "https://dns.alidns.com/dns-query"
+    ],
+    "fallback": [
+      "https://doh.dns.sb/dns-query",
+      "https://dns.cloudflare.com/dns-query",
+      "https://dns.twnic.tw/dns-query",
+      "tls://8.8.4.4:853"
+    ],
+    "proxy-server-nameserver": ["https://doh.pub/dns-query"],
+    "fallback-filter": {
+      "geoip": true,
+      "geoip-code": "CN",
+      "geosite": ["gfw"],
+      "ipcidr": ["240.0.0.0/4"],
+      "domain": ["+.google.com", "+.facebook.com", "+.youtube.com"]
+    }
+  },
+  "rules": [],
+  "global-ua": "FlClash/v0.8.57 clash-verge Platform/macos",
+  "global-real-ua": null,
+  "geox-url": {
+    "mmdb": "https://github.com/MetaCubeX/meta-rules-dat/releases/download/latest/geoip.metadb",
+    "asn": "https://github.com/xishang0128/geoip/releases/download/latest/GeoLite2-ASN.mmdb",
+    "geoip": "https://github.com/MetaCubeX/meta-rules-dat/releases/download/latest/GeoIP.dat",
+    "geosite": "https://github.com/MetaCubeX/meta-rules-dat/releases/download/latest/geosite.dat"
+  },
+  "hosts": {}
+}

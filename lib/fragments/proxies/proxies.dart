@@ -20,6 +20,7 @@ class ProxiesFragment extends StatefulWidget {
 class _ProxiesFragmentState extends State<ProxiesFragment> {
   final GlobalKey<ProxiesTabFragmentState> _proxiesTabKey = GlobalKey();
 
+  // 页面操作按钮
   _initActions(ProxiesType proxiesType, bool hasProvider) {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       final commonScaffoldState =

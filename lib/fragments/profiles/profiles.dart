@@ -29,6 +29,7 @@ class ProfilesFragment extends StatefulWidget {
 class _ProfilesFragmentState extends State<ProfilesFragment> {
   Function? applyConfigDebounce;
 
+  // 添加Profile
   _handleShowAddExtendPage() {
     showExtendPage(
       globalState.navigatorKey.currentState!.context,
@@ -39,6 +40,7 @@ class _ProfilesFragmentState extends State<ProfilesFragment> {
     );
   }
 
+  // 更新所有Profile
   _updateProfiles() async {
     final appController = globalState.appController;
     final config = appController.config;
@@ -80,6 +82,7 @@ class _ProfilesFragmentState extends State<ProfilesFragment> {
     }
   }
 
+  // 更新和排序按钮，更新commonScaffoldState的actions
   _initScaffoldState() {
     WidgetsBinding.instance.addPostFrameCallback(
       (_) {
@@ -396,6 +399,7 @@ class ProfileItem extends StatelessWidget {
   }
 }
 
+// 排序Profile
 class ReorderableProfiles extends StatefulWidget {
   final List<Profile> profiles;
 
