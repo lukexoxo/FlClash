@@ -142,7 +142,7 @@ class Config extends ChangeNotifier {
   VpnProps _vpnProps; // VPN配置：启用、允许应用绕过VPN、系统代理（为VPNService附加HTTP代理）
   ScaleProps _scaleProps;
   DesktopProps _desktopProps;
-  bool _showLabel;
+  bool _showLabel; // 是否显示菜单名称
   bool _overrideDns;
 
   Config()

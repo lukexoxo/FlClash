@@ -20,6 +20,7 @@ class HomePage extends StatelessWidget {
     required int currentIndex,
   }) {
     if (viewMode == ViewMode.mobile) {
+      // 移动端底部导航
       return NavigationBar(
         destinations: navigationItems
             .map(
@@ -51,6 +52,7 @@ class HomePage extends StatelessWidget {
                         selector: (_, config) => config.showLabel,
                         builder: (_, showLabel, __) {
                           return NavigationRail(
+                            // 桌面版侧边导航
                             backgroundColor:
                             context.colorScheme.surfaceContainer,
                             selectedIconTheme: IconThemeData(
@@ -111,6 +113,7 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return PopContainer(
+      // 通过 LayoutBuilder 拿到父组件传递的约束
       child: LayoutBuilder(
         builder: (_, container) {
           final appController = globalState.appController;
@@ -168,6 +171,7 @@ class HomePage extends StatelessWidget {
 class HomeBody extends StatelessWidget {
   const HomeBody({super.key});
 
+  // 跳转到当前菜单索引的页面
   _updatePageIndex(List<NavigationItem> navigationItems) {
     final currentLabel = globalState.appController.appState.currentLabel;
     final index = navigationItems.lastIndexWhere(
@@ -197,6 +201,7 @@ class HomeBody extends StatelessWidget {
         _updatePageIndex(navigationItems);
         return PageView.builder(
           controller: globalState.pageController,
+          // 完全禁用滚动行为
           physics: const NeverScrollableScrollPhysics(),
           itemCount: navigationItems.length,
           itemBuilder: (_, index) {

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+// 允许其内部状态在页面切换时保持
 class KeepContainer extends StatefulWidget {
   final Widget child;
   final bool keep;

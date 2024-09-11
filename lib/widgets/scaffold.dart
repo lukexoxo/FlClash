@@ -7,9 +7,9 @@ class CommonScaffold extends StatefulWidget {
   final Widget? bottomNavigationBar;
   final Widget? sideNavigationBar;
   final String title;
-  final Widget? leading;
-  final List<Widget>? actions;
-  final bool automaticallyImplyLeading;
+  final Widget? leading; // 顶部栏左侧的组件
+  final List<Widget>? actions; // 顶部栏右侧的操作按钮列表
+  final bool automaticallyImplyLeading; // 是否自动添加返回按钮
 
   const CommonScaffold({
     super.key,
@@ -57,6 +57,8 @@ class CommonScaffoldState extends State<CommonScaffold> {
     }
   }
 
+  // 在执行异步任务时，显示 LinearProgressIndicator。
+  // 如果异步任务抛出异常，捕获并通过 globalState.showMessage 显示错误信息。
   Future<T?> loadingRun<T>(
     Future<T> Function() futureFunction, {
     String? title,
@@ -86,6 +88,7 @@ class CommonScaffoldState extends State<CommonScaffold> {
 
   @override
   void didUpdateWidget(CommonScaffold oldWidget) {
+    // 如果组件的 title 发生了变化，则重置 actions
     super.didUpdateWidget(oldWidget);
     if (oldWidget.title != widget.title) {
       _actions.value = [];
@@ -99,12 +102,14 @@ class CommonScaffoldState extends State<CommonScaffold> {
   @override
   Widget build(BuildContext context) {
     final scaffold = Scaffold(
+      // 当键盘弹出时，页面的 body 会自动调整大小
       resizeToAvoidBottomInset: true,
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(kToolbarHeight),
         child: Stack(
           alignment: Alignment.bottomCenter,
           children: [
+            // 监听 actions 的变化，当 actions 发生变化时更新右侧操作按钮。
             ValueListenableBuilder<List<Widget>>(
               valueListenable: _actions,
               builder: (_, actions, __) {
@@ -124,6 +129,7 @@ class CommonScaffoldState extends State<CommonScaffold> {
                 );
               },
             ),
+            // 监听 _loading 的状态，显示或隐藏 LinearProgressIndicator
             ValueListenableBuilder(
               valueListenable: _loading,
               builder: (_, value, __) {

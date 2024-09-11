@@ -18,18 +18,18 @@ import 'version.dart';
 typedef DelayMap = Map<String, int?>;
 
 class AppState with ChangeNotifier {
-  List<NavigationItem> _navigationItems;
-  int? _runTime;
-  bool _isInit;
-  VersionInfo? _versionInfo;
-  List<Traffic> _traffics;
-  Traffic _totalTraffic;
-  List<Log> _logs;
-  String _currentLabel;
-  SystemColorSchemes _systemColorSchemes;
+  List<NavigationItem> _navigationItems; // 菜单项
+  int? _runTime; // 运行时间
+  bool _isInit; // Clash是否初始化
+  VersionInfo? _versionInfo; // Clash版本信息
+  List<Traffic> _traffics; // 实时流量
+  Traffic _totalTraffic; // 总流量
+  List<Log> _logs; // 日志
+  String _currentLabel; // 当前菜单名称
+  SystemColorSchemes _systemColorSchemes; // 系统颜色
   num _sortNum;
-  Mode _mode;
-  DelayMap _delayMap;
+  Mode _mode; // 出站模式
+  DelayMap _delayMap; // 延迟数据存储
   SelectedMap _selectedMap;
   bool _isCompatible;
   List<Group> _groups;
