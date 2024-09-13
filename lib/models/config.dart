@@ -127,7 +127,7 @@ class Config extends ChangeNotifier {
   bool _isMinimizeOnExit;
   bool _isAccessControl;
   AccessControl _accessControl; // Android的应用访问控制
-  bool _isAnimateToPage;
+  bool _isAnimateToPage; // Android页面切换动画
   bool _autoCheckUpdate;
   bool _isExclude; // 是否从最近任务中隐藏应用
   DAV? _dav;

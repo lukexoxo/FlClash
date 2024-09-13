@@ -89,6 +89,7 @@ class ProxyCard extends StatelessWidget {
     }
   }
 
+  // 切换代理
   _changeProxy(BuildContext context) async {
     final appController = globalState.appController;
     final isUrlTest = groupType == GroupType.URLTest;

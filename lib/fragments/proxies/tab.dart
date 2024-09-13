@@ -56,7 +56,7 @@ class ProxiesTabFragmentState extends State<ProxiesTabFragment>
     );
   }
 
-  // 设置
+  // 布局设置
   _showMoreMenu() {
     showSheet(
       context: context,
@@ -155,11 +155,13 @@ class ProxiesTabFragmentState extends State<ProxiesTabFragment>
           children: [
             NotificationListener<ScrollMetricsNotification>(
               onNotification: (scrollNotification) {
+                // > 0 说明可滚动
                 _hasMoreButtonNotifier.value =
                     scrollNotification.metrics.maxScrollExtent > 0;
                 return true;
               },
               child: ValueListenableBuilder(
+                // 当值发生变化时，会rebuild
                 valueListenable: _hasMoreButtonNotifier,
                 builder: (_, value, child) {
                   return Stack(
@@ -232,6 +234,7 @@ class ProxiesTabFragmentState extends State<ProxiesTabFragment>
   }
 }
 
+// 策略组页面内容
 class ProxyGroupView extends StatefulWidget {
   final String groupName;
 

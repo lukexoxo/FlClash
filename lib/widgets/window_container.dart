@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:window_manager/window_manager.dart';
 
-// 桌面版窗口容器
+// 桌面版窗口容器 最大化、最小化、拖动、缩放、置顶、关闭
 class WindowContainer extends StatefulWidget {
   final Widget child;
 

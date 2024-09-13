@@ -54,7 +54,7 @@ class Profile with _$Profile {
     required Duration autoUpdateDuration,
     UserInfo? userInfo,
     @Default(true) bool autoUpdate,
-    @Default({}) SelectedMap selectedMap,
+    @Default({}) SelectedMap selectedMap, // 每个组选择的Proxy，如Proxies->HK,Youtube->Proxies, Global->HK专线01
     @Default({}) Set<String> unfoldSet,
     @JsonKey(includeToJson: false, includeFromJson: false)
     @Default(false)

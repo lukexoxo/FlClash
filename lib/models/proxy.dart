@@ -37,7 +37,7 @@ extension GroupExt on Group {
 class Proxy with _$Proxy {
   const factory Proxy({
     required String name,
-    required String type,
+    required String type, // Shadowsocks\Selector|Direct
     String? now,
   }) = _Proxy;
 
