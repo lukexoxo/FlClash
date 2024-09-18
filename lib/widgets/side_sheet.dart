@@ -561,7 +561,7 @@ class ModalSideSheetRoute<T> extends PopupRoute<T> {
   }
 }
 
-// Side Sheet，对应Material的BottomSheet
+// SideSheet，对应Material的BottomSheet
 Future<T?> showModalSideSheet<T>({
   required BuildContext context,
   required Widget body,

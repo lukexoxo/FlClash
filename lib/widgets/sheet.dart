@@ -6,6 +6,8 @@ import 'package:flutter/material.dart';
 import 'side_sheet.dart';
 
 // 展示新页面
+// Android: 新页面
+// Desktop: 侧边Sheet
 showExtendPage(
   BuildContext context, {
   required Widget body,
@@ -64,6 +66,8 @@ showExtendPage(
   );
 }
 
+// mobile: bottomSheet
+// desktop: sideSheet
 showSheet({
   required BuildContext context,
   required WidgetBuilder builder,

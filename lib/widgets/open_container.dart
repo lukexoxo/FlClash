@@ -21,6 +21,7 @@ enum ContainerTransitionType {
 
 typedef ClosedCallback<S> = void Function(S data);
 
+// 自定义动画效果，从封闭状态（closedBuilder）平滑过渡到打开状态（openBuilder）
 @optionalTypeArgs
 class OpenContainer<T extends Object?> extends StatefulWidget {
   const OpenContainer({
