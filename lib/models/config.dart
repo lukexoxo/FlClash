@@ -113,7 +113,7 @@ class ScaleProps with _$ScaleProps {
 // 应用程序的配置
 @JsonSerializable()
 class Config extends ChangeNotifier {
-  List<Profile> _profiles;
+  List<Profile> _profiles; // Clash配置文件列表
   bool _isCompatible;
   String? _currentProfileId;
   bool _autoLaunch;
