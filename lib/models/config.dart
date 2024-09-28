@@ -115,35 +115,35 @@ class ScaleProps with _$ScaleProps {
 class Config extends ChangeNotifier {
   List<Profile> _profiles; // Clash配置文件列表
   bool _isCompatible;
-  String? _currentProfileId;
-  bool _autoLaunch;
-  bool _silentLaunch;
-  bool _autoRun;
-  bool _openLog;
+  String? _currentProfileId; // 当前配置文件ID
+  bool _autoLaunch; // 自启动 desktop
+  bool _silentLaunch; // 静默启动 desktop 不显示窗口
+  bool _autoRun; // 启动时自动运行
+  bool _openLog; // Clash开启日志
   ThemeMode _themeMode; // 主题模式
   String? _locale; // 语言
   int? _primaryColor; // 主题色彩
-  ProxiesSortType _proxiesSortType;
-  bool _isMinimizeOnExit;
-  bool _isAccessControl;
+  ProxiesSortType _proxiesSortType; // 代理排序方式
+  bool _isMinimizeOnExit; // 退出时最小化
+  bool _isAccessControl; // Android的应用访问控制
   AccessControl _accessControl; // Android的应用访问控制
   bool _isAnimateToPage; // Android页面切换动画
-  bool _autoCheckUpdate;
+  bool _autoCheckUpdate; // 自动检查更新
   bool _isExclude; // 是否从最近任务中隐藏应用
-  DAV? _dav;
-  bool _isCloseConnections;
-  ProxiesType _proxiesType;
+  DAV? _dav; // DAV备份配置
+  bool _isCloseConnections; // 切换节点后是否关闭所有连接
+  ProxiesType _proxiesType; // 代理展示方式 tab or list
   ProxyCardType _proxyCardType;
   ProxiesLayout _proxiesLayout;
-  String _testUrl;
-  WindowProps _windowProps;
+  String _testUrl; // 测速链接
+  WindowProps _windowProps; // 窗口配置 desktop
   bool _onlyProxy; // 是否只统计代理流量
   bool _prueBlack; // 是否纯黑模式
   VpnProps _vpnProps; // VPN配置：启用、允许应用绕过VPN、系统代理（为VPNService附加HTTP代理）
-  ScaleProps _scaleProps;
-  DesktopProps _desktopProps;
+  ScaleProps _scaleProps; // 缩放配置
+  DesktopProps _desktopProps; // 系统代理开关 desktop
   bool _showLabel; // 是否显示菜单名称
-  bool _overrideDns;
+  bool _overrideDns; // 是否覆盖DNS
 
   Config()
       : _profiles = [],

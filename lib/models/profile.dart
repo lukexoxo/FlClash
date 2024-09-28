@@ -47,18 +47,18 @@ class UserInfo with _$UserInfo {
 class Profile with _$Profile {
   const factory Profile({
     required String id,
-    String? label,
-    String? currentGroupName,
-    @Default("") String url,
-    DateTime? lastUpdateDate,
-    required Duration autoUpdateDuration,
-    UserInfo? userInfo,
-    @Default(true) bool autoUpdate,
+    String? label, // 名称
+    String? currentGroupName, // 当前选择组
+    @Default("") String url, // 订阅地址
+    DateTime? lastUpdateDate, // 最后更新时间
+    required Duration autoUpdateDuration, // 自动更新时间间隔
+    UserInfo? userInfo, // 订阅信息
+    @Default(true) bool autoUpdate, // 是否自动更新
     @Default({}) SelectedMap selectedMap, // 每个组选择的Proxy，如Proxies->HK,Youtube->Proxies, Global->HK专线01
-    @Default({}) Set<String> unfoldSet,
+    @Default({}) Set<String> unfoldSet, // 展开的组
     @JsonKey(includeToJson: false, includeFromJson: false)
     @Default(false)
-    bool isUpdating,
+    bool isUpdating, // 是否正在更新
   }) = _Profile;
 
   factory Profile.fromJson(Map<String, Object?> json) =>
