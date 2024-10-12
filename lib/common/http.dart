@@ -11,8 +11,9 @@ class FlClashHttpOverrides extends HttpOverrides {
     client.badCertificateCallback = (_, __, ___) => true;
     client.findProxy = (url) {
       debugPrint("find $url");
-      final port = globalState.appController.clashConfig.mixedPort;
-      final isStart = globalState.appController.appState.isStart;
+      final appController = globalState.appController;
+      final port = appController.clashConfig.mixedPort;
+      final isStart = appController.appFlowingState.isStart;
       if (!isStart) return "DIRECT";
       return "PROXY localhost:$port";
     };

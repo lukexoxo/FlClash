@@ -1,9 +1,8 @@
-import 'dart:math';
 import 'dart:typed_data';
 
 import 'package:dio/dio.dart';
 import 'package:fl_clash/common/common.dart';
-import 'package:fl_clash/models/ip.dart';
+import 'package:fl_clash/models/models.dart';
 import 'package:fl_clash/state.dart';
 import 'package:flutter/cupertino.dart';
 
@@ -77,7 +76,7 @@ class Request {
   };
 
   Future<IpInfo?> checkIp({CancelToken? cancelToken}) async {
-    for (final source in _ipInfoSources.entries.toList()..shuffle(Random())) {
+    for (final source in _ipInfoSources.entries) {
       try {
         final response = await _dio
             .get<Map<String, dynamic>>(

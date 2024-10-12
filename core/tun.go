@@ -7,6 +7,7 @@ import (
 	"core/platform"
 	t "core/tun"
 	"errors"
+	"github.com/metacubex/mihomo/listener/sing_tun"
 	"strconv"
 	"sync"
 	"sync/atomic"
@@ -15,11 +16,9 @@ import (
 
 	"github.com/metacubex/mihomo/component/dialer"
 	"github.com/metacubex/mihomo/log"
-	"golang.org/x/sync/semaphore"
 )
 
 var tunLock sync.Mutex
-var tun *t.Tun
 var runTime *time.Time
 
 type FdMap struct {
@@ -35,7 +34,11 @@ func (cm *FdMap) Load(key int64) bool {
 	return ok
 }
 
-var fdMap FdMap
+var (
+	tunListener *sing_tun.Listener
+	fdMap       FdMap
+	fdCounter   int64 = 0
+)
 
 //export startTUN
 func startTUN(fd C.int, port C.longlong) {
@@ -56,29 +59,11 @@ func startTUN(fd C.int, port C.longlong) {
 	go func() {
 		tunLock.Lock()
 		defer tunLock.Unlock()
-
-		if tun != nil {
-			tun.Close()
-			tun = nil
-		}
-
 		f := int(fd)
-		gateway := "172.16.0.1/30"
-		portal := "172.16.0.2"
-		dns := "0.0.0.0"
-
-		tempTun := &t.Tun{Closed: false, Limit: semaphore.NewWeighted(4)}
-
-		closer, err := t.Start(f, gateway, portal, dns)
-
-		if err != nil {
-			log.Errorln("startTUN error: %v", err)
-			tempTun.Close()
+		tunListener, _ = t.Start(f)
+		if tunListener != nil {
+			log.Infoln("TUN address: %v", tunListener.Address())
 		}
-
-		tempTun.Closer = closer
-
-		tun = tempTun
 
 		now := time.Now()
 
@@ -108,9 +93,8 @@ func stopTun() {
 
 		runTime = nil
 
-		if tun != nil {
-			tun.Close()
-			tun = nil
+		if tunListener != nil {
+			_ = tunListener.Close()
 		}
 	}()
 }
@@ -137,18 +121,12 @@ func markSocket(fd Fd) {
 	})
 }
 
-var fdCounter int64 = 0
-
 func initSocketHook() {
 	dialer.DefaultSocketHook = func(network, address string, conn syscall.RawConn) error {
 		if platform.ShouldBlockConnection() {
 			return errBlocked
 		}
 		return conn.Control(func(fd uintptr) {
-			if tun == nil {
-				return
-			}
-
 			fdInt := int64(fd)
 			timeout := time.After(100 * time.Millisecond)
 			id := atomic.AddInt64(&fdCounter, 1)

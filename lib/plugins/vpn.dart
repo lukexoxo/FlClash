@@ -20,9 +20,14 @@ class Vpn {
     methodChannel.setMethodCallHandler((call) async {
       switch (call.method) {
         case "started":
-          final fd = call.arguments;
+          final fd = call.arguments as int;
           onStarted(fd);
           break;
+        case "gc":
+          clashCore.requestGc();
+        case "dnsChanged":
+          final dns = call.arguments as String;
+          clashCore.updateDns(dns);
         default:
           throw MissingPluginException();
       }
@@ -34,11 +39,10 @@ class Vpn {
     return _instance!;
   }
 
-  Future<bool?> startVpn(port) async {
-    final state = clashCore.getState();
+  Future<bool?> startVpn() async {
+    final options = clashCore.getAndroidVpnOptions();
     return await methodChannel.invokeMethod<bool>("start", {
-      'port': state.mixedPort,
-      'args': json.encode(state),
+      'data': json.encode(options),
     });
   }
 
@@ -48,6 +52,12 @@ class Vpn {
 
   Future<bool?> setProtect(int fd) async {
     return await methodChannel.invokeMethod<bool?>("setProtect", {'fd': fd});
+  }
+
+  Future<String?> resolverProcess(Process process) async {
+    return await methodChannel.invokeMethod<String>("resolverProcess", {
+      "data": json.encode(process),
+    });
   }
 
   Future<bool?> startForeground({
@@ -60,7 +70,7 @@ class Vpn {
     });
   }
 
-  onStarted(int? fd) {
+  onStarted(int fd) {
     if (receiver != null) {
       receiver!.close();
       receiver == null;
@@ -69,7 +79,7 @@ class Vpn {
     receiver!.listen((message) {
       _handleServiceMessage(message);
     });
-    clashCore.startTun(fd ?? 0, receiver!.sendPort.nativePort);
+    clashCore.startTun(fd, receiver!.sendPort.nativePort);
   }
 
   setServiceMessageHandler(ServiceMessageListener serviceMessageListener) {

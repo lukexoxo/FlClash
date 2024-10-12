@@ -100,12 +100,18 @@ class Other {
     }
   }
 
-  String getTrayIconPath() {
-    if (Platform.isWindows) {
-      return "assets/images/icon.ico";
-    } else {
-      return "assets/images/icon_monochrome.png";
+  String getTrayIconPath({
+    required bool isStart,
+    required Brightness brightness,
+  }) {
+    final suffix = Platform.isWindows ? "ico" : "png";
+    if (!isStart && Platform.isWindows) {
+      return switch (brightness) {
+        Brightness.dark => "assets/images/icon_white.$suffix",
+        Brightness.light => "assets/images/icon_black.$suffix",
+      };
     }
+    return "assets/images/icon.$suffix";
   }
 
   int compareVersions(String version1, String version2) {
@@ -165,14 +171,18 @@ class Other {
     if (disposition == null) return null;
     final parseValue = HeaderValue.parse(disposition);
     final parameters = parseValue.parameters;
-    final key = parameters.keys
-        .firstWhere((key) => key.startsWith("filename"), orElse: () => '');
-    if (key.isEmpty) return null;
-    if (key == "filename*") {
-      return Uri.decodeComponent((parameters[key] ?? "").split("'").last);
-    } else {
-      return parameters[key];
+    final fileNamePointKey = parameters.keys
+        .firstWhere((key) => key == "filename*", orElse: () => "");
+    if (fileNamePointKey.isNotEmpty) {
+      final res = parameters[fileNamePointKey]?.split("''") ?? [];
+      if (res.length >= 2) {
+        return Uri.decodeComponent(res[1]);
+      }
     }
+    final fileNameKey = parameters.keys
+        .firstWhere((key) => key == "filename", orElse: () => "");
+    if (fileNameKey.isEmpty) return null;
+    return parameters[fileNameKey];
   }
 
   double getViewWidth() {
@@ -201,9 +211,9 @@ class Other {
   int getProxiesColumns(double viewWidth, ProxiesLayout proxiesLayout) {
     final columns = max((viewWidth / 300).ceil(), 2);
     return switch (proxiesLayout) {
-      ProxiesLayout.tight => columns - 1,
+      ProxiesLayout.tight => columns + 1,
       ProxiesLayout.standard => columns,
-      ProxiesLayout.loose => columns + 1,
+      ProxiesLayout.loose => columns - 1,
     };
   }
 
@@ -213,6 +223,15 @@ class Other {
 
   String getBackupFileName() {
     return "${appName}_backup_${DateTime.now().show}.zip";
+  }
+
+  String get logFile {
+    return "${appName}_${DateTime.now().show}.log";
+  }
+
+  Size getScreenSize() {
+    final view = WidgetsBinding.instance.platformDispatcher.views.first;
+    return view.physicalSize / view.devicePixelRatio;
   }
 }
 

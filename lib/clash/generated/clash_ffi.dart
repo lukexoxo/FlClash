@@ -5144,6 +5144,20 @@ class ClashFFI {
   late final __FCmulcr =
       __FCmulcrPtr.asFunction<_Fcomplex Function(_Fcomplex, double)>();
 
+  void updateDns(
+    ffi.Pointer<ffi.Char> s,
+  ) {
+    return _updateDns(
+      s,
+    );
+  }
+
+  late final _updateDnsPtr =
+      _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Char>)>>(
+          'updateDns');
+  late final _updateDns =
+      _updateDnsPtr.asFunction<void Function(ffi.Pointer<ffi.Char>)>();
+
   void start() {
     return _start();
   }
@@ -5543,14 +5557,25 @@ class ClashFFI {
   late final _setProcessMap =
       _setProcessMapPtr.asFunction<void Function(ffi.Pointer<ffi.Char>)>();
 
-  ffi.Pointer<ffi.Char> getState() {
-    return _getState();
+  ffi.Pointer<ffi.Char> getCurrentProfileName() {
+    return _getCurrentProfileName();
   }
 
-  late final _getStatePtr =
-      _lookup<ffi.NativeFunction<ffi.Pointer<ffi.Char> Function()>>('getState');
-  late final _getState =
-      _getStatePtr.asFunction<ffi.Pointer<ffi.Char> Function()>();
+  late final _getCurrentProfileNamePtr =
+      _lookup<ffi.NativeFunction<ffi.Pointer<ffi.Char> Function()>>(
+          'getCurrentProfileName');
+  late final _getCurrentProfileName =
+      _getCurrentProfileNamePtr.asFunction<ffi.Pointer<ffi.Char> Function()>();
+
+  ffi.Pointer<ffi.Char> getAndroidVpnOptions() {
+    return _getAndroidVpnOptions();
+  }
+
+  late final _getAndroidVpnOptionsPtr =
+      _lookup<ffi.NativeFunction<ffi.Pointer<ffi.Char> Function()>>(
+          'getAndroidVpnOptions');
+  late final _getAndroidVpnOptions =
+      _getAndroidVpnOptionsPtr.asFunction<ffi.Pointer<ffi.Char> Function()>();
 
   void setState(
     ffi.Pointer<ffi.Char> s,

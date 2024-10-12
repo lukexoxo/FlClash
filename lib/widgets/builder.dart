@@ -65,3 +65,24 @@ class ProxiesActionsBuilder extends StatelessWidget {
     );
   }
 }
+
+typedef StateWidgetBuilder<T> = Widget Function(T state);
+
+class LocaleBuilder extends StatelessWidget {
+  final StateWidgetBuilder<String?> builder;
+
+  const LocaleBuilder({
+    super.key,
+    required this.builder,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Selector<Config, String?>(
+      selector: (_, config) => config.appSetting.locale,
+      builder: (_, state, __) {
+        return builder(state);
+      },
+    );
+  }
+}

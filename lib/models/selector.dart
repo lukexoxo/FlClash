@@ -59,15 +59,17 @@ class ApplicationSelectorState with _$ApplicationSelectorState {
 }
 
 @freezed
-class TrayContainerSelectorState with _$TrayContainerSelectorState {
-  const factory TrayContainerSelectorState({
+class TrayState with _$TrayState {
+  const factory TrayState({
     required Mode mode,
     required bool autoLaunch,
+    required bool adminAutoLaunch,
     required bool systemProxy,
     required bool tunEnable,
     required bool isStart,
     required String? locale,
-  }) = _TrayContainerSelectorState;
+    required Brightness? brightness,
+  }) = _TrayState;
 }
 
 @freezed
@@ -79,20 +81,13 @@ class UpdateNavigationsSelector with _$UpdateNavigationsSelector {
 }
 
 @freezed
-class HomeSelectorState with _$HomeSelectorState {
-  const factory HomeSelectorState({
+class HomeState with _$HomeState {
+  const factory HomeState({
     required String currentLabel,
     required List<NavigationItem> navigationItems,
     required ViewMode viewMode,
     required String? locale,
-  }) = _HomeSelectorState;
-}
-
-@freezed
-class HomeBodySelectorState with _$HomeBodySelectorState {
-  const factory HomeBodySelectorState({
-    required List<NavigationItem> navigationItems,
-  }) = _HomeBodySelectorState;
+  }) = _HomeState;
 }
 
 @freezed
@@ -201,7 +196,7 @@ class ProxiesActionsState with _$ProxiesActionsState {
 class AutoLaunchState with _$AutoLaunchState {
   const factory AutoLaunchState({
     required bool isAutoLaunch,
-    required bool isOpenTun,
+    required bool isAdminAutoLaunch,
   }) = _AutoLaunchState;
 }
 
@@ -221,6 +216,8 @@ class HttpOverridesState with _$HttpOverridesState {
     required int port,
   }) = _HttpOverridesState;
 }
+
+
 
 @freezed
 class ClashConfigState with _$ClashConfigState {
@@ -244,4 +241,13 @@ class ClashConfigState with _$ClashConfigState {
     required List<String> rules,
     required String? globalRealUa,
   }) = _ClashConfigState;
+}
+
+@freezed
+class VPNState with _$VPNState {
+  const factory VPNState({
+    required AccessControl? accessControl,
+    required TunStack stack,
+    required VpnProps vpnProps,
+  }) = _VPNState;
 }

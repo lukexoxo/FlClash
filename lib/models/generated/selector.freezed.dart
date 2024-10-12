@@ -957,40 +957,41 @@ abstract class _ApplicationSelectorState implements ApplicationSelectorState {
 }
 
 /// @nodoc
-mixin _$TrayContainerSelectorState {
+mixin _$TrayState {
   Mode get mode => throw _privateConstructorUsedError;
   bool get autoLaunch => throw _privateConstructorUsedError;
+  bool get adminAutoLaunch => throw _privateConstructorUsedError;
   bool get systemProxy => throw _privateConstructorUsedError;
   bool get tunEnable => throw _privateConstructorUsedError;
   bool get isStart => throw _privateConstructorUsedError;
   String? get locale => throw _privateConstructorUsedError;
+  Brightness? get brightness => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
-  $TrayContainerSelectorStateCopyWith<TrayContainerSelectorState>
-      get copyWith => throw _privateConstructorUsedError;
+  $TrayStateCopyWith<TrayState> get copyWith =>
+      throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class $TrayContainerSelectorStateCopyWith<$Res> {
-  factory $TrayContainerSelectorStateCopyWith(TrayContainerSelectorState value,
-          $Res Function(TrayContainerSelectorState) then) =
-      _$TrayContainerSelectorStateCopyWithImpl<$Res,
-          TrayContainerSelectorState>;
+abstract class $TrayStateCopyWith<$Res> {
+  factory $TrayStateCopyWith(TrayState value, $Res Function(TrayState) then) =
+      _$TrayStateCopyWithImpl<$Res, TrayState>;
   @useResult
   $Res call(
       {Mode mode,
       bool autoLaunch,
+      bool adminAutoLaunch,
       bool systemProxy,
       bool tunEnable,
       bool isStart,
-      String? locale});
+      String? locale,
+      Brightness? brightness});
 }
 
 /// @nodoc
-class _$TrayContainerSelectorStateCopyWithImpl<$Res,
-        $Val extends TrayContainerSelectorState>
-    implements $TrayContainerSelectorStateCopyWith<$Res> {
-  _$TrayContainerSelectorStateCopyWithImpl(this._value, this._then);
+class _$TrayStateCopyWithImpl<$Res, $Val extends TrayState>
+    implements $TrayStateCopyWith<$Res> {
+  _$TrayStateCopyWithImpl(this._value, this._then);
 
   // ignore: unused_field
   final $Val _value;
@@ -1002,10 +1003,12 @@ class _$TrayContainerSelectorStateCopyWithImpl<$Res,
   $Res call({
     Object? mode = null,
     Object? autoLaunch = null,
+    Object? adminAutoLaunch = null,
     Object? systemProxy = null,
     Object? tunEnable = null,
     Object? isStart = null,
     Object? locale = freezed,
+    Object? brightness = freezed,
   }) {
     return _then(_value.copyWith(
       mode: null == mode
@@ -1016,6 +1019,10 @@ class _$TrayContainerSelectorStateCopyWithImpl<$Res,
           ? _value.autoLaunch
           : autoLaunch // ignore: cast_nullable_to_non_nullable
               as bool,
+      adminAutoLaunch: null == adminAutoLaunch
+          ? _value.adminAutoLaunch
+          : adminAutoLaunch // ignore: cast_nullable_to_non_nullable
+              as bool,
       systemProxy: null == systemProxy
           ? _value.systemProxy
           : systemProxy // ignore: cast_nullable_to_non_nullable
@@ -1032,36 +1039,39 @@ class _$TrayContainerSelectorStateCopyWithImpl<$Res,
           ? _value.locale
           : locale // ignore: cast_nullable_to_non_nullable
               as String?,
+      brightness: freezed == brightness
+          ? _value.brightness
+          : brightness // ignore: cast_nullable_to_non_nullable
+              as Brightness?,
     ) as $Val);
   }
 }
 
 /// @nodoc
-abstract class _$$TrayContainerSelectorStateImplCopyWith<$Res>
-    implements $TrayContainerSelectorStateCopyWith<$Res> {
-  factory _$$TrayContainerSelectorStateImplCopyWith(
-          _$TrayContainerSelectorStateImpl value,
-          $Res Function(_$TrayContainerSelectorStateImpl) then) =
-      __$$TrayContainerSelectorStateImplCopyWithImpl<$Res>;
+abstract class _$$TrayStateImplCopyWith<$Res>
+    implements $TrayStateCopyWith<$Res> {
+  factory _$$TrayStateImplCopyWith(
+          _$TrayStateImpl value, $Res Function(_$TrayStateImpl) then) =
+      __$$TrayStateImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call(
       {Mode mode,
       bool autoLaunch,
+      bool adminAutoLaunch,
       bool systemProxy,
       bool tunEnable,
       bool isStart,
-      String? locale});
+      String? locale,
+      Brightness? brightness});
 }
 
 /// @nodoc
-class __$$TrayContainerSelectorStateImplCopyWithImpl<$Res>
-    extends _$TrayContainerSelectorStateCopyWithImpl<$Res,
-        _$TrayContainerSelectorStateImpl>
-    implements _$$TrayContainerSelectorStateImplCopyWith<$Res> {
-  __$$TrayContainerSelectorStateImplCopyWithImpl(
-      _$TrayContainerSelectorStateImpl _value,
-      $Res Function(_$TrayContainerSelectorStateImpl) _then)
+class __$$TrayStateImplCopyWithImpl<$Res>
+    extends _$TrayStateCopyWithImpl<$Res, _$TrayStateImpl>
+    implements _$$TrayStateImplCopyWith<$Res> {
+  __$$TrayStateImplCopyWithImpl(
+      _$TrayStateImpl _value, $Res Function(_$TrayStateImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -1069,12 +1079,14 @@ class __$$TrayContainerSelectorStateImplCopyWithImpl<$Res>
   $Res call({
     Object? mode = null,
     Object? autoLaunch = null,
+    Object? adminAutoLaunch = null,
     Object? systemProxy = null,
     Object? tunEnable = null,
     Object? isStart = null,
     Object? locale = freezed,
+    Object? brightness = freezed,
   }) {
-    return _then(_$TrayContainerSelectorStateImpl(
+    return _then(_$TrayStateImpl(
       mode: null == mode
           ? _value.mode
           : mode // ignore: cast_nullable_to_non_nullable
@@ -1083,6 +1095,10 @@ class __$$TrayContainerSelectorStateImplCopyWithImpl<$Res>
           ? _value.autoLaunch
           : autoLaunch // ignore: cast_nullable_to_non_nullable
               as bool,
+      adminAutoLaunch: null == adminAutoLaunch
+          ? _value.adminAutoLaunch
+          : adminAutoLaunch // ignore: cast_nullable_to_non_nullable
+              as bool,
       systemProxy: null == systemProxy
           ? _value.systemProxy
           : systemProxy // ignore: cast_nullable_to_non_nullable
@@ -1099,25 +1115,33 @@ class __$$TrayContainerSelectorStateImplCopyWithImpl<$Res>
           ? _value.locale
           : locale // ignore: cast_nullable_to_non_nullable
               as String?,
+      brightness: freezed == brightness
+          ? _value.brightness
+          : brightness // ignore: cast_nullable_to_non_nullable
+              as Brightness?,
     ));
   }
 }
 
 /// @nodoc
 
-class _$TrayContainerSelectorStateImpl implements _TrayContainerSelectorState {
-  const _$TrayContainerSelectorStateImpl(
+class _$TrayStateImpl implements _TrayState {
+  const _$TrayStateImpl(
       {required this.mode,
       required this.autoLaunch,
+      required this.adminAutoLaunch,
       required this.systemProxy,
       required this.tunEnable,
       required this.isStart,
-      required this.locale});
+      required this.locale,
+      required this.brightness});
 
   @override
   final Mode mode;
   @override
   final bool autoLaunch;
+  @override
+  final bool adminAutoLaunch;
   @override
   final bool systemProxy;
   @override
@@ -1126,54 +1150,62 @@ class _$TrayContainerSelectorStateImpl implements _TrayContainerSelectorState {
   final bool isStart;
   @override
   final String? locale;
+  @override
+  final Brightness? brightness;
 
   @override
   String toString() {
-    return 'TrayContainerSelectorState(mode: $mode, autoLaunch: $autoLaunch, systemProxy: $systemProxy, tunEnable: $tunEnable, isStart: $isStart, locale: $locale)';
+    return 'TrayState(mode: $mode, autoLaunch: $autoLaunch, adminAutoLaunch: $adminAutoLaunch, systemProxy: $systemProxy, tunEnable: $tunEnable, isStart: $isStart, locale: $locale, brightness: $brightness)';
   }
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$TrayContainerSelectorStateImpl &&
+            other is _$TrayStateImpl &&
             (identical(other.mode, mode) || other.mode == mode) &&
             (identical(other.autoLaunch, autoLaunch) ||
                 other.autoLaunch == autoLaunch) &&
+            (identical(other.adminAutoLaunch, adminAutoLaunch) ||
+                other.adminAutoLaunch == adminAutoLaunch) &&
             (identical(other.systemProxy, systemProxy) ||
                 other.systemProxy == systemProxy) &&
             (identical(other.tunEnable, tunEnable) ||
                 other.tunEnable == tunEnable) &&
             (identical(other.isStart, isStart) || other.isStart == isStart) &&
-            (identical(other.locale, locale) || other.locale == locale));
+            (identical(other.locale, locale) || other.locale == locale) &&
+            (identical(other.brightness, brightness) ||
+                other.brightness == brightness));
   }
 
   @override
-  int get hashCode => Object.hash(
-      runtimeType, mode, autoLaunch, systemProxy, tunEnable, isStart, locale);
+  int get hashCode => Object.hash(runtimeType, mode, autoLaunch,
+      adminAutoLaunch, systemProxy, tunEnable, isStart, locale, brightness);
 
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$TrayContainerSelectorStateImplCopyWith<_$TrayContainerSelectorStateImpl>
-      get copyWith => __$$TrayContainerSelectorStateImplCopyWithImpl<
-          _$TrayContainerSelectorStateImpl>(this, _$identity);
+  _$$TrayStateImplCopyWith<_$TrayStateImpl> get copyWith =>
+      __$$TrayStateImplCopyWithImpl<_$TrayStateImpl>(this, _$identity);
 }
 
-abstract class _TrayContainerSelectorState
-    implements TrayContainerSelectorState {
-  const factory _TrayContainerSelectorState(
+abstract class _TrayState implements TrayState {
+  const factory _TrayState(
       {required final Mode mode,
       required final bool autoLaunch,
+      required final bool adminAutoLaunch,
       required final bool systemProxy,
       required final bool tunEnable,
       required final bool isStart,
-      required final String? locale}) = _$TrayContainerSelectorStateImpl;
+      required final String? locale,
+      required final Brightness? brightness}) = _$TrayStateImpl;
 
   @override
   Mode get mode;
   @override
   bool get autoLaunch;
+  @override
+  bool get adminAutoLaunch;
   @override
   bool get systemProxy;
   @override
@@ -1183,9 +1215,11 @@ abstract class _TrayContainerSelectorState
   @override
   String? get locale;
   @override
+  Brightness? get brightness;
+  @override
   @JsonKey(ignore: true)
-  _$$TrayContainerSelectorStateImplCopyWith<_$TrayContainerSelectorStateImpl>
-      get copyWith => throw _privateConstructorUsedError;
+  _$$TrayStateImplCopyWith<_$TrayStateImpl> get copyWith =>
+      throw _privateConstructorUsedError;
 }
 
 /// @nodoc
@@ -1332,7 +1366,7 @@ abstract class _UpdateNavigationsSelector implements UpdateNavigationsSelector {
 }
 
 /// @nodoc
-mixin _$HomeSelectorState {
+mixin _$HomeState {
   String get currentLabel => throw _privateConstructorUsedError;
   List<NavigationItem> get navigationItems =>
       throw _privateConstructorUsedError;
@@ -1340,15 +1374,14 @@ mixin _$HomeSelectorState {
   String? get locale => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
-  $HomeSelectorStateCopyWith<HomeSelectorState> get copyWith =>
+  $HomeStateCopyWith<HomeState> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class $HomeSelectorStateCopyWith<$Res> {
-  factory $HomeSelectorStateCopyWith(
-          HomeSelectorState value, $Res Function(HomeSelectorState) then) =
-      _$HomeSelectorStateCopyWithImpl<$Res, HomeSelectorState>;
+abstract class $HomeStateCopyWith<$Res> {
+  factory $HomeStateCopyWith(HomeState value, $Res Function(HomeState) then) =
+      _$HomeStateCopyWithImpl<$Res, HomeState>;
   @useResult
   $Res call(
       {String currentLabel,
@@ -1358,9 +1391,9 @@ abstract class $HomeSelectorStateCopyWith<$Res> {
 }
 
 /// @nodoc
-class _$HomeSelectorStateCopyWithImpl<$Res, $Val extends HomeSelectorState>
-    implements $HomeSelectorStateCopyWith<$Res> {
-  _$HomeSelectorStateCopyWithImpl(this._value, this._then);
+class _$HomeStateCopyWithImpl<$Res, $Val extends HomeState>
+    implements $HomeStateCopyWith<$Res> {
+  _$HomeStateCopyWithImpl(this._value, this._then);
 
   // ignore: unused_field
   final $Val _value;
@@ -1397,11 +1430,11 @@ class _$HomeSelectorStateCopyWithImpl<$Res, $Val extends HomeSelectorState>
 }
 
 /// @nodoc
-abstract class _$$HomeSelectorStateImplCopyWith<$Res>
-    implements $HomeSelectorStateCopyWith<$Res> {
-  factory _$$HomeSelectorStateImplCopyWith(_$HomeSelectorStateImpl value,
-          $Res Function(_$HomeSelectorStateImpl) then) =
-      __$$HomeSelectorStateImplCopyWithImpl<$Res>;
+abstract class _$$HomeStateImplCopyWith<$Res>
+    implements $HomeStateCopyWith<$Res> {
+  factory _$$HomeStateImplCopyWith(
+          _$HomeStateImpl value, $Res Function(_$HomeStateImpl) then) =
+      __$$HomeStateImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call(
@@ -1412,11 +1445,11 @@ abstract class _$$HomeSelectorStateImplCopyWith<$Res>
 }
 
 /// @nodoc
-class __$$HomeSelectorStateImplCopyWithImpl<$Res>
-    extends _$HomeSelectorStateCopyWithImpl<$Res, _$HomeSelectorStateImpl>
-    implements _$$HomeSelectorStateImplCopyWith<$Res> {
-  __$$HomeSelectorStateImplCopyWithImpl(_$HomeSelectorStateImpl _value,
-      $Res Function(_$HomeSelectorStateImpl) _then)
+class __$$HomeStateImplCopyWithImpl<$Res>
+    extends _$HomeStateCopyWithImpl<$Res, _$HomeStateImpl>
+    implements _$$HomeStateImplCopyWith<$Res> {
+  __$$HomeStateImplCopyWithImpl(
+      _$HomeStateImpl _value, $Res Function(_$HomeStateImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -1427,7 +1460,7 @@ class __$$HomeSelectorStateImplCopyWithImpl<$Res>
     Object? viewMode = null,
     Object? locale = freezed,
   }) {
-    return _then(_$HomeSelectorStateImpl(
+    return _then(_$HomeStateImpl(
       currentLabel: null == currentLabel
           ? _value.currentLabel
           : currentLabel // ignore: cast_nullable_to_non_nullable
@@ -1450,8 +1483,8 @@ class __$$HomeSelectorStateImplCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$HomeSelectorStateImpl implements _HomeSelectorState {
-  const _$HomeSelectorStateImpl(
+class _$HomeStateImpl implements _HomeState {
+  const _$HomeStateImpl(
       {required this.currentLabel,
       required final List<NavigationItem> navigationItems,
       required this.viewMode,
@@ -1475,14 +1508,14 @@ class _$HomeSelectorStateImpl implements _HomeSelectorState {
 
   @override
   String toString() {
-    return 'HomeSelectorState(currentLabel: $currentLabel, navigationItems: $navigationItems, viewMode: $viewMode, locale: $locale)';
+    return 'HomeState(currentLabel: $currentLabel, navigationItems: $navigationItems, viewMode: $viewMode, locale: $locale)';
   }
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$HomeSelectorStateImpl &&
+            other is _$HomeStateImpl &&
             (identical(other.currentLabel, currentLabel) ||
                 other.currentLabel == currentLabel) &&
             const DeepCollectionEquality()
@@ -1499,17 +1532,16 @@ class _$HomeSelectorStateImpl implements _HomeSelectorState {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$HomeSelectorStateImplCopyWith<_$HomeSelectorStateImpl> get copyWith =>
-      __$$HomeSelectorStateImplCopyWithImpl<_$HomeSelectorStateImpl>(
-          this, _$identity);
+  _$$HomeStateImplCopyWith<_$HomeStateImpl> get copyWith =>
+      __$$HomeStateImplCopyWithImpl<_$HomeStateImpl>(this, _$identity);
 }
 
-abstract class _HomeSelectorState implements HomeSelectorState {
-  const factory _HomeSelectorState(
+abstract class _HomeState implements HomeState {
+  const factory _HomeState(
       {required final String currentLabel,
       required final List<NavigationItem> navigationItems,
       required final ViewMode viewMode,
-      required final String? locale}) = _$HomeSelectorStateImpl;
+      required final String? locale}) = _$HomeStateImpl;
 
   @override
   String get currentLabel;
@@ -1521,141 +1553,8 @@ abstract class _HomeSelectorState implements HomeSelectorState {
   String? get locale;
   @override
   @JsonKey(ignore: true)
-  _$$HomeSelectorStateImplCopyWith<_$HomeSelectorStateImpl> get copyWith =>
+  _$$HomeStateImplCopyWith<_$HomeStateImpl> get copyWith =>
       throw _privateConstructorUsedError;
-}
-
-/// @nodoc
-mixin _$HomeBodySelectorState {
-  List<NavigationItem> get navigationItems =>
-      throw _privateConstructorUsedError;
-
-  @JsonKey(ignore: true)
-  $HomeBodySelectorStateCopyWith<HomeBodySelectorState> get copyWith =>
-      throw _privateConstructorUsedError;
-}
-
-/// @nodoc
-abstract class $HomeBodySelectorStateCopyWith<$Res> {
-  factory $HomeBodySelectorStateCopyWith(HomeBodySelectorState value,
-          $Res Function(HomeBodySelectorState) then) =
-      _$HomeBodySelectorStateCopyWithImpl<$Res, HomeBodySelectorState>;
-  @useResult
-  $Res call({List<NavigationItem> navigationItems});
-}
-
-/// @nodoc
-class _$HomeBodySelectorStateCopyWithImpl<$Res,
-        $Val extends HomeBodySelectorState>
-    implements $HomeBodySelectorStateCopyWith<$Res> {
-  _$HomeBodySelectorStateCopyWithImpl(this._value, this._then);
-
-  // ignore: unused_field
-  final $Val _value;
-  // ignore: unused_field
-  final $Res Function($Val) _then;
-
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? navigationItems = null,
-  }) {
-    return _then(_value.copyWith(
-      navigationItems: null == navigationItems
-          ? _value.navigationItems
-          : navigationItems // ignore: cast_nullable_to_non_nullable
-              as List<NavigationItem>,
-    ) as $Val);
-  }
-}
-
-/// @nodoc
-abstract class _$$HomeBodySelectorStateImplCopyWith<$Res>
-    implements $HomeBodySelectorStateCopyWith<$Res> {
-  factory _$$HomeBodySelectorStateImplCopyWith(
-          _$HomeBodySelectorStateImpl value,
-          $Res Function(_$HomeBodySelectorStateImpl) then) =
-      __$$HomeBodySelectorStateImplCopyWithImpl<$Res>;
-  @override
-  @useResult
-  $Res call({List<NavigationItem> navigationItems});
-}
-
-/// @nodoc
-class __$$HomeBodySelectorStateImplCopyWithImpl<$Res>
-    extends _$HomeBodySelectorStateCopyWithImpl<$Res,
-        _$HomeBodySelectorStateImpl>
-    implements _$$HomeBodySelectorStateImplCopyWith<$Res> {
-  __$$HomeBodySelectorStateImplCopyWithImpl(_$HomeBodySelectorStateImpl _value,
-      $Res Function(_$HomeBodySelectorStateImpl) _then)
-      : super(_value, _then);
-
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? navigationItems = null,
-  }) {
-    return _then(_$HomeBodySelectorStateImpl(
-      navigationItems: null == navigationItems
-          ? _value._navigationItems
-          : navigationItems // ignore: cast_nullable_to_non_nullable
-              as List<NavigationItem>,
-    ));
-  }
-}
-
-/// @nodoc
-
-class _$HomeBodySelectorStateImpl implements _HomeBodySelectorState {
-  const _$HomeBodySelectorStateImpl(
-      {required final List<NavigationItem> navigationItems})
-      : _navigationItems = navigationItems;
-
-  final List<NavigationItem> _navigationItems;
-  @override
-  List<NavigationItem> get navigationItems {
-    if (_navigationItems is EqualUnmodifiableListView) return _navigationItems;
-    // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_navigationItems);
-  }
-
-  @override
-  String toString() {
-    return 'HomeBodySelectorState(navigationItems: $navigationItems)';
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$HomeBodySelectorStateImpl &&
-            const DeepCollectionEquality()
-                .equals(other._navigationItems, _navigationItems));
-  }
-
-  @override
-  int get hashCode => Object.hash(
-      runtimeType, const DeepCollectionEquality().hash(_navigationItems));
-
-  @JsonKey(ignore: true)
-  @override
-  @pragma('vm:prefer-inline')
-  _$$HomeBodySelectorStateImplCopyWith<_$HomeBodySelectorStateImpl>
-      get copyWith => __$$HomeBodySelectorStateImplCopyWithImpl<
-          _$HomeBodySelectorStateImpl>(this, _$identity);
-}
-
-abstract class _HomeBodySelectorState implements HomeBodySelectorState {
-  const factory _HomeBodySelectorState(
-          {required final List<NavigationItem> navigationItems}) =
-      _$HomeBodySelectorStateImpl;
-
-  @override
-  List<NavigationItem> get navigationItems;
-  @override
-  @JsonKey(ignore: true)
-  _$$HomeBodySelectorStateImplCopyWith<_$HomeBodySelectorStateImpl>
-      get copyWith => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
@@ -3041,7 +2940,7 @@ abstract class _ProxiesActionsState implements ProxiesActionsState {
 /// @nodoc
 mixin _$AutoLaunchState {
   bool get isAutoLaunch => throw _privateConstructorUsedError;
-  bool get isOpenTun => throw _privateConstructorUsedError;
+  bool get isAdminAutoLaunch => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $AutoLaunchStateCopyWith<AutoLaunchState> get copyWith =>
@@ -3054,7 +2953,7 @@ abstract class $AutoLaunchStateCopyWith<$Res> {
           AutoLaunchState value, $Res Function(AutoLaunchState) then) =
       _$AutoLaunchStateCopyWithImpl<$Res, AutoLaunchState>;
   @useResult
-  $Res call({bool isAutoLaunch, bool isOpenTun});
+  $Res call({bool isAutoLaunch, bool isAdminAutoLaunch});
 }
 
 /// @nodoc
@@ -3071,16 +2970,16 @@ class _$AutoLaunchStateCopyWithImpl<$Res, $Val extends AutoLaunchState>
   @override
   $Res call({
     Object? isAutoLaunch = null,
-    Object? isOpenTun = null,
+    Object? isAdminAutoLaunch = null,
   }) {
     return _then(_value.copyWith(
       isAutoLaunch: null == isAutoLaunch
           ? _value.isAutoLaunch
           : isAutoLaunch // ignore: cast_nullable_to_non_nullable
               as bool,
-      isOpenTun: null == isOpenTun
-          ? _value.isOpenTun
-          : isOpenTun // ignore: cast_nullable_to_non_nullable
+      isAdminAutoLaunch: null == isAdminAutoLaunch
+          ? _value.isAdminAutoLaunch
+          : isAdminAutoLaunch // ignore: cast_nullable_to_non_nullable
               as bool,
     ) as $Val);
   }
@@ -3094,7 +2993,7 @@ abstract class _$$AutoLaunchStateImplCopyWith<$Res>
       __$$AutoLaunchStateImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({bool isAutoLaunch, bool isOpenTun});
+  $Res call({bool isAutoLaunch, bool isAdminAutoLaunch});
 }
 
 /// @nodoc
@@ -3109,16 +3008,16 @@ class __$$AutoLaunchStateImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? isAutoLaunch = null,
-    Object? isOpenTun = null,
+    Object? isAdminAutoLaunch = null,
   }) {
     return _then(_$AutoLaunchStateImpl(
       isAutoLaunch: null == isAutoLaunch
           ? _value.isAutoLaunch
           : isAutoLaunch // ignore: cast_nullable_to_non_nullable
               as bool,
-      isOpenTun: null == isOpenTun
-          ? _value.isOpenTun
-          : isOpenTun // ignore: cast_nullable_to_non_nullable
+      isAdminAutoLaunch: null == isAdminAutoLaunch
+          ? _value.isAdminAutoLaunch
+          : isAdminAutoLaunch // ignore: cast_nullable_to_non_nullable
               as bool,
     ));
   }
@@ -3128,16 +3027,16 @@ class __$$AutoLaunchStateImplCopyWithImpl<$Res>
 
 class _$AutoLaunchStateImpl implements _AutoLaunchState {
   const _$AutoLaunchStateImpl(
-      {required this.isAutoLaunch, required this.isOpenTun});
+      {required this.isAutoLaunch, required this.isAdminAutoLaunch});
 
   @override
   final bool isAutoLaunch;
   @override
-  final bool isOpenTun;
+  final bool isAdminAutoLaunch;
 
   @override
   String toString() {
-    return 'AutoLaunchState(isAutoLaunch: $isAutoLaunch, isOpenTun: $isOpenTun)';
+    return 'AutoLaunchState(isAutoLaunch: $isAutoLaunch, isAdminAutoLaunch: $isAdminAutoLaunch)';
   }
 
   @override
@@ -3147,12 +3046,12 @@ class _$AutoLaunchStateImpl implements _AutoLaunchState {
             other is _$AutoLaunchStateImpl &&
             (identical(other.isAutoLaunch, isAutoLaunch) ||
                 other.isAutoLaunch == isAutoLaunch) &&
-            (identical(other.isOpenTun, isOpenTun) ||
-                other.isOpenTun == isOpenTun));
+            (identical(other.isAdminAutoLaunch, isAdminAutoLaunch) ||
+                other.isAdminAutoLaunch == isAdminAutoLaunch));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, isAutoLaunch, isOpenTun);
+  int get hashCode => Object.hash(runtimeType, isAutoLaunch, isAdminAutoLaunch);
 
   @JsonKey(ignore: true)
   @override
@@ -3165,12 +3064,12 @@ class _$AutoLaunchStateImpl implements _AutoLaunchState {
 abstract class _AutoLaunchState implements AutoLaunchState {
   const factory _AutoLaunchState(
       {required final bool isAutoLaunch,
-      required final bool isOpenTun}) = _$AutoLaunchStateImpl;
+      required final bool isAdminAutoLaunch}) = _$AutoLaunchStateImpl;
 
   @override
   bool get isAutoLaunch;
   @override
-  bool get isOpenTun;
+  bool get isAdminAutoLaunch;
   @override
   @JsonKey(ignore: true)
   _$$AutoLaunchStateImplCopyWith<_$AutoLaunchStateImpl> get copyWith =>
@@ -4001,5 +3900,189 @@ abstract class _ClashConfigState implements ClashConfigState {
   @override
   @JsonKey(ignore: true)
   _$$ClashConfigStateImplCopyWith<_$ClashConfigStateImpl> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+mixin _$VPNState {
+  AccessControl? get accessControl => throw _privateConstructorUsedError;
+  TunStack get stack => throw _privateConstructorUsedError;
+  VpnProps get vpnProps => throw _privateConstructorUsedError;
+
+  @JsonKey(ignore: true)
+  $VPNStateCopyWith<VPNState> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $VPNStateCopyWith<$Res> {
+  factory $VPNStateCopyWith(VPNState value, $Res Function(VPNState) then) =
+      _$VPNStateCopyWithImpl<$Res, VPNState>;
+  @useResult
+  $Res call({AccessControl? accessControl, TunStack stack, VpnProps vpnProps});
+
+  $AccessControlCopyWith<$Res>? get accessControl;
+  $VpnPropsCopyWith<$Res> get vpnProps;
+}
+
+/// @nodoc
+class _$VPNStateCopyWithImpl<$Res, $Val extends VPNState>
+    implements $VPNStateCopyWith<$Res> {
+  _$VPNStateCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? accessControl = freezed,
+    Object? stack = null,
+    Object? vpnProps = null,
+  }) {
+    return _then(_value.copyWith(
+      accessControl: freezed == accessControl
+          ? _value.accessControl
+          : accessControl // ignore: cast_nullable_to_non_nullable
+              as AccessControl?,
+      stack: null == stack
+          ? _value.stack
+          : stack // ignore: cast_nullable_to_non_nullable
+              as TunStack,
+      vpnProps: null == vpnProps
+          ? _value.vpnProps
+          : vpnProps // ignore: cast_nullable_to_non_nullable
+              as VpnProps,
+    ) as $Val);
+  }
+
+  @override
+  @pragma('vm:prefer-inline')
+  $AccessControlCopyWith<$Res>? get accessControl {
+    if (_value.accessControl == null) {
+      return null;
+    }
+
+    return $AccessControlCopyWith<$Res>(_value.accessControl!, (value) {
+      return _then(_value.copyWith(accessControl: value) as $Val);
+    });
+  }
+
+  @override
+  @pragma('vm:prefer-inline')
+  $VpnPropsCopyWith<$Res> get vpnProps {
+    return $VpnPropsCopyWith<$Res>(_value.vpnProps, (value) {
+      return _then(_value.copyWith(vpnProps: value) as $Val);
+    });
+  }
+}
+
+/// @nodoc
+abstract class _$$VPNStateImplCopyWith<$Res>
+    implements $VPNStateCopyWith<$Res> {
+  factory _$$VPNStateImplCopyWith(
+          _$VPNStateImpl value, $Res Function(_$VPNStateImpl) then) =
+      __$$VPNStateImplCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call({AccessControl? accessControl, TunStack stack, VpnProps vpnProps});
+
+  @override
+  $AccessControlCopyWith<$Res>? get accessControl;
+  @override
+  $VpnPropsCopyWith<$Res> get vpnProps;
+}
+
+/// @nodoc
+class __$$VPNStateImplCopyWithImpl<$Res>
+    extends _$VPNStateCopyWithImpl<$Res, _$VPNStateImpl>
+    implements _$$VPNStateImplCopyWith<$Res> {
+  __$$VPNStateImplCopyWithImpl(
+      _$VPNStateImpl _value, $Res Function(_$VPNStateImpl) _then)
+      : super(_value, _then);
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? accessControl = freezed,
+    Object? stack = null,
+    Object? vpnProps = null,
+  }) {
+    return _then(_$VPNStateImpl(
+      accessControl: freezed == accessControl
+          ? _value.accessControl
+          : accessControl // ignore: cast_nullable_to_non_nullable
+              as AccessControl?,
+      stack: null == stack
+          ? _value.stack
+          : stack // ignore: cast_nullable_to_non_nullable
+              as TunStack,
+      vpnProps: null == vpnProps
+          ? _value.vpnProps
+          : vpnProps // ignore: cast_nullable_to_non_nullable
+              as VpnProps,
+    ));
+  }
+}
+
+/// @nodoc
+
+class _$VPNStateImpl implements _VPNState {
+  const _$VPNStateImpl(
+      {required this.accessControl,
+      required this.stack,
+      required this.vpnProps});
+
+  @override
+  final AccessControl? accessControl;
+  @override
+  final TunStack stack;
+  @override
+  final VpnProps vpnProps;
+
+  @override
+  String toString() {
+    return 'VPNState(accessControl: $accessControl, stack: $stack, vpnProps: $vpnProps)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$VPNStateImpl &&
+            (identical(other.accessControl, accessControl) ||
+                other.accessControl == accessControl) &&
+            (identical(other.stack, stack) || other.stack == stack) &&
+            (identical(other.vpnProps, vpnProps) ||
+                other.vpnProps == vpnProps));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, accessControl, stack, vpnProps);
+
+  @JsonKey(ignore: true)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$VPNStateImplCopyWith<_$VPNStateImpl> get copyWith =>
+      __$$VPNStateImplCopyWithImpl<_$VPNStateImpl>(this, _$identity);
+}
+
+abstract class _VPNState implements VPNState {
+  const factory _VPNState(
+      {required final AccessControl? accessControl,
+      required final TunStack stack,
+      required final VpnProps vpnProps}) = _$VPNStateImpl;
+
+  @override
+  AccessControl? get accessControl;
+  @override
+  TunStack get stack;
+  @override
+  VpnProps get vpnProps;
+  @override
+  @JsonKey(ignore: true)
+  _$$VPNStateImplCopyWith<_$VPNStateImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

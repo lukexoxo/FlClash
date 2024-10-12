@@ -1,7 +1,9 @@
+import 'dart:io';
 import 'dart:ui';
 
+import 'package:collection/collection.dart';
 import 'package:fl_clash/enum/enum.dart';
-import 'package:fl_clash/models/clash_config.dart';
+import 'package:fl_clash/models/models.dart';
 import 'package:flutter/material.dart';
 import 'system.dart';
 
@@ -16,14 +18,18 @@ const mmdbFileName = "geoip.metadb";
 const asnFileName = "ASN.mmdb";
 const geoIpFileName = "GeoIP.dat";
 const geoSiteFileName = "GeoSite.dat";
-final double kHeaderHeight = system.isDesktop ? 40 : 0;
+final double kHeaderHeight = system.isDesktop
+    ? !Platform.isMacOS
+        ? 40
+        : 26
+    : 0;
 const GeoXMap defaultGeoXMap = {
   "mmdb":
       "https://github.com/MetaCubeX/meta-rules-dat/releases/download/latest/geoip.metadb",
   "asn":
-      "https://github.com/xishang0128/geoip/releases/download/latest/GeoLite2-ASN.mmdb",
+      "https://github.com/MetaCubeX/meta-rules-dat/releases/download/latest/GeoLite2-ASN.mmdb",
   "geoip":
-      "https://github.com/MetaCubeX/meta-rules-dat/releases/download/latest/GeoIP.dat",
+      "https://github.com/MetaCubeX/meta-rules-dat/releases/download/latest/geoip.dat",
   "geosite":
       "https://github.com/MetaCubeX/meta-rules-dat/releases/download/latest/geosite.dat"
 };
@@ -45,6 +51,21 @@ final filter = ImageFilter.blur(
   sigmaY: 5,
   tileMode: TileMode.mirror,
 );
+
+const navigationItemListEquality = ListEquality<NavigationItem>();
+const connectionListEquality = ListEquality<Connection>();
+const stringListEquality = ListEquality<String>();
+const logListEquality = ListEquality<Log>();
+const groupListEquality = ListEquality<Group>();
+const externalProviderListEquality = ListEquality<ExternalProvider>();
+const packageListEquality = ListEquality<Package>();
+const hotKeyActionListEquality = ListEquality<HotKeyAction>();
+const stringAndStringMapEquality = MapEquality<String, String>();
+const stringAndStringMapEntryIterableEquality =
+    IterableEquality<MapEntry<String, String>>();
+const stringAndIntQMapEquality = MapEquality<String, int?>();
+const stringSetEquality = SetEquality<String>();
+const keyboardModifierListEquality = SetEquality<KeyboardModifier>();
 
 const viewModeColumnsMap = {
   ViewMode.mobile: [2, 1],

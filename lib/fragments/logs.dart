@@ -1,6 +1,4 @@
 import 'dart:async';
-
-import 'package:collection/collection.dart';
 import 'package:fl_clash/common/common.dart';
 import 'package:fl_clash/enum/enum.dart';
 import 'package:fl_clash/state.dart';
@@ -21,7 +19,6 @@ class _LogsFragmentState extends State<LogsFragment> {
   final scrollController = ScrollController(
     keepScrollOffset: false,
   );
-  List<GlobalObjectKey<_LogItemState>> keys = [];
 
   Timer? timer;
 
@@ -29,19 +26,22 @@ class _LogsFragmentState extends State<LogsFragment> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      final appState = globalState.appController.appState;
-      logsNotifier.value = logsNotifier.value.copyWith(logs: appState.logs);
+      final appFlowingState = globalState.appController.appFlowingState;
+      logsNotifier.value =
+          logsNotifier.value.copyWith(logs: appFlowingState.logs);
       if (timer != null) {
         timer?.cancel();
         timer = null;
       }
       timer = Timer.periodic(const Duration(milliseconds: 200), (timer) {
-        final logs = appState.logs;
-        if (!const ListEquality<Log>().equals(
+        final logs = appFlowingState.logs;
+        if (!logListEquality.equals(
           logsNotifier.value.logs,
           logs,
         )) {
-          logsNotifier.value = logsNotifier.value.copyWith(logs: logs);
+          logsNotifier.value = logsNotifier.value.copyWith(
+            logs: logs,
+          );
         }
       });
     });
@@ -54,6 +54,21 @@ class _LogsFragmentState extends State<LogsFragment> {
     logsNotifier.dispose();
     scrollController.dispose();
     timer = null;
+  }
+
+  _handleExport() async {
+    final commonScaffoldState = context.commonScaffoldState;
+    final res = await commonScaffoldState?.loadingRun<bool>(
+      () async {
+        return await globalState.appController.exportLogs();
+      },
+      title: appLocalizations.exportLogs,
+    );
+    if (res != true) return;
+    globalState.showMessage(
+      title: appLocalizations.tip,
+      message: TextSpan(text: appLocalizations.exportSuccess),
+    );
   }
 
   _initActions() {
@@ -71,6 +86,17 @@ class _LogsFragmentState extends State<LogsFragment> {
             );
           },
           icon: const Icon(Icons.search),
+        ),
+        const SizedBox(
+          width: 8,
+        ),
+        IconButton(
+          onPressed: () {
+            _handleExport();
+          },
+          icon: const Icon(
+            Icons.file_download_outlined,
+          ),
         ),
       ];
     });
@@ -112,15 +138,26 @@ class _LogsFragmentState extends State<LogsFragment> {
       child: ValueListenableBuilder<LogsAndKeywords>(
         valueListenable: logsNotifier,
         builder: (_, state, __) {
-          var logs = state.filteredLogs;
+          final logs = state.filteredLogs;
           if (logs.isEmpty) {
             return NullStatus(
               label: appLocalizations.nullLogsDesc,
             );
           }
-          logs = logs.reversed.toList();
-          keys = logs
-              .map((log) => GlobalObjectKey<_LogItemState>(log.dateTime))
+          final reversedLogs = logs.reversed.toList();
+          final logWidgets = reversedLogs
+              .map<Widget>(
+                (log) => LogItem(
+                  key: Key(log.dateTime.toString()),
+                  log: log,
+                  onClick: _addKeyword,
+                ),
+              )
+              .separated(
+                const Divider(
+                  height: 0,
+                ),
+              )
               .toList();
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -147,22 +184,38 @@ class _LogsFragmentState extends State<LogsFragment> {
                   ),
                 ),
               Expanded(
-                child: ListView.separated(
-                  controller: scrollController,
-                  itemBuilder: (_, index) {
-                    final log = logs[index];
-                    return LogItem(
-                      key: Key(log.dateTime.toString()),
-                      log: log,
-                      onClick: _addKeyword,
-                    );
+                child: LayoutBuilder(
+                  builder: (_, constraints) {
+                    return ScrollConfiguration(
+                        behavior: ShowBarScrollBehavior(),
+                        child: ListView.builder(
+                          controller: scrollController,
+                          itemExtentBuilder: (index, __) {
+                            final widget = logWidgets[index];
+                            if (widget.runtimeType == Divider) {
+                              return 0;
+                            }
+                            final measure = globalState.measure;
+                            final bodyLargeSize = measure.bodyLargeSize;
+                            final bodySmallHeight = measure.bodySmallHeight;
+                            final bodyMediumHeight = measure.bodyMediumHeight;
+                            final log = reversedLogs[(index / 2).floor()];
+                            final width = (log.payload?.length ?? 0) *
+                                    bodyLargeSize.width +
+                                200;
+                            final lines = (width / constraints.maxWidth).ceil();
+                            return lines * bodyLargeSize.height +
+                                bodySmallHeight +
+                                8 +
+                                bodyMediumHeight +
+                                40;
+                          },
+                          itemBuilder: (_, index) {
+                            return logWidgets[index];
+                          },
+                          itemCount: logWidgets.length,
+                        ));
                   },
-                  separatorBuilder: (BuildContext context, int index) {
-                    return const Divider(
-                      height: 0,
-                    );
-                  },
-                  itemCount: logs.length,
                 ),
               )
             ],
@@ -236,7 +289,8 @@ class LogsSearchDelegate extends SearchDelegate {
   _addKeyword(String keyword) {
     final isContains = logsNotifier.value.keywords.contains(keyword);
     if (isContains) return;
-    final keywords = List<String>.from(logsNotifier.value.keywords)..add(keyword);
+    final keywords = List<String>.from(logsNotifier.value.keywords)
+      ..add(keyword);
     logsNotifier.value = logsNotifier.value.copyWith(
       keywords: keywords,
     );
@@ -245,7 +299,8 @@ class LogsSearchDelegate extends SearchDelegate {
   _deleteKeyword(String keyword) {
     final isContains = logsNotifier.value.keywords.contains(keyword);
     if (!isContains) return;
-    final keywords = List<String>.from(logsNotifier.value.keywords)..remove(keyword);
+    final keywords = List<String>.from(logsNotifier.value.keywords)
+      ..remove(keyword);
     logsNotifier.value = logsNotifier.value.copyWith(
       keywords: keywords,
     );
@@ -330,7 +385,9 @@ class _LogItemState extends State<LogItem> {
         horizontal: 16,
         vertical: 4,
       ),
-      title: SelectableText(log.payload ?? ''),
+      title: SelectableText(
+        log.payload ?? '',
+      ),
       subtitle: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -339,7 +396,9 @@ class _LogItemState extends State<LogItem> {
             style: context.textTheme.bodySmall
                 ?.copyWith(color: context.colorScheme.primary),
           ),
-          const SizedBox(height: 8,),
+          const SizedBox(
+            height: 8,
+          ),
           Container(
             alignment: Alignment.centerLeft,
             child: CommonChip(

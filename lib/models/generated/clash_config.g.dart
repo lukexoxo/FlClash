@@ -32,9 +32,9 @@ ClashConfig _$ClashConfigFromJson(Map<String, dynamic> json) => ClashConfig()
         'mmdb':
             'https://github.com/MetaCubeX/meta-rules-dat/releases/download/latest/geoip.metadb',
         'asn':
-            'https://github.com/xishang0128/geoip/releases/download/latest/GeoLite2-ASN.mmdb',
+            'https://github.com/MetaCubeX/meta-rules-dat/releases/download/latest/GeoLite2-ASN.mmdb',
         'geoip':
-            'https://github.com/MetaCubeX/meta-rules-dat/releases/download/latest/GeoIP.dat',
+            'https://github.com/MetaCubeX/meta-rules-dat/releases/download/latest/geoip.dat',
         'geosite':
             'https://github.com/MetaCubeX/meta-rules-dat/releases/download/latest/geosite.dat'
       }
@@ -141,7 +141,7 @@ _$DnsImpl _$$DnsImplFromJson(Map<String, dynamic> json) => _$DnsImpl(
       preferH3: json['prefer-h3'] as bool? ?? false,
       useHosts: json['use-hosts'] as bool? ?? true,
       useSystemHosts: json['use-system-hosts'] as bool? ?? true,
-      respectRules: json['respect-rules'] as bool? ?? true,
+      respectRules: json['respect-rules'] as bool? ?? false,
       ipv6: json['ipv6'] as bool? ?? false,
       defaultNameserver: (json['default-nameserver'] as List<dynamic>?)
               ?.map((e) => e as String)

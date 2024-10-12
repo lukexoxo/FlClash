@@ -1,4 +1,4 @@
-import 'package:collection/collection.dart';
+import 'dart:math';
 import 'package:fl_clash/common/common.dart';
 import 'package:fl_clash/enum/enum.dart';
 import 'package:fl_clash/models/models.dart';
@@ -121,8 +121,7 @@ class ProxiesTabFragmentState extends State<ProxiesTabFragment>
         );
       },
       shouldRebuild: (prev, next) {
-        if (!const ListEquality<String>()
-            .equals(prev.groupNames, next.groupNames)) {
+        if (!stringListEquality.equals(prev.groupNames, next.groupNames)) {
           _tabController?.dispose();
           _tabController = null;
           return true;
@@ -141,7 +140,7 @@ class ProxiesTabFragmentState extends State<ProxiesTabFragment>
         GroupNameKeyMap keyMap = {};
         final children = state.groupNames.map((groupName) {
           keyMap[groupName] = GlobalObjectKey(groupName);
-          return KeepContainer(
+          return KeepScope(
             child: ProxyGroupView(
               key: keyMap[groupName],
               groupName: groupName,
@@ -272,11 +271,14 @@ class ProxyGroupViewState extends State<ProxyGroupView> {
       return;
     }
     _controller.animateTo(
-      16 +
-          getScrollToSelectedOffset(
-            groupName: groupName,
-            proxies: _lastProxies,
-          ),
+      min(
+        16 +
+            getScrollToSelectedOffset(
+              groupName: groupName,
+              proxies: _lastProxies,
+            ),
+        _controller.position.maxScrollExtent,
+      ),
       duration: const Duration(milliseconds: 300),
       curve: Curves.easeIn,
     );
@@ -288,11 +290,11 @@ class ProxyGroupViewState extends State<ProxyGroupView> {
       selector: (_, appState, config) {
         final group = appState.getGroupWithName(groupName)!;
         return ProxyGroupSelectorState(
-          proxyCardType: config.proxyCardType,
-          proxiesSortType: config.proxiesSortType,
+          proxyCardType: config.proxiesStyle.cardType,
+          proxiesSortType: config.proxiesStyle.sortType,
           columns: other.getProxiesColumns(
             appState.viewWidth,
-            config.proxiesLayout,
+            config.proxiesStyle.layout,
           ),
           sortNum: appState.sortNum,
           proxies: group.all,
@@ -317,7 +319,12 @@ class ProxyGroupViewState extends State<ProxyGroupView> {
             alignment: Alignment.topCenter,
             child: GridView.builder(
               controller: _controller,
-              padding: const EdgeInsets.all(16),
+              padding: const EdgeInsets.only(
+                top: 16,
+                left: 16,
+                right: 16,
+                bottom: 96,
+              ),
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: columns,
                 mainAxisSpacing: 8,

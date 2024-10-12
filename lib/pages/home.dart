@@ -49,12 +49,12 @@ class HomePage extends StatelessWidget {
                   child: SingleChildScrollView(
                     child: IntrinsicHeight(
                       child: Selector<Config, bool>(
-                        selector: (_, config) => config.showLabel,
+                        selector: (_, config) => config.appSetting.showLabel,
                         builder: (_, showLabel, __) {
                           return NavigationRail(
                             // 桌面版侧边导航
                             backgroundColor:
-                            context.colorScheme.surfaceContainer,
+                                context.colorScheme.surfaceContainer,
                             selectedIconTheme: IconThemeData(
                               color: context.colorScheme.onSurfaceVariant,
                             ),
@@ -62,25 +62,25 @@ class HomePage extends StatelessWidget {
                               color: context.colorScheme.onSurfaceVariant,
                             ),
                             selectedLabelTextStyle:
-                            context.textTheme.labelLarge!.copyWith(
+                                context.textTheme.labelLarge!.copyWith(
                               color: context.colorScheme.onSurface,
                             ),
                             unselectedLabelTextStyle:
-                            context.textTheme.labelLarge!.copyWith(
+                                context.textTheme.labelLarge!.copyWith(
                               color: context.colorScheme.onSurface,
                             ),
                             destinations: navigationItems
                                 .map(
                                   (e) => NavigationRailDestination(
-                                icon: e.icon,
-                                label: Text(
-                                  Intl.message(e.label),
-                                ),
-                              ),
-                            )
+                                    icon: e.icon,
+                                    label: Text(
+                                      Intl.message(e.label),
+                                    ),
+                                  ),
+                                )
                                 .toList(),
                             onDestinationSelected:
-                            globalState.appController.toPage,
+                                globalState.appController.toPage,
                             extended: false,
                             selectedIndex: currentIndex,
                             labelType: showLabel
@@ -98,7 +98,10 @@ class HomePage extends StatelessWidget {
                 IconButton(
                   onPressed: () {
                     final config = globalState.appController.config;
-                    config.showLabel = !config.showLabel;
+                    final appSetting = config.appSetting;
+                    config.appSetting = appSetting.copyWith(
+                      showLabel: !appSetting.showLabel,
+                    );
                   },
                   icon: const Icon(Icons.menu),
                 )
@@ -110,69 +113,7 @@ class HomePage extends StatelessWidget {
     );
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return PopContainer(
-      // 通过 LayoutBuilder 拿到父组件传递的约束
-      child: LayoutBuilder(
-        builder: (_, container) {
-          final appController = globalState.appController;
-          final maxWidth = container.maxWidth;
-          if (appController.appState.viewWidth != maxWidth) {
-            globalState.appController.updateViewWidth(maxWidth);
-          }
-          return Selector2<AppState, Config, HomeSelectorState>(
-            selector: (_, appState, config) {
-              return HomeSelectorState(
-                currentLabel: appState.currentLabel,
-                navigationItems: appState.currentNavigationItems,
-                viewMode: other.getViewMode(maxWidth),
-                locale: config.locale,
-              );
-            },
-            builder: (_, state, child) {
-              final viewMode = state.viewMode;
-              final navigationItems = state.navigationItems;
-              final currentLabel = state.currentLabel;
-              final index = navigationItems.lastIndexWhere(
-                (element) => element.label == currentLabel,
-              );
-              final currentIndex = index == -1 ? 0 : index;
-              final navigationBar = _getNavigationBar(
-                context: context,
-                viewMode: viewMode,
-                navigationItems: navigationItems,
-                currentIndex: currentIndex,
-              );
-              final bottomNavigationBar =
-                  viewMode == ViewMode.mobile ? navigationBar : null;
-              final sideNavigationBar =
-                  viewMode != ViewMode.mobile ? navigationBar : null;
-              return CommonScaffold(
-                key: globalState.homeScaffoldKey,
-                title: Intl.message(
-                  currentLabel,
-                ),
-                sideNavigationBar: sideNavigationBar,
-                body: child!,
-                bottomNavigationBar: bottomNavigationBar,
-              );
-            },
-            child: const HomeBody(
-              key: Key("home_boy"),
-            ),
-          );
-        },
-      ),
-    );
-  }
-}
-
-class HomeBody extends StatelessWidget {
-  const HomeBody({super.key});
-
-  // 跳转到当前菜单索引的页面
-  _updatePageIndex(List<NavigationItem> navigationItems) {
+  _updatePageController(List<NavigationItem> navigationItems) {
     final currentLabel = globalState.appController.appState.currentLabel;
     final index = navigationItems.lastIndexWhere(
       (element) => element.label == currentLabel,
@@ -190,15 +131,14 @@ class HomeBody extends StatelessWidget {
     }
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Selector<AppState, HomeBodySelectorState>(
-      selector: (_, appState) => HomeBodySelectorState(
-        navigationItems: appState.currentNavigationItems,
-      ),
-      builder: (_, state, __) {
-        final navigationItems = state.navigationItems;
-        _updatePageIndex(navigationItems);
+  Widget _buildPageView() {
+    return Selector<AppState, List<NavigationItem>>(
+      selector: (_, appState) => appState.currentNavigationItems,
+      shouldRebuild: (prev, next) {
+        return prev.length != next.length;
+      },
+      builder: (_, navigationItems, __) {
+        _updatePageController(navigationItems);
         return PageView.builder(
           controller: globalState.pageController,
           // 完全禁用滚动行为
@@ -206,7 +146,7 @@ class HomeBody extends StatelessWidget {
           itemCount: navigationItems.length,
           itemBuilder: (_, index) {
             final navigationItem = navigationItems[index];
-            return KeepContainer(
+            return KeepScope(
               keep: navigationItem.keep,
               key: Key(navigationItem.label),
               child: navigationItem.fragment,
@@ -214,6 +154,54 @@ class HomeBody extends StatelessWidget {
           },
         );
       },
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return BackScope(
+      child: Selector2<AppState, Config, HomeState>(
+        selector: (_, appState, config) {
+          return HomeState(
+            currentLabel: appState.currentLabel,
+            navigationItems: appState.currentNavigationItems,
+            viewMode: appState.viewMode,
+            locale: config.appSetting.locale,
+          );
+        },
+        shouldRebuild: (prev, next) {
+          return prev != next;
+        },
+        builder: (_, state, child) {
+          final viewMode = state.viewMode;
+          final navigationItems = state.navigationItems;
+          final currentLabel = state.currentLabel;
+          final index = navigationItems.lastIndexWhere(
+            (element) => element.label == currentLabel,
+          );
+          final currentIndex = index == -1 ? 0 : index;
+          final navigationBar = _getNavigationBar(
+            context: context,
+            viewMode: viewMode,
+            navigationItems: navigationItems,
+            currentIndex: currentIndex,
+          );
+          final bottomNavigationBar =
+              viewMode == ViewMode.mobile ? navigationBar : null;
+          final sideNavigationBar =
+              viewMode != ViewMode.mobile ? navigationBar : null;
+          return CommonScaffold(
+            key: globalState.homeScaffoldKey,
+            title: Intl.message(
+              currentLabel,
+            ),
+            sideNavigationBar: sideNavigationBar,
+            body: child!,
+            bottomNavigationBar: bottomNavigationBar,
+          );
+        },
+        child: _buildPageView(),
+      ),
     );
   }
 }

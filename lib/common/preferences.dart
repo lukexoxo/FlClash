@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:flutter/cupertino.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../models/models.dart';
@@ -29,7 +30,8 @@ class Preferences {
     try {
       return ClashConfig.fromJson(clashConfigMap);
     } catch (e) {
-      throw e.toString();
+      debugPrint(e.toString());
+      return null;
     }
   }
 
@@ -49,7 +51,8 @@ class Preferences {
     try {
       return Config.fromJson(configMap);
     } catch (e) {
-      throw e.toString();
+      debugPrint(e.toString());
+      return null;
     }
   }
 

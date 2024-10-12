@@ -5,15 +5,17 @@ import 'package:fl_clash/fragments/about.dart';
 import 'package:fl_clash/fragments/access.dart';
 import 'package:fl_clash/fragments/application_setting.dart';
 import 'package:fl_clash/fragments/config/config.dart';
+import 'package:fl_clash/fragments/hotkey.dart';
 import 'package:fl_clash/l10n/l10n.dart';
 import 'package:fl_clash/models/models.dart';
 import 'package:fl_clash/state.dart';
+import 'package:fl_clash/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
-import '../widgets/widgets.dart';
 import 'backup_and_recovery.dart';
 import 'theme.dart';
+import 'package:path/path.dart' show dirname, join;
 
 class ToolsFragment extends StatefulWidget {
   const ToolsFragment({super.key});
@@ -61,6 +63,17 @@ class _ToolboxFragmentState extends State<ToolsFragment> {
     return generateSection(
       title: appLocalizations.other,
       items: [
+        ListItem(
+          leading: const Icon(Icons.gavel),
+          title: Text(appLocalizations.disclaimer),
+          onTap: () async {
+            final isDisclaimerAccepted =
+                await globalState.appController.showDisclaimer();
+            if (!isDisclaimerAccepted) {
+              globalState.appController.handleExit();
+            }
+          },
+        ),
         ListItem.open(
           leading: const Icon(Icons.info),
           title: Text(appLocalizations.about),
@@ -78,7 +91,7 @@ class _ToolboxFragmentState extends State<ToolsFragment> {
       title: appLocalizations.settings,
       items: [
         Selector<Config, String?>(
-          selector: (_, config) => config.locale,
+          selector: (_, config) => config.appSetting.locale,
           builder: (_, localeString, __) {
             final subTitle = localeString ?? appLocalizations.defaultText;
             final currentLocale = other.getLocaleForString(localeString);
@@ -88,13 +101,12 @@ class _ToolboxFragmentState extends State<ToolsFragment> {
               subtitle: Text(Intl.message(subTitle)),
               delegate: OptionsDelegate(
                 title: appLocalizations.language,
-                options: [
-                  null,
-                  ...AppLocalizations.delegate.supportedLocales
-                ],
+                options: [null, ...AppLocalizations.delegate.supportedLocales],
                 onChanged: (Locale? value) {
-                  final config = context.read<Config>();
-                  config.locale = value?.toString();
+                  final config = globalState.appController.config;
+                  config.appSetting = config.appSetting.copyWith(
+                    locale: value?.toString(),
+                  );
                 },
                 textBuilder: (locale) => _getLocaleString(locale),
                 value: currentLocale,
@@ -121,6 +133,28 @@ class _ToolboxFragmentState extends State<ToolsFragment> {
             widget: const BackupAndRecovery(),
           ),
         ),
+        if (system.isDesktop)
+          ListItem.open(
+            leading: const Icon(Icons.keyboard),
+            title: Text(appLocalizations.hotkeyManagement),
+            subtitle: Text(appLocalizations.hotkeyManagementDesc),
+            delegate: OpenDelegate(
+              title: appLocalizations.hotkeyManagement,
+              widget: const HotKeyFragment(),
+            ),
+          ),
+        if (Platform.isWindows)
+          ListItem(
+            leading: const Icon(Icons.lock),
+            title: Text(appLocalizations.loopback),
+            subtitle: Text(appLocalizations.loopbackDesc),
+            onTap: () {
+              windows?.runas(
+                '"${join(dirname(Platform.resolvedExecutable), "EnableLoopback.exe")}"',
+                "",
+              );
+            },
+          ),
         if (Platform.isAndroid)
           ListItem.open(
             leading: const Icon(Icons.view_list),
@@ -155,9 +189,8 @@ class _ToolboxFragmentState extends State<ToolsFragment> {
 
   @override
   Widget build(BuildContext context) {
-    return Selector<Config, String?>(
-      selector: (_, config) => config.locale,
-      builder: (_, __, ___) {
+    return LocaleBuilder(
+      builder: (_) {
         final items = [
           Selector<AppState, MoreToolsSelectorState>(
             selector: (_, appState) {
@@ -190,6 +223,7 @@ class _ToolboxFragmentState extends State<ToolsFragment> {
         return ListView.builder(
           itemCount: items.length,
           itemBuilder: (_, index) => items[index],
+          padding: const EdgeInsets.only(bottom: 20),
         );
       },
     );

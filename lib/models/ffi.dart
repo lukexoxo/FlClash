@@ -9,6 +9,41 @@ part 'generated/ffi.g.dart';
 part 'generated/ffi.freezed.dart';
 
 @freezed
+class CoreState with _$CoreState {
+  const factory CoreState({
+    required bool enable,
+    AccessControl? accessControl,
+    required String currentProfileName,
+    required bool allowBypass,
+    required bool systemProxy,
+    required List<String> bypassDomain,
+    required bool ipv6,
+    required bool onlyProxy,
+  }) = _CoreState;
+
+  factory CoreState.fromJson(Map<String, Object?> json) =>
+      _$CoreStateFromJson(json);
+}
+
+@freezed
+class AndroidVpnOptions with _$AndroidVpnOptions {
+  const factory AndroidVpnOptions({
+    required bool enable,
+    required int port,
+    required AccessControl? accessControl,
+    required bool allowBypass,
+    required bool systemProxy,
+    required List<String> bypassDomain,
+    required String ipv4Address,
+    required String ipv6Address,
+    required String dnsServerAddress,
+  }) = _AndroidVpnOptions;
+
+  factory AndroidVpnOptions.fromJson(Map<String, Object?> json) =>
+      _$AndroidVpnOptionsFromJson(json);
+}
+
+@freezed
 class ConfigExtendedParams with _$ConfigExtendedParams {
   const factory ConfigExtendedParams({
     @JsonKey(name: "is-patch") required bool isPatch,
@@ -133,6 +168,22 @@ class ExternalProvider with _$ExternalProvider {
 
   factory ExternalProvider.fromJson(Map<String, Object?> json) =>
       _$ExternalProviderFromJson(json);
+}
+
+@freezed
+class TunProps with _$TunProps {
+  const factory TunProps({
+    required int fd,
+    required String gateway,
+    required String gateway6,
+    required String portal,
+    required String portal6,
+    required String dns,
+    required String dns6,
+  }) = _TunProps;
+
+  factory TunProps.fromJson(Map<String, Object?> json) =>
+      _$TunPropsFromJson(json);
 }
 
 abstract mixin class AppMessageListener {

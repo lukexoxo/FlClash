@@ -25,6 +25,10 @@ class ProxyCard extends StatelessWidget {
 
   Measure get measure => globalState.measure;
 
+  _handleTestCurrentDelay() {
+    proxyDelayTest(proxy);
+  }
+
   Widget _buildDelayText() {
     return SizedBox(
       height: measure.labelSmallHeight,
@@ -36,24 +40,31 @@ class ProxyCard extends StatelessWidget {
           return FadeBox(
             child: Builder(
               builder: (_) {
-                if (delay == null) {
-                  return Container();
-                }
-                if (delay == 0) {
+                if (delay == 0 || delay == null) {
                   return SizedBox(
                     height: measure.labelSmallHeight,
                     width: measure.labelSmallHeight,
-                    child: const CircularProgressIndicator(
-                      strokeWidth: 2,
-                    ),
+                    child: delay == 0
+                        ? const CircularProgressIndicator(
+                            strokeWidth: 2,
+                          )
+                        : IconButton(
+                            icon: const Icon(Icons.bolt),
+                            iconSize: globalState.measure.labelSmallHeight,
+                            padding: EdgeInsets.zero,
+                            onPressed: _handleTestCurrentDelay,
+                          ),
                   );
                 }
-                return Text(
-                  delay > 0 ? '$delay ms' : "Timeout",
-                  style: context.textTheme.labelSmall?.copyWith(
-                    overflow: TextOverflow.ellipsis,
-                    color: other.getDelayColor(
-                      delay,
+                return GestureDetector(
+                  onTap: _handleTestCurrentDelay,
+                  child: Text(
+                    delay > 0 ? '$delay ms' : "Timeout",
+                    style: context.textTheme.labelSmall?.copyWith(
+                      overflow: TextOverflow.ellipsis,
+                      color: other.getDelayColor(
+                        delay,
+                      ),
                     ),
                   ),
                 );
@@ -92,12 +103,12 @@ class ProxyCard extends StatelessWidget {
   // 切换代理
   _changeProxy(BuildContext context) async {
     final appController = globalState.appController;
-    final isUrlTest = groupType == GroupType.URLTest;
+    final isURLTestOrFallback = groupType.isURLTestOrFallback;
     final isSelector = groupType == GroupType.Selector;
-    if (isUrlTest || isSelector) {
+    if (isURLTestOrFallback || isSelector) {
       final currentProxyName =
           appController.config.currentSelectedMap[groupName];
-      final nextProxyName = switch (isUrlTest) {
+      final nextProxyName = switch (isURLTestOrFallback) {
         true => currentProxyName == proxy.name ? "" : proxy.name,
         false => proxy.name,
       };
@@ -123,7 +134,7 @@ class ProxyCard extends StatelessWidget {
     final measure = globalState.measure;
     final delayText = _buildDelayText();
     final proxyNameText = _buildProxyNameText(context);
-    return currentGroupProxyNameBuilder(
+    return currentSelectedProxyNameBuilder(
       groupName: groupName,
       builder: (currentGroupName) {
         return Stack(
@@ -197,30 +208,16 @@ class ProxyCard extends StatelessWidget {
                 ),
               ),
             ),
-            if (groupType == GroupType.URLTest)
+            if (groupType.isURLTestOrFallback)
               Selector<Config, String>(
                 selector: (_, config) {
                   final selectedProxyName =
                       config.currentSelectedMap[groupName];
                   return selectedProxyName ?? '';
                 },
-                builder: (_, value, __) {
+                builder: (_, value, child) {
                   if (value != proxy.name) return Container();
-                  return Positioned.fill(
-                    child: Container(
-                      alignment: Alignment.topRight,
-                      margin: const EdgeInsets.all(8),
-                      child: Container(
-                        padding: const EdgeInsets.all(4),
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color:
-                              Theme.of(context).colorScheme.secondaryContainer,
-                        ),
-                        child: const SelectIcon(),
-                      ),
-                    ),
-                  );
+                  return child!;
                 },
                 child: Positioned.fill(
                   child: Container(

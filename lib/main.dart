@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:fl_clash/clash/clash.dart';
-import 'package:fl_clash/common/http.dart';
 import 'package:fl_clash/plugins/app.dart';
 import 'package:fl_clash/plugins/tile.dart';
 import 'package:fl_clash/plugins/vpn.dart';
@@ -18,24 +17,19 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   clashCore.initMessage();
   globalState.packageInfo = await PackageInfo.fromPlatform();
+  final version = await system.version;
   final config = await preferences.getConfig() ?? Config();
-  globalState.autoRun = config.autoRun;
   final clashConfig = await preferences.getClashConfig() ?? ClashConfig();
   await android?.init();
-  await window?.init(config.windowProps);
+  await window?.init(config.windowProps, version);
   final appState = AppState(
     mode: clashConfig.mode,
-    isCompatible: config.isCompatible,
+    version: version,
     selectedMap: config.currentSelectedMap,
   );
   appState.navigationItems = navigation.getItems(
-    openLogs: config.openLogs,
+    openLogs: config.appSetting.openLogs,
     hasProxies: false,
-  );
-  globalState.updateTray(
-    appState: appState,
-    config: config,
-    clashConfig: clashConfig,
   );
   await globalState.init(
     appState: appState,
@@ -58,12 +52,13 @@ Future<void> vpnService() async {
   WidgetsFlutterBinding.ensureInitialized();
   globalState.isVpnService = true;
   globalState.packageInfo = await PackageInfo.fromPlatform();
+  final version = await system.version;
   final config = await preferences.getConfig() ?? Config();
   final clashConfig = await preferences.getClashConfig() ?? ClashConfig();
   final appState = AppState(
     mode: clashConfig.mode,
-    isCompatible: config.isCompatible,
     selectedMap: config.currentSelectedMap,
+    version: version,
   );
   await globalState.init(
     appState: appState,
@@ -78,7 +73,7 @@ Future<void> vpnService() async {
         clashCore.setFdMap(fd.id);
       },
       onProcess: (Process process) async {
-        final packageName = await app?.resolverProcess(process);
+        final packageName = await vpn?.resolverProcess(process);
         clashCore.setProcessMap(
           ProcessMapItem(
             id: process.id,
@@ -106,7 +101,7 @@ Future<void> vpnService() async {
     ),
   );
   final appLocalizations = await AppLocalizations.load(
-    other.getLocaleForString(config.locale) ??
+    other.getLocaleForString(config.appSetting.locale) ??
         WidgetsBinding.instance.platformDispatcher.locale,
   );
   await app?.tip(appLocalizations.startVpn);

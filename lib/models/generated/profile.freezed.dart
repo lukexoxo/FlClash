@@ -214,15 +214,17 @@ Profile _$ProfileFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$Profile {
   String get id => throw _privateConstructorUsedError;
-  String? get label => throw _privateConstructorUsedError;
-  String? get currentGroupName => throw _privateConstructorUsedError;
-  String get url => throw _privateConstructorUsedError;
-  DateTime? get lastUpdateDate => throw _privateConstructorUsedError;
-  Duration get autoUpdateDuration => throw _privateConstructorUsedError;
-  UserInfo? get userInfo => throw _privateConstructorUsedError;
-  bool get autoUpdate => throw _privateConstructorUsedError;
-  Map<String, String> get selectedMap => throw _privateConstructorUsedError;
-  Set<String> get unfoldSet => throw _privateConstructorUsedError;
+  String? get label => throw _privateConstructorUsedError; // 名称
+  String? get currentGroupName => throw _privateConstructorUsedError; // 当前选择组
+  String get url => throw _privateConstructorUsedError; // 订阅地址
+  DateTime? get lastUpdateDate => throw _privateConstructorUsedError; // 最后更新时间
+  Duration get autoUpdateDuration =>
+      throw _privateConstructorUsedError; // 自动更新时间间隔
+  UserInfo? get userInfo => throw _privateConstructorUsedError; // 订阅信息
+  bool get autoUpdate => throw _privateConstructorUsedError; // 是否自动更新
+  Map<String, String> get selectedMap =>
+      throw _privateConstructorUsedError; // 每个组选择的Proxy，如Proxies->HK,Youtube->Proxies, Global->HK专线01
+  Set<String> get unfoldSet => throw _privateConstructorUsedError; // 展开的组
   @JsonKey(includeToJson: false, includeFromJson: false)
   bool get isUpdating => throw _privateConstructorUsedError;
 
@@ -460,21 +462,29 @@ class _$ProfileImpl implements _Profile {
   final String id;
   @override
   final String? label;
+// 名称
   @override
   final String? currentGroupName;
+// 当前选择组
   @override
   @JsonKey()
   final String url;
+// 订阅地址
   @override
   final DateTime? lastUpdateDate;
+// 最后更新时间
   @override
   final Duration autoUpdateDuration;
+// 自动更新时间间隔
   @override
   final UserInfo? userInfo;
+// 订阅信息
   @override
   @JsonKey()
   final bool autoUpdate;
+// 是否自动更新
   final Map<String, String> _selectedMap;
+// 是否自动更新
   @override
   @JsonKey()
   Map<String, String> get selectedMap {
@@ -483,7 +493,9 @@ class _$ProfileImpl implements _Profile {
     return EqualUnmodifiableMapView(_selectedMap);
   }
 
+// 每个组选择的Proxy，如Proxies->HK,Youtube->Proxies, Global->HK专线01
   final Set<String> _unfoldSet;
+// 每个组选择的Proxy，如Proxies->HK,Youtube->Proxies, Global->HK专线01
   @override
   @JsonKey()
   Set<String> get unfoldSet {
@@ -492,6 +504,7 @@ class _$ProfileImpl implements _Profile {
     return EqualUnmodifiableSetView(_unfoldSet);
   }
 
+// 展开的组
   @override
   @JsonKey(includeToJson: false, includeFromJson: false)
   final bool isUpdating;
@@ -578,23 +591,23 @@ abstract class _Profile implements Profile {
   String get id;
   @override
   String? get label;
-  @override
+  @override // 名称
   String? get currentGroupName;
-  @override
+  @override // 当前选择组
   String get url;
-  @override
+  @override // 订阅地址
   DateTime? get lastUpdateDate;
-  @override
+  @override // 最后更新时间
   Duration get autoUpdateDuration;
-  @override
+  @override // 自动更新时间间隔
   UserInfo? get userInfo;
-  @override
+  @override // 订阅信息
   bool get autoUpdate;
-  @override
+  @override // 是否自动更新
   Map<String, String> get selectedMap;
-  @override
+  @override // 每个组选择的Proxy，如Proxies->HK,Youtube->Proxies, Global->HK专线01
   Set<String> get unfoldSet;
-  @override
+  @override // 展开的组
   @JsonKey(includeToJson: false, includeFromJson: false)
   bool get isUpdating;
   @override

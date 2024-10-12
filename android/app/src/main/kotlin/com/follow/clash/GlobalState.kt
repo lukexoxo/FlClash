@@ -33,14 +33,13 @@ object GlobalState {
         return currentEngine?.plugins?.get(AppPlugin::class.java) as AppPlugin?
     }
 
-    fun getCurrentTitlePlugin(): TilePlugin? {
+    fun getCurrentTilePlugin(): TilePlugin? {
         val currentEngine = if (flutterEngine != null) flutterEngine else serviceEngine
         return currentEngine?.plugins?.get(TilePlugin::class.java) as TilePlugin?
     }
 
     fun getCurrentVPNPlugin(): VpnPlugin? {
-        val currentEngine = if (serviceEngine != null) serviceEngine else flutterEngine
-        return currentEngine?.plugins?.get(VpnPlugin::class.java) as VpnPlugin?
+        return serviceEngine?.plugins?.get(VpnPlugin::class.java) as VpnPlugin?
     }
 
     fun destroyServiceEngine() {
