@@ -14,8 +14,11 @@ import 'controller.dart';
 import 'models/models.dart';
 import 'common/common.dart';
 
+/// 全局单例对象
+/// 
+/// timer 更新定时器，流量更新，运行时间更新
 class GlobalState {
-  Timer? timer; // 更新定时器，流量更新，运行时间更新
+  Timer? timer;
   Timer? groupsUpdateTimer;
   var isVpnService = false;
   late PackageInfo packageInfo;
@@ -142,7 +145,7 @@ class GlobalState {
         onlyProxy: config.appSetting.onlyProxy,
         bypassDomain: config.vpnProps.bypassDomain,
         currentProfileName:
-        config.currentProfile?.label ?? config.currentProfileId ?? "",
+            config.currentProfile?.label ?? config.currentProfileId ?? "",
       ),
     );
     updateCoreVersionInfo(appState);

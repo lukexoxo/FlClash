@@ -10,6 +10,7 @@ import 'package:provider/provider.dart';
 import 'package:tray_manager/tray_manager.dart';
 import 'package:window_ext/window_ext.dart';
 
+/// desktop系统托盘
 class TrayManager extends StatefulWidget {
   final Widget child;
 
@@ -22,8 +23,7 @@ class TrayManager extends StatefulWidget {
   State<TrayManager> createState() => _TrayContainerState();
 }
 
-class _TrayContainerState extends State<TrayManager>
-    with TrayListener {
+class _TrayContainerState extends State<TrayManager> with TrayListener {
   @override
   void initState() {
     super.initState();

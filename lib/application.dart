@@ -31,7 +31,6 @@ runAppWithPreferences(
         create: (_) => AppFlowingState(),
       ),
       ChangeNotifierProxyProvider2<Config, ClashConfig, AppState>(
-        // 依赖于 ClashConfig 和 Config，并随依赖的变化而变化
         create: (_) => appState,
         update: (_, config, clashConfig, appState) {
           appState?.mode = clashConfig.mode;
@@ -57,7 +56,6 @@ class ApplicationState extends State<Application> {
   late SystemColorSchemes systemColorSchemes;
   Timer? timer;
 
-  // 页面切换动画
   final _pageTransitionsTheme = const PageTransitionsTheme(
     builders: <TargetPlatform, PageTransitionsBuilder>{
       TargetPlatform.android: CupertinoPageTransitionsBuilder(),
@@ -98,6 +96,7 @@ class ApplicationState extends State<Application> {
     });
   }
 
+  // 20s更新一次策略组
   _initTimer() {
     _cancelTimer();
     timer = Timer.periodic(const Duration(milliseconds: 20000), (_) {
@@ -170,7 +169,6 @@ class ApplicationState extends State<Application> {
               prueBlack: config.prueBlack,
             ),
             builder: (_, state, child) {
-              // 从系统动态颜色中生成 ColorScheme
               return DynamicColorBuilder(
                 builder: (lightDynamic, darkDynamic) {
                   _updateSystemColorSchemes(lightDynamic, darkDynamic);

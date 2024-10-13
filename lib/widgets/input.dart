@@ -8,6 +8,7 @@ import 'card.dart';
 import 'float_layout.dart';
 import 'list.dart';
 
+/// 选项输入 弹窗
 class OptionsDialog<T> extends StatelessWidget {
   final String title;
   final List<T> options;
@@ -54,6 +55,7 @@ class OptionsDialog<T> extends StatelessWidget {
   }
 }
 
+/// Input输入 弹窗
 class InputDialog extends StatefulWidget {
   final String title;
   final String value;
@@ -143,6 +145,7 @@ class _InputDialogState extends State<InputDialog> {
   }
 }
 
+/// 可增删改查的列表
 class ListPage<T> extends StatelessWidget {
   final String title;
   final Iterable<T> items;

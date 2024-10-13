@@ -3,14 +3,18 @@ import 'package:fl_clash/state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+/// 页面的基础布局，包含顶部栏、底部栏、侧边栏、加载状态
+/// leading                       顶部栏左侧的组件
+/// actions                       顶部栏右侧的操作按钮列表
+/// automaticallyImplyLeading     是否自动添加返回按钮
 class CommonScaffold extends StatefulWidget {
   final Widget body;
   final Widget? bottomNavigationBar;
   final Widget? sideNavigationBar;
   final String title;
-  final Widget? leading; // 顶部栏左侧的组件
-  final List<Widget>? actions; // 顶部栏右侧的操作按钮列表
-  final bool automaticallyImplyLeading; // 是否自动添加返回按钮
+  final Widget? leading;
+  final List<Widget>? actions;
+  final bool automaticallyImplyLeading;
 
   const CommonScaffold({
     super.key,
@@ -87,9 +91,9 @@ class CommonScaffoldState extends State<CommonScaffold> {
     super.dispose();
   }
 
+  // 如果组件的 title 发生了变化，则重置 actions
   @override
   void didUpdateWidget(CommonScaffold oldWidget) {
-    // 如果组件的 title 发生了变化，则重置 actions
     super.didUpdateWidget(oldWidget);
     if (oldWidget.title != widget.title) {
       _actions.value = [];

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+/// 实现页面的渐隐/渐现过渡效果
 class FadePage<T> extends Page<T> {
   final Widget child;
   final bool maintainState;

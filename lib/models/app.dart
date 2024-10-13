@@ -7,22 +7,37 @@ import 'profile.dart';
 
 typedef DelayMap = Map<String, int?>;
 
+/// App状态管理
+/// 
+/// _navigationItems      菜单项
+/// _isInit               Clash是否初始化
+/// _versionInfo          Clash版本信息
+/// _currentLabel         当前菜单名称
+/// _systemColorSchemes   系统颜色
+/// _mode                 出站模式
+/// _delayMap             延迟数据存储
+///
+/// _groups               策略组：Selector（手动选择）, URLTest（自动选择）, Fallback（自动回退）, LoadBalance（负载均衡）, Relay（链式代理）
+/// _viewWidth            视图宽度
+/// _requests             请求
+/// _providers            提供者：代理提供者、规则提供者
+/// _packages             安装包信息
 class AppState with ChangeNotifier {
-  List<NavigationItem> _navigationItems; // 菜单项
-  bool _isInit; // Clash是否初始化
-  VersionInfo? _versionInfo; // Clash版本信息
-  String _currentLabel; // 当前菜单名称
+  List<NavigationItem> _navigationItems;
+  bool _isInit;
+  VersionInfo? _versionInfo;
+  String _currentLabel;
   SystemColorSchemes _systemColorSchemes; // 系统颜色
   num _sortNum;
-  Mode _mode; // 出站模式
-  DelayMap _delayMap; // 延迟数据存储
+  Mode _mode;
+  DelayMap _delayMap;
   SelectedMap _selectedMap;
-  List<Group> _groups; // 策略组：Selector（手动选择）, URLTest（自动选择）, Fallback（自动回退）, LoadBalance（负载均衡）, Relay（链式代理）
-  double _viewWidth; // 视图宽度
-  List<Connection> _requests; // 请求
+  List<Group> _groups;
+  double _viewWidth;
+  List<Connection> _requests;
   num _checkIpNum;
-  List<ExternalProvider> _providers; // 提供者：代理提供者、规则提供者
-  List<Package> _packages; // 安装包信息
+  List<ExternalProvider> _providers;
+  List<Package> _packages;
   Brightness? _brightness;
   int _version;
 

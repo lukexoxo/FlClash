@@ -3,7 +3,7 @@ import 'dart:io';
 import 'dart:isolate';
 import 'package:flutter/services.dart';
 
-// Android
+/// Android
 class Service {
   static Service? _instance;
   late MethodChannel methodChannel;

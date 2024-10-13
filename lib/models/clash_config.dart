@@ -126,27 +126,45 @@ typedef HostsMap = Map<String, String>;
 const defaultMixedPort = 7890;
 const defaultKeepAliveInterval = 30;
 
-// Clash配置
-// https://wiki.metacubex.one/config/
+/// Clash配置状态管理
+/// https://wiki.metacubex.one/config/
+///
+/// _mixedPort              混合端口
+/// _allowLan               是否允许局域网访问代理
+/// _ipv6                   是否开启IPv6
+/// _geodataLoader          GEO文件加载模式 geodata-loader
+/// _logLevel               日志等级
+/// _externalController     外部控制器，开启后可通过9090端口访问
+/// _mode                   模式：全局、规则、直连
+/// _findProcessMode        控制是否让 Clash 去匹配进程
+/// _keepAliveInterval      TCP保活间隔
+/// _unifiedDelay           统一延迟，去除握手等额外延迟
+/// _tcpConcurrent          是否允许TCP并发
+/// _tun                    tun配置
+/// _dns                    dns配置
+/// _geoXUrl                自定GEO下载地址 geox-url
+/// _rules                  路由规则
+/// _globalRealUa           http的userAgent
+/// _hosts                  自定义hosts
 @JsonSerializable()
 class ClashConfig extends ChangeNotifier {
-  int _mixedPort; // 混合端口
-  bool _allowLan; // 是否允许局域网访问代理
-  bool _ipv6; // 是否开启IPv6
-  String _geodataLoader; // GEO文件加载模式 geodata-loader
-  LogLevel _logLevel; // 日志等级
-  String _externalController; // 外部控制器，开启后可通过9090端口访问
-  Mode _mode; // 模式：全局、规则、直连
-  FindProcessMode _findProcessMode; // 控制是否让 Clash 去匹配进程
-  int _keepAliveInterval; // TCP保活间隔
-  bool _unifiedDelay; // 统一延迟，去除握手等额外延迟
-  bool _tcpConcurrent; // 是否允许TCP并发
-  Tun _tun; // tun配置
-  Dns _dns; // dns配置
-  GeoXMap _geoXUrl; // 自定GEO下载地址 geox-url
-  List<String> _rules; // 路由规则
-  String? _globalRealUa; // http的userAgent
-  HostsMap _hosts; // 自定义hosts
+  int _mixedPort;
+  bool _allowLan;
+  bool _ipv6;
+  String _geodataLoader;
+  LogLevel _logLevel;
+  String _externalController;
+  Mode _mode;
+  FindProcessMode _findProcessMode;
+  int _keepAliveInterval;
+  bool _unifiedDelay;
+  bool _tcpConcurrent;
+  Tun _tun;
+  Dns _dns;
+  GeoXMap _geoXUrl;
+  List<String> _rules;
+  String? _globalRealUa;
+  HostsMap _hosts;
 
   ClashConfig()
       : _mixedPort = defaultMixedPort,

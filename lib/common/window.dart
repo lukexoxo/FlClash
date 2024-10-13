@@ -8,6 +8,9 @@ import 'package:windows_single_instance/windows_single_instance.dart';
 import 'protocol.dart';
 import 'system.dart';
 
+/// for desktop
+/// 初始化窗口的位置、大小、标题栏样式
+/// 定义窗口的显示、隐藏、关闭方法
 class Window {
   init(WindowProps props, int version) async {
     if (Platform.isWindows) {

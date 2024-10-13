@@ -13,6 +13,8 @@ typedef OnSelected = void Function(int index);
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
 
+  // 移动端底部导航
+  // 桌面版侧边导航
   _getNavigationBar({
     required BuildContext context,
     required ViewMode viewMode,
@@ -20,7 +22,6 @@ class HomePage extends StatelessWidget {
     required int currentIndex,
   }) {
     if (viewMode == ViewMode.mobile) {
-      // 移动端底部导航
       return NavigationBar(
         destinations: navigationItems
             .map(
@@ -52,7 +53,6 @@ class HomePage extends StatelessWidget {
                         selector: (_, config) => config.appSetting.showLabel,
                         builder: (_, showLabel, __) {
                           return NavigationRail(
-                            // 桌面版侧边导航
                             backgroundColor:
                                 context.colorScheme.surfaceContainer,
                             selectedIconTheme: IconThemeData(
@@ -141,7 +141,6 @@ class HomePage extends StatelessWidget {
         _updatePageController(navigationItems);
         return PageView.builder(
           controller: globalState.pageController,
-          // 完全禁用滚动行为
           physics: const NeverScrollableScrollPhysics(),
           itemCount: navigationItems.length,
           itemBuilder: (_, index) {

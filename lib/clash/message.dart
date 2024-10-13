@@ -7,7 +7,13 @@ import 'package:flutter/foundation.dart';
 
 import 'core.dart';
 
-// 监听Clash的消息  log日志,delay测速,request请求,started,loaded
+/// 监听Clash的消息
+/// 
+/// onLog           日志
+/// onDelay         测速
+/// onRequest       请求
+/// onStarted       Clash启动
+/// onLoaded        Clash加载
 class ClashMessage {
   StreamSubscription? subscription;
 

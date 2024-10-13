@@ -7,6 +7,7 @@ import 'constant.dart';
 import 'system.dart';
 import 'windows.dart';
 
+/// 自动启动和管理员自动启动 desktop
 class AutoLaunch {
   static AutoLaunch? _instance;
 

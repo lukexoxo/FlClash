@@ -12,6 +12,22 @@ part 'generated/config.freezed.dart';
 
 const defaultAppSetting = AppSetting();
 
+/// App应用设置
+/// 
+/// locale            语言
+/// onlyProxy         是否只统计代理流量
+/// autoLaunch        自启动 desktop
+/// adminAutoLaunch
+/// silentLaunch      静默启动，不显示窗口 desktop
+/// autoRun           启动时自动运行
+/// openLogs
+/// closeConnections  切换节点后是否关闭所有连接
+/// testUrl           测速链接
+/// isAnimateToPage   Android页面切换动画
+/// autoCheckUpdate   自动检查更新
+/// showLabel         是否显示菜单名称 desktop
+/// disclaimerAccepted
+/// minimizeOnExit    退出时最小化 desktop
 @freezed
 class AppSetting with _$AppSetting {
   const factory AppSetting({
@@ -143,37 +159,21 @@ class ProxiesStyle with _$ProxiesStyle {
 
 const defaultCustomFontSizeScale = 1.0;
 
-/**List<Profile> _profiles; // Clash配置文件列表
-  bool _isCompatible;
-  String? _currentProfileId; // 当前配置文件ID
-  bool _autoLaunch; // 自启动 desktop
-  bool _silentLaunch; // 静默启动 desktop 不显示窗口
-  bool _autoRun; // 启动时自动运行
-  bool _openLog; // Clash开启日志
-  ThemeMode _themeMode; // 主题模式
-  String? _locale; // 语言
-  int? _primaryColor; // 主题色彩
-  ProxiesSortType _proxiesSortType; // 代理排序方式
-  bool _isMinimizeOnExit; // 退出时最小化
-  bool _isAccessControl; // Android的应用访问控制
-  AccessControl _accessControl; // Android的应用访问控制
-  bool _isAnimateToPage; // Android页面切换动画
-  bool _autoCheckUpdate; // 自动检查更新
-  bool _isExclude; // 是否从最近任务中隐藏应用
-  DAV? _dav; // DAV备份配置
-  bool _isCloseConnections; // 切换节点后是否关闭所有连接
-  ProxiesType _proxiesType; // 代理展示方式 tab or list
-  ProxyCardType _proxyCardType;
-  ProxiesLayout _proxiesLayout;
-  String _testUrl; // 测速链接
-  WindowProps _windowProps; // 窗口配置 desktop
-  bool _onlyProxy; // 是否只统计代理流量
-  bool _prueBlack; // 是否纯黑模式
-  VpnProps _vpnProps; // VPN配置：启用、允许应用绕过VPN、系统代理（为VPNService附加HTTP代理）
-  ScaleProps _scaleProps; // 缩放配置
-  DesktopProps _desktopProps; // 系统代理开关 desktop
-  bool _showLabel; // 是否显示菜单名称
-  bool _overrideDns; // 是否覆盖DNS */
+/// App配置状态管理
+///
+/// _appSetting           应用设置
+/// _profiles             Clash配置文件列表
+/// _currentProfileId     当前配置文件ID
+/// _themeMode            主题模式
+/// _primaryColor         主题色彩
+/// _isAccessControl      Android的应用访问控制
+/// _accessControl        Android的应用访问控制
+/// _dav                  DAV备份配置
+/// _windowProps          窗口配置 desktop
+/// _prueBlack            是否纯黑模式
+/// _vpnProps             VPN配置：启用、允许应用绕过VPN、系统代理（为VPNService附加HTTP代理）
+/// _desktopProps         系统代理开关 desktop
+/// _overrideDns          是否覆盖DNS
 @JsonSerializable()
 class Config extends ChangeNotifier {
   AppSetting _appSetting;
