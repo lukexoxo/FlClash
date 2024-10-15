@@ -19,6 +19,10 @@ import 'clash/core.dart';
 import 'models/models.dart';
 import 'common/common.dart';
 
+/// updateClashConfigDebounce             防抖：globalState.updateClashConfig
+/// updateGroupDebounce                   防抖：globalState.updateGroups
+/// addCheckIpNumDebounce                 防抖：appState.checkIpNum++
+/// applyProfileDebounce                  防抖：globalState.applyProfile
 class AppController {
   final BuildContext context;
   late AppState appState;
@@ -49,6 +53,7 @@ class AppController {
     });
   }
 
+  // 启动和停止Clash Core
   updateStatus(bool isStart) async {
     if (isStart) {
       await globalState.handleStart(
@@ -74,10 +79,12 @@ class AppController {
     }
   }
 
+  // 更新Clash版本信息
   updateCoreVersionInfo() {
     globalState.updateCoreVersionInfo(appState);
   }
 
+  // 更新Clash运行时间
   updateRunTime() {
     final startTime = globalState.startTime;
     if (startTime != null) {
@@ -89,6 +96,7 @@ class AppController {
     }
   }
 
+  // 更新流量
   updateTraffic() {
     globalState.updateTraffic(
       appFlowingState: appFlowingState,
@@ -115,6 +123,7 @@ class AppController {
     }
   }
 
+  // 网络更新Profile
   Future<void> updateProfile(Profile profile) async {
     final newProfile = await profile.update();
     config.setProfile(
@@ -193,6 +202,7 @@ class AppController {
     }
   }
 
+  // 读取Clash Core的ProxyGroups
   Future<void> updateGroups() async {
     await globalState.updateGroups(appState);
   }
@@ -239,6 +249,7 @@ class AppController {
     }
   }
 
+  // 退出应用
   handleExit() async {
     await updateStatus(false);
     await proxy?.stopProxy();
@@ -256,6 +267,7 @@ class AppController {
     }
   }
 
+  // 应用更新
   autoCheckUpdate() async {
     if (!config.appSetting.autoCheckUpdate) return;
     final res = await request.checkForUpdate();
@@ -388,6 +400,7 @@ class AppController {
     globalState.showSnackBar(context, message: message);
   }
 
+  // 免责声明
   Future<bool> showDisclaimer() async {
     return await globalState.showCommonDialog<bool>(
           dismissible: false,

@@ -12,6 +12,8 @@ class Debouncer {
   }
 }
 
+// 防抖：函数频繁调用时，只有当它停止调用一段时间后才会执行
+// 另->节流：函数频繁调用时，保证在一定时间内只执行一次
 Function debounce<F extends Function>(F func,{int milliseconds = 600}) {
   Timer? timer;
 
