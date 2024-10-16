@@ -167,6 +167,7 @@ class Other {
     });
   }
 
+  // 从 Content-Disposition 头中解析出文件名
   String? getFileNameForDisposition(String? disposition) {
     if (disposition == null) return null;
     final parseValue = HeaderValue.parse(disposition);

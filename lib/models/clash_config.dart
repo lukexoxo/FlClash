@@ -140,7 +140,7 @@ const defaultKeepAliveInterval = 30;
 /// _keepAliveInterval      TCP保活间隔
 /// _unifiedDelay           统一延迟，去除握手等额外延迟
 /// _tcpConcurrent          是否允许TCP并发
-/// _tun                    tun配置
+/// _tun                    tun配置，虚拟网卡，栈模式gvisor
 /// _dns                    dns配置
 /// _geoXUrl                自定GEO下载地址 geox-url
 /// _rules                  路由规则

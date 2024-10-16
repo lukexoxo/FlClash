@@ -258,6 +258,7 @@ class AppController {
     system.exit();
   }
 
+  // Clash Core日志
   updateLogStatus() {
     if (config.appSetting.openLogs) {
       clashCore.startLog();
@@ -338,6 +339,7 @@ class AppController {
     autoCheckUpdate();
   }
 
+  // 更新延迟
   setDelay(Delay delay) {
     appState.setDelay(delay);
   }
@@ -499,6 +501,7 @@ class AppController {
     });
   }
 
+  // 按名称排序
   List<Proxy> _sortOfName(List<Proxy> proxies) {
     return List.of(proxies)
       ..sort(
@@ -509,6 +512,7 @@ class AppController {
       );
   }
 
+  // 按延迟排序
   List<Proxy> _sortOfDelay(List<Proxy> proxies) {
     return proxies = List.of(proxies)
       ..sort(
@@ -529,6 +533,7 @@ class AppController {
       );
   }
 
+  // 获取排序后的Proxy
   List<Proxy> getSortProxies(List<Proxy> proxies) {
     return switch (config.proxiesStyle.sortType) {
       ProxiesSortType.none => proxies,
@@ -537,6 +542,7 @@ class AppController {
     };
   }
 
+  // 获取策略组选中的proxy
   String getCurrentSelectedName(String groupName) {
     final group = appState.getGroupWithName(groupName);
     return group?.getCurrentSelectedName(
@@ -544,34 +550,40 @@ class AppController {
         '';
   }
 
+  // 开关Tun虚拟网卡
   updateTun() {
     clashConfig.tun = clashConfig.tun.copyWith(
       enable: !clashConfig.tun.enable,
     );
   }
 
+  // 开关系统代理
   updateSystemProxy() {
     config.desktopProps = config.desktopProps.copyWith(
       systemProxy: !config.desktopProps.systemProxy,
     );
   }
 
+  // 开关代理
   updateStart() {
     updateStatus(!appFlowingState.isStart);
   }
 
+  // 开关自启动
   updateAutoLaunch() {
     config.appSetting = config.appSetting.copyWith(
       autoLaunch: !config.appSetting.autoLaunch,
     );
   }
 
+  // 开关管理员自启动
   updateAdminAutoLaunch() {
     config.appSetting = config.appSetting.copyWith(
       adminAutoLaunch: !config.appSetting.adminAutoLaunch,
     );
   }
 
+  // 窗口显示和隐藏
   updateVisible() async {
     final visible = await window?.isVisible();
     if (visible != null && !visible) {
@@ -581,6 +593,7 @@ class AppController {
     }
   }
 
+  // 逐个切换模式，快捷键用：Global、Rule、Direct
   updateMode() {
     final index = Mode.values.indexWhere((item) => item == clashConfig.mode);
     if (index == -1) {
@@ -590,6 +603,7 @@ class AppController {
     clashConfig.mode = Mode.values[nextIndex];
   }
 
+  // 导出Clash Core日志
   Future<bool> exportLogs() async {
     final logsRaw = appFlowingState.logs.map(
       (item) => item.toString(),
@@ -605,6 +619,7 @@ class AppController {
         null;
   }
 
+  // 备份数据
   Future<List<int>> backupData() async {
     final homeDirPath = await appPath.getHomeDirPath();
     final profilesPath = await appPath.getProfilesPath();
@@ -639,6 +654,7 @@ class AppController {
     }
   }
 
+  // 更新系统托盘
   updateTray() async {
     if (!Platform.isLinux) {
       await _updateSystemTray(
@@ -731,6 +747,7 @@ class AppController {
     }
   }
 
+  // 恢复数据
   recoveryData(
     List<int> data,
     RecoveryOption recoveryOption,

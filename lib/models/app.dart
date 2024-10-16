@@ -7,8 +7,8 @@ import 'profile.dart';
 
 typedef DelayMap = Map<String, int?>;
 
-/// App状态管理
-/// 
+/// App状态管理，运行时数据，不需要持久化
+///
 /// _navigationItems      菜单项
 /// _isInit               Clash是否初始化
 /// _versionInfo          Clash版本信息
@@ -27,7 +27,7 @@ class AppState with ChangeNotifier {
   bool _isInit;
   VersionInfo? _versionInfo;
   String _currentLabel;
-  SystemColorSchemes _systemColorSchemes; // 系统颜色
+  SystemColorSchemes _systemColorSchemes;
   num _sortNum;
   Mode _mode;
   DelayMap _delayMap;
