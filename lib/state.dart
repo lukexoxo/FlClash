@@ -21,7 +21,7 @@ import 'common/common.dart';
 /// packageInfo           包信息
 /// pageController        页面控制器
 /// measure               文本缩放比例
-/// startTime             启动时间
+/// startTime             Clash Core启动时间
 /// navigatorKey          MaterialApp的navigatorKey
 /// homeScaffoldKey       主页的Scaffold的key
 ///
