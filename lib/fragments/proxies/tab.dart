@@ -19,10 +19,11 @@ class ProxiesTabFragment extends StatefulWidget {
   State<ProxiesTabFragment> createState() => ProxiesTabFragmentState();
 }
 
+/// _hasMoreButtonNotifier              显示更多分组按钮
 class ProxiesTabFragmentState extends State<ProxiesTabFragment>
     with TickerProviderStateMixin {
   TabController? _tabController;
-  final _hasMoreButtonNotifier = ValueNotifier<bool>(false); // 分组显示更多按钮
+  final _hasMoreButtonNotifier = ValueNotifier<bool>(false);
   GroupNameKeyMap _keyMap = {};
 
   @override
@@ -37,7 +38,7 @@ class ProxiesTabFragmentState extends State<ProxiesTabFragment>
     _keyMap[currentGroupName]?.currentState?.scrollToSelected();
   }
 
-  // 更多分组的按钮
+  // 显示更多分组的按钮
   _buildMoreButton() {
     return Selector<AppState, bool>(
       selector: (_, appState) => appState.viewMode == ViewMode.mobile,
@@ -56,7 +57,7 @@ class ProxiesTabFragmentState extends State<ProxiesTabFragment>
     );
   }
 
-  // 布局设置
+  // 布局设置：风格 排序 布局 尺寸 图标样式
   _showMoreMenu() {
     showSheet(
       context: context,
@@ -233,7 +234,7 @@ class ProxiesTabFragmentState extends State<ProxiesTabFragment>
   }
 }
 
-// 策略组页面内容
+// Tab页面内容
 class ProxyGroupView extends StatefulWidget {
   final String groupName;
 

@@ -10,10 +10,10 @@ import 'package:fl_clash/enum/enum.dart';
 import 'package:fl_clash/models/models.dart';
 import 'generated/clash_ffi.dart';
 
-// 单例类，用于管理与本地C/C++库（通过FFI绑定）的交互
+/// 单例类，用于管理与本地C/C++库（通过FFI绑定）的交互
+/// receiver            接收端口，用于异步通信
 class ClashCore {
   static ClashCore? _instance;
-  // 接收端口，用于异步通信
   static final receiver = ReceivePort();
 
   late final ClashFFI clashFFI;

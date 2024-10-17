@@ -56,6 +56,8 @@ class GlobalState {
   }
 
   // 更新Clash配置到Clash Core
+  // isPatch: true 为增量更新，false 为全量更新
+  // 传递currentProfileId，core会自动寻找对应的profile文件
   Future<void> updateClashConfig({
     required ClashConfig clashConfig,
     required Config config,

@@ -164,6 +164,7 @@ class AppController {
     addCheckIpNumDebounce();
   }
 
+  // 切换Profile，监听到Profile变化后，会自动更新Clash Core的配置
   changeProfile(String? value) async {
     if (value == config.currentProfileId) return;
     config.currentProfileId = value;
@@ -671,8 +672,9 @@ class AppController {
     );
     menuItems.add(showMenuItem);
     final startMenuItem = MenuItem.checkbox(
-      label:
-      appFlowingState.isStart ? appLocalizations.stop : appLocalizations.start,
+      label: appFlowingState.isStart
+          ? appLocalizations.stop
+          : appLocalizations.start,
       onClick: (_) async {
         globalState.appController.updateStart();
       },

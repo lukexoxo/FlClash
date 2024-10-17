@@ -27,7 +27,7 @@ class _ClashContainerState extends State<ClashManager> with AppMessageListener {
   Function? updateClashConfigDebounce;
   Function? updateDelayDebounce;
 
-  // 更新Clash内核 配置文件
+  // 更新Clash内核 配置文件，首次会执行
   Widget _updateContainer(Widget child) {
     return Selector2<Config, ClashConfig, ClashConfigState>(
       selector: (_, config, clashConfig) => ClashConfigState(
