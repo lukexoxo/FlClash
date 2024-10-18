@@ -351,6 +351,8 @@ class ProxyGroupViewState extends State<ProxyGroupView> {
   }
 }
 
+// 延迟测试按钮
+// 点击测试按钮时，按钮会缩小，然后执行测试，测试完成后按钮会恢复原状
 class DelayTestButtonContainer extends StatefulWidget {
   final Widget child;
   final Future Function() onClick;
