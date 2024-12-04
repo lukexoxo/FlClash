@@ -9,6 +9,9 @@ import 'package:fl_clash/models/models.dart';
 import 'package:flutter/services.dart';
 
 /// Android平台的VPN服务
+/// methodChannel.invokeMethod：调用原生层 VPNPlugin
+/// setMethodCallHandler：监听来自原生层的调用
+/// 通过ReceivePort监听来自原生层 clashCore 的消息
 class Vpn {
   static Vpn? _instance;
   late MethodChannel methodChannel;

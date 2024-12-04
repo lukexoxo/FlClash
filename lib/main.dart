@@ -45,6 +45,8 @@ Future<void> main() async {
   );
 }
 
+// 与Android层VPNService在同一个进程中运行
+// 利用 DartExecutor 动态绑定 Dart 函数，灵活实现跨平台调用
 // 独立服务的入口点
 // 确保不会被树摇优化（编译优化，移除未使用的代码）去除
 @pragma('vm:entry-point')
