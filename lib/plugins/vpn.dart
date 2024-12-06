@@ -8,7 +8,9 @@ import 'package:fl_clash/enum/enum.dart';
 import 'package:fl_clash/models/models.dart';
 import 'package:flutter/services.dart';
 
-/// Android平台的VPN服务
+/// Android的VPN插件，运行在VPNService进程中
+/// 
+/// 
 /// methodChannel.invokeMethod：调用原生层 VPNPlugin
 /// setMethodCallHandler：监听来自原生层的调用
 /// 通过ReceivePort监听来自原生层 clashCore 的消息

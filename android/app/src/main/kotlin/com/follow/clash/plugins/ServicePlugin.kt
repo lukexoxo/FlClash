@@ -25,6 +25,7 @@ class ServicePlugin : FlutterPlugin, MethodChannel.MethodCallHandler {
         flutterMethodChannel.setMethodCallHandler(null)
     }
 
+    // Dart调用
     override fun onMethodCall(call: MethodCall, result: MethodChannel.Result) = when (call.method) {
         "init" -> {
             GlobalState.getCurrentAppPlugin()?.requestNotificationsPermission(context)

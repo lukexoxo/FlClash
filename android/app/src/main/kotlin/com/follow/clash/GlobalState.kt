@@ -19,12 +19,16 @@ enum class RunState {
 }
 
 
+// object 用于创建单例对象或静态工具类
+// 不需要手动实例化、自动是一个单例对象
 object GlobalState {
 
     private val lock = ReentrantLock()
     val runLock = ReentrantLock()
 
     val runState: MutableLiveData<RunState> = MutableLiveData<RunState>(RunState.STOP)
+
+    // 在MainActivity中初始化
     var flutterEngine: FlutterEngine? = null
     private var serviceEngine: FlutterEngine? = null
 
@@ -47,6 +51,7 @@ object GlobalState {
         serviceEngine = null
     }
 
+    // 初始化VPNService -> 指定Dart入口点
     fun initServiceEngine(context: Context) {
         if (serviceEngine != null) return
         lock.withLock {
