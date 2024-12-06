@@ -8,6 +8,7 @@ import 'package:fl_clash/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+// android 是否启动VPNService
 class VPNSwitch extends StatelessWidget {
   const VPNSwitch({super.key});
 
@@ -34,6 +35,7 @@ class VPNSwitch extends StatelessWidget {
   }
 }
 
+// desktop 是否启动TUN
 class TUNItem extends StatelessWidget {
   const TUNItem({super.key});
 

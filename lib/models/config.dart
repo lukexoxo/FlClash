@@ -171,7 +171,8 @@ const defaultCustomFontSizeScale = 1.0;
 /// _dav                  DAV备份配置
 /// _windowProps          窗口配置 for desktop
 /// _prueBlack            是否纯黑模式
-/// _vpnProps             VPN配置：启用、允许应用绕过VPN、系统代理（为VPNService附加HTTP代理）
+/// _vpnProps             android VPN配置：启用VPNService、系统代理（为VPNService附加HTTP代理），允许应用绕过VPN
+///     enable            android是否启动VPNService（类似于tun）
 /// _desktopProps         系统代理的开关 for desktop
 /// _overrideDns          是否覆盖DNS
 @JsonSerializable()
