@@ -9,7 +9,7 @@ import 'package:fl_clash/models/models.dart';
 import 'package:flutter/services.dart';
 
 /// Android的VPN插件，运行在VPNService进程中
-/// 
+/// 启动普通Service 或者 VPNService
 /// 
 /// methodChannel.invokeMethod：调用原生层 VPNPlugin
 /// setMethodCallHandler：监听来自原生层的调用

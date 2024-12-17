@@ -29,6 +29,7 @@ object GlobalState {
     val runState: MutableLiveData<RunState> = MutableLiveData<RunState>(RunState.STOP)
 
     // 在MainActivity中初始化
+    // FlutterEngine会创建一个独立的Dart虚拟机，用于执行Dart代码，destroy后虚拟机停止运行。
     var flutterEngine: FlutterEngine? = null
     private var serviceEngine: FlutterEngine? = null
 

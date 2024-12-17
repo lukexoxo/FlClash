@@ -32,12 +32,15 @@ class FlClashTileService : TileService() {
         }
     }
 
+    // 初始化
     override fun onStartListening() {
         super.onStartListening()
         GlobalState.runState.value?.let { updateTile(it) }
+        // 注册观察器
         GlobalState.runState.observeForever(observer)
     }
 
+    // 启动TempActivity
     @SuppressLint("StartActivityAndCollapseDeprecated")
     private fun activityTransfer() {
         val intent = Intent(this, TempActivity::class.java)
@@ -64,6 +67,7 @@ class FlClashTileService : TileService() {
         }
     }
 
+    // 点击磁贴，状态转换
     override fun onClick() {
         super.onClick()
         activityTransfer()
