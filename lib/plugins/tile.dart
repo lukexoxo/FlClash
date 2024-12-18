@@ -14,7 +14,8 @@ abstract mixin class TileListener {
   }
 }
 
-/// Android 磁贴，通知栏快捷菜单
+/// Android
+/// 磁贴，通知栏快捷菜单插件
 class Tile {
   StreamSubscription? subscription;
 

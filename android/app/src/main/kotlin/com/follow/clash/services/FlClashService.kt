@@ -16,11 +16,12 @@ import com.follow.clash.BaseServiceInterface
 import com.follow.clash.MainActivity
 import com.follow.clash.models.VpnOptions
 
-
+// 普通的Clash服务
 class FlClashService : Service(), BaseServiceInterface {
 
     private val binder = LocalBinder()
 
+    // 把FlClashService返回给客户端组件
     inner class LocalBinder : Binder() {
         fun getService(): FlClashService = this@FlClashService
     }
@@ -37,6 +38,7 @@ class FlClashService : Service(), BaseServiceInterface {
 
     private val notificationId: Int = 1
 
+    // 用户点击通知时触发的 PendingIntent
     private val notificationBuilder: NotificationCompat.Builder by lazy {
         val intent = Intent(this, MainActivity::class.java)
 

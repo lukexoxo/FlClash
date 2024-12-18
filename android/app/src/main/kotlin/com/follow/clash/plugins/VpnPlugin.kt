@@ -31,7 +31,13 @@ import kotlin.concurrent.withLock
 import com.follow.clash.models.Process
 import com.follow.clash.models.VpnOptions
 
+// start：
+// stop：
+// setProtect：
+// startForeground：
+// resolverProcess：
 
+// 网络状态监控，并回调到Dart层
 class VpnPlugin : FlutterPlugin, MethodChannel.MethodCallHandler {
     private lateinit var flutterMethodChannel: MethodChannel
     private lateinit var context: Context
@@ -39,10 +45,12 @@ class VpnPlugin : FlutterPlugin, MethodChannel.MethodCallHandler {
     private lateinit var options: VpnOptions
     private lateinit var scope: CoroutineScope
 
+    // 获取系统服务 ConnectivityManager 用于管理网络连接
     private val connectivity by lazy {
         context.getSystemService<ConnectivityManager>()
     }
 
+    // bindService后，用于与服务交互
     private val connection = object : ServiceConnection {
         override fun onServiceConnected(className: ComponentName, service: IBinder) {
             flClashService = when (service) {
