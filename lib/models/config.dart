@@ -172,7 +172,9 @@ const defaultCustomFontSizeScale = 1.0;
 /// _windowProps          窗口配置 for desktop
 /// _prueBlack            是否纯黑模式
 /// _vpnProps             VPN配置：启用、允许应用绕过VPN、系统代理（为VPNService附加HTTP代理）
-/// _desktopProps         系统代理的开关 for desktop
+///       enable          开启 android的 VPNService，desktop的tun模式配置在clashConfig
+///       systemProxy     for android 是否为VPNService附加HTTP代理
+/// _desktopProps         for desktop 系统代理的开关 
 /// _overrideDns          是否覆盖DNS
 @JsonSerializable()
 class Config extends ChangeNotifier {

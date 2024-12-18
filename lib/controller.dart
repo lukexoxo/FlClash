@@ -551,14 +551,14 @@ class AppController {
         '';
   }
 
-  // 开关Tun虚拟网卡
+  // desktop: 开关Tun虚拟网卡
   updateTun() {
     clashConfig.tun = clashConfig.tun.copyWith(
       enable: !clashConfig.tun.enable,
     );
   }
 
-  // 开关系统代理
+  // desktop: 开关系统代理
   updateSystemProxy() {
     config.desktopProps = config.desktopProps.copyWith(
       systemProxy: !config.desktopProps.systemProxy,
