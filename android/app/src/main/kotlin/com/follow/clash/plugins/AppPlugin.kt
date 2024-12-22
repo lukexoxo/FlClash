@@ -413,7 +413,7 @@ class AppPlugin : FlutterPlugin, MethodChannel.MethodCallHandler, ActivityAware 
         return false
     }
 
-    // 绑定Activity
+    // Flutter插件的一种机制：用于在插件附加到 Activity 时触发回调
     // 注册 Activity 返回值监听
     // 注册权限请求结果监听
     override fun onAttachedToActivity(binding: ActivityPluginBinding) {
