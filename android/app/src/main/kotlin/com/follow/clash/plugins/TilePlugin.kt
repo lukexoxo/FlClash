@@ -5,6 +5,8 @@ import io.flutter.embedding.engine.plugins.FlutterPlugin
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 
+// 开关磁贴插件，点击磁贴时：handleStart、handleStop、handleDetached
+// 调用Dart代码
 // MethodChannel：原生调用Dart
 // onMethodCall：Dart调用原生
 class TilePlugin(private val onStart: (() -> Unit)? = null, private val onStop: (() -> Unit)? = null) : FlutterPlugin,
@@ -19,6 +21,7 @@ class TilePlugin(private val onStart: (() -> Unit)? = null, private val onStop: 
     }
 
     // 插件从 Flutter 引擎解绑
+    // 用户退出应用，或应用进程被杀死
     override fun onDetachedFromEngine(binding: FlutterPlugin.FlutterPluginBinding) {
         handleDetached()
         channel.setMethodCallHandler(null)

@@ -31,13 +31,20 @@ import kotlin.concurrent.withLock
 import com.follow.clash.models.Process
 import com.follow.clash.models.VpnOptions
 
+// Dart调用原生：onMethodCall
 // start：
 // stop：
 // setProtect：
 // startForeground：
 // resolverProcess：
 
+// 原生调用Dart：MethodChannel
+// gc
+// dnsChanged
+// started
+
 // 网络状态监控，并回调到Dart层
+// flClashService是FlClashService还是FlClashVpnService 取决于：VpnOptions.enable
 class VpnPlugin : FlutterPlugin, MethodChannel.MethodCallHandler {
     private lateinit var flutterMethodChannel: MethodChannel
     private lateinit var context: Context

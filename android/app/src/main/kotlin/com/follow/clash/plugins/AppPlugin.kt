@@ -35,6 +35,7 @@ import kotlinx.coroutines.withContext
 import java.io.File
 import java.util.zip.ZipFile
 
+// Dart调用原生：onMethodCall
 // moveTaskToBack：将当前任务移动到后台
 // updateExcludeFromRecents：设置应用是否从最近任务中排除
 // getPackages：异步获取已安装的应用信息
@@ -43,6 +44,7 @@ import java.util.zip.ZipFile
 // tip：显示Toast
 // openFile：打开指定路径的文件
 
+// 原生调用Dart：MethodChannel
 // requestVpnPermission：请求VPN权限
 // requestNotificationsPermission：请求通知权限
 class AppPlugin : FlutterPlugin, MethodChannel.MethodCallHandler, ActivityAware {

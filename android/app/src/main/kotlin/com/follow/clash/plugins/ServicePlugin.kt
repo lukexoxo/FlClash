@@ -8,7 +8,8 @@ import io.flutter.embedding.engine.plugins.FlutterPlugin
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 
-
+// serviceEngine的启动和销毁
+// 供dart调用
 class ServicePlugin : FlutterPlugin, MethodChannel.MethodCallHandler {
 
     private lateinit var flutterMethodChannel: MethodChannel

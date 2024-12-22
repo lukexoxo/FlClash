@@ -14,9 +14,11 @@ import com.follow.clash.RunState
 import com.follow.clash.TempActivity
 
 
+// App开关 磁贴
 @RequiresApi(Build.VERSION_CODES.N)
 class FlClashTileService : TileService() {
 
+    // 观察 RunState 状态的变化，当 RunState 变化时，调用 updateTile() 方法更新磁贴的状态
     private val observer = Observer<RunState> { runState ->
         updateTile(runState)
     }
@@ -32,9 +34,10 @@ class FlClashTileService : TileService() {
         }
     }
 
-    // 初始化
+    // TileService 初始化
     override fun onStartListening() {
         super.onStartListening()
+        // 用runState的值初始化 qsTile.state
         GlobalState.runState.value?.let { updateTile(it) }
         // 注册观察器
         GlobalState.runState.observeForever(observer)
@@ -61,13 +64,14 @@ class FlClashTileService : TileService() {
             )
         }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+            // 启动活动 并 关闭当前的快速设置面板
             startActivityAndCollapse(pendingIntent)
         } else {
             startActivityAndCollapse(intent)
         }
     }
 
-    // 点击磁贴，状态转换
+    // 点击磁贴，转换App开关状态
     override fun onClick() {
         super.onClick()
         activityTransfer()

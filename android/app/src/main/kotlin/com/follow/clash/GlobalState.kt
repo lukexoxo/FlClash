@@ -18,7 +18,6 @@ enum class RunState {
     STOP
 }
 
-
 // object 用于创建单例对象或静态工具类
 // 不需要手动实例化、自动是一个单例对象
 object GlobalState {
@@ -52,7 +51,7 @@ object GlobalState {
         serviceEngine = null
     }
 
-    // 初始化VPNService -> 指定Dart入口点
+    // 执行service的Flutter Engine -> 指定Dart入口点（立即执行）
     fun initServiceEngine(context: Context) {
         if (serviceEngine != null) return
         lock.withLock {
