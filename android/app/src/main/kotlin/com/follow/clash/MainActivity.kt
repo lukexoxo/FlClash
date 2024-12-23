@@ -3,6 +3,7 @@ package com.follow.clash
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import com.follow.clash.plugins.AppPlugin
 import com.follow.clash.plugins.ServicePlugin
 import com.follow.clash.plugins.VpnPlugin
@@ -12,6 +13,7 @@ import io.flutter.embedding.engine.FlutterEngine
 
 class MainActivity : FlutterActivity() {
     override fun configureFlutterEngine(flutterEngine: FlutterEngine) {
+        Log.i("MainActivity", "configureFlutterEngine");
         super.configureFlutterEngine(flutterEngine)
         flutterEngine.plugins.add(AppPlugin())
         flutterEngine.plugins.add(VpnPlugin())

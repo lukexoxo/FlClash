@@ -10,6 +10,7 @@ import android.content.pm.ComponentInfo
 import android.content.pm.PackageManager
 import android.net.VpnService
 import android.os.Build
+import android.util.Log
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -45,8 +46,6 @@ import java.util.zip.ZipFile
 // openFile：打开指定路径的文件
 
 // 原生调用Dart：MethodChannel
-// requestVpnPermission：请求VPN权限
-// requestNotificationsPermission：请求通知权限
 class AppPlugin : FlutterPlugin, MethodChannel.MethodCallHandler, ActivityAware {
 
     private var activity: Activity? = null
@@ -414,8 +413,8 @@ class AppPlugin : FlutterPlugin, MethodChannel.MethodCallHandler, ActivityAware 
     }
 
     // Flutter插件的一种机制：用于在插件附加到 Activity 时触发回调
-    // 注册 Activity 返回值监听
-    // 注册权限请求结果监听
+    // 注册接收Activity结果监听：VpnPlugin.start时会requestVpnPermission（请求VPN权限），监听startActivityForResult
+    // 注册权限请求结果监听:ServicePlugin.init会调用requestNotificationsPermission（请求通知权限）
     override fun onAttachedToActivity(binding: ActivityPluginBinding) {
         activity = binding.activity;
         binding.addActivityResultListener(::onActivityResult)
@@ -436,6 +435,7 @@ class AppPlugin : FlutterPlugin, MethodChannel.MethodCallHandler, ActivityAware 
     }
 
     private fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?): Boolean {
+        Log.i("AppPlugin", "onActivityResult");
         if (requestCode == VPN_PERMISSION_REQUEST_CODE) {
             if (resultCode == FlutterActivity.RESULT_OK) {
                 GlobalState.initServiceEngine(context)
