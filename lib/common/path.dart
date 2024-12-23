@@ -6,7 +6,7 @@ import 'package:path_provider/path_provider.dart';
 
 import 'constant.dart';
 
-/// Core go代码共享路径
+/// ClashCore go代码共享路径
 /// getProfileProvidersPath
 /// getProfilePath
 class AppPath {

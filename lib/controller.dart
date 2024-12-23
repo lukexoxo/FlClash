@@ -551,7 +551,7 @@ class AppController {
         '';
   }
 
-  // desktop: 开关Tun虚拟网卡
+  // desktop: 开关Tun虚拟网卡，仅支持windows
   updateTun() {
     clashConfig.tun = clashConfig.tun.copyWith(
       enable: !clashConfig.tun.enable,

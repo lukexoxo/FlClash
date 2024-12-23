@@ -7,7 +7,7 @@ import 'package:flutter/foundation.dart';
 
 import 'core.dart';
 
-/// 监听Clash的消息
+/// 监听ClashCore的消息
 /// 
 /// onLog           日志
 /// onDelay         测速
