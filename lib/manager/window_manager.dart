@@ -9,6 +9,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:window_ext/window_ext.dart';
 import 'package:window_manager/window_manager.dart';
 
+/// for desktop
+/// 监听窗口的移动、大小调整、最小化和关闭
 class WindowManager extends ConsumerStatefulWidget {
   final Widget child;
 

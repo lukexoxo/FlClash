@@ -15,6 +15,8 @@ import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 
+// Clash Service操作类
+// 通过 AIDL 与 RemoteService 通信，实现 VPN/代理服务的启动、停止、事件监听和状态查询
 object Service {
     private val delegate by lazy {
         ServiceDelegate<IRemoteInterface>(

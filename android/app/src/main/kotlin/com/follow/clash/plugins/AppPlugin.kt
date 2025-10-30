@@ -41,6 +41,9 @@ import java.io.File
 import java.lang.ref.WeakReference
 import java.util.zip.ZipFile
 
+// 1. AppPlugin
+// 2. 处理请求通知权限
+// 3. 处理请求VpnService权限
 class AppPlugin : FlutterPlugin, MethodChannel.MethodCallHandler, ActivityAware {
 
     companion object {
@@ -175,6 +178,8 @@ class AppPlugin : FlutterPlugin, MethodChannel.MethodCallHandler, ActivityAware 
         }
     }
 
+    // 动态快捷方式（Dynamic Shortcut）
+    // Intent：打开 TempActivity，Action("CHANGE")
     private fun initShortcuts(label: String) {
         val shortcut = with(ShortcutInfoCompat.Builder(GlobalState.application, "toggle")) {
             setShortLabel(label)
@@ -247,6 +252,7 @@ class AppPlugin : FlutterPlugin, MethodChannel.MethodCallHandler, ActivityAware 
         }
     }
 
+    // 请求通知权限
     fun requestNotificationsPermission(callBack: () -> Unit) {
         requestNotificationCallback = callBack
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
@@ -276,6 +282,7 @@ class AppPlugin : FlutterPlugin, MethodChannel.MethodCallHandler, ActivityAware 
         requestNotificationCallback = null
     }
 
+    // prepare VpnService
     fun prepare(needPrepare: Boolean, callBack: (suspend () -> Unit)) {
         vpnPrepareCallback = callBack
         if (!needPrepare) {
@@ -366,6 +373,7 @@ class AppPlugin : FlutterPlugin, MethodChannel.MethodCallHandler, ActivityAware 
         return false
     }
 
+    // 初始化插件
     override fun onAttachedToEngine(flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
         scope = CoroutineScope(Dispatchers.Default)
         channel =
@@ -373,11 +381,15 @@ class AppPlugin : FlutterPlugin, MethodChannel.MethodCallHandler, ActivityAware 
         channel.setMethodCallHandler(this)
     }
 
+    // 销毁插件
     override fun onDetachedFromEngine(binding: FlutterPlugin.FlutterPluginBinding) {
         channel.setMethodCallHandler(null)
         scope.cancel()
     }
 
+    // Flutter插件的一种机制：用于在插件附加到 Activity 时触发回调
+    // 注册接收Activity结果监听：prepare VpnService（请求VPN权限），监听startActivityForResult
+    // 当State.startService时，请求权限，监听结果
     override fun onAttachedToActivity(binding: ActivityPluginBinding) {
         activityRef = WeakReference(binding.activity)
         binding.addActivityResultListener(::onActivityResult)

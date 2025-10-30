@@ -18,11 +18,14 @@ class MainActivity : FlutterActivity(),
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        // MainActivity启动，销毁ServiceFlutterEngine（无界面版App）
         lifecycleScope.launch {
             State.destroyServiceEngine()
         }
     }
 
+    // 启动FlutterEngine，是一个Dart VM，会自动执行dart main()
+    // 注册Plugin，Flutter-原生通信机制
     override fun configureFlutterEngine(flutterEngine: FlutterEngine) {
         super.configureFlutterEngine(flutterEngine)
         flutterEngine.plugins.add(AppPlugin())
@@ -32,6 +35,7 @@ class MainActivity : FlutterActivity(),
     }
 
     override fun onDestroy() {
+        // 使用协程销毁
         GlobalState.launch {
             Service.setEventListener(null)
         }

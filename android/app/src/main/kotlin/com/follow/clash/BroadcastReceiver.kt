@@ -8,6 +8,8 @@ import com.follow.clash.common.GlobalState
 import com.follow.clash.common.action
 import kotlinx.coroutines.launch
 
+// Service启动、停止的广播
+// Service有两种：VpnService和普通Service
 class BroadcastReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context?, intent: Intent?) {
         when (intent?.action) {

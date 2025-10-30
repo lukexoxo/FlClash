@@ -22,6 +22,8 @@ import kotlinx.coroutines.sync.withLock
 import java.util.UUID
 import kotlin.coroutines.resume
 
+// RemoteService，通过 AIDL 暴露接口给前端或 UI 层调用
+// 根据参数决定使用 VpnService 还是 CommonService
 class RemoteService : Service(),
     CoroutineScope by CoroutineScope(SupervisorJob() + Dispatchers.Default) {
     private fun handleStopService(result: IResultInterface) {
