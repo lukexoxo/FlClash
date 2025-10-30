@@ -10,6 +10,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 
+/// 监听 openLogs 和 hasProfile 来更新导航项目
+/// 当应用暂停时，保存应用状态
+/// 当系统亮度改变时，更新应用的亮度
 class AppStateManager extends ConsumerStatefulWidget {
   final Widget child;
 

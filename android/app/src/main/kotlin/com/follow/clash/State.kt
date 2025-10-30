@@ -14,6 +14,7 @@ import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
 
+// Service运行状态
 enum class RunState {
     START, PENDING, STOP
 }
@@ -64,6 +65,9 @@ object State {
         }
     }
 
+    // 磁贴开关时会调用，Service启动广播会调用
+    // 如果有MainActivity（正常打开App），就不会创建ServiceFlutterEngine
+    // 如果没打开App，通过磁贴开关，则会创建ServiceFlutterEngine
     suspend fun handleStartServiceAction() {
         runLock.withLock {
             if (runStateFlow.value != RunState.STOP) {
@@ -78,6 +82,7 @@ object State {
 
     }
 
+    // 磁贴开关时会调用，Service停止广播会调用
     suspend fun handleStopServiceAction() {
         runLock.withLock {
             if (runStateFlow.value != RunState.START) {
@@ -127,6 +132,8 @@ object State {
         }
     }
 
+    // 创建ServiceFlutterEngine，执行_service入口点
+    // 简单说就是无界面版本App
     private fun startServiceWithEngine() {
         GlobalState.launch {
             runLock.withLock {

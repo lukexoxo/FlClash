@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:tray_manager/tray_manager.dart';
 
+/// for desktop
+/// 系统托盘
 class TrayManager extends ConsumerStatefulWidget {
   final Widget child;
 

@@ -13,8 +13,10 @@ import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 
+// 磁贴开关服务
 class TileService : TileService() {
     private var scope: CoroutineScope? = null
+    // 更新 Tile 状态
     private fun updateTile(runState: RunState) {
         if (qsTile != null) {
             qsTile.state = when (runState) {
@@ -26,6 +28,7 @@ class TileService : TileService() {
         }
     }
 
+    // 用协程监听Service状态
     override fun onStartListening() {
         super.onStartListening()
         scope?.cancel()
@@ -38,6 +41,7 @@ class TileService : TileService() {
         }
     }
 
+    // 用TempActivity触发开关
     @SuppressLint("StartActivityAndCollapseDeprecated")
     private fun handleToggle() {
         val intent = QuickAction.TOGGLE.quickIntent

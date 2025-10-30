@@ -7,6 +7,7 @@ import 'package:fl_clash/models/models.dart';
 import 'package:fl_clash/widgets/fade_box.dart';
 import 'package:flutter/material.dart';
 
+// 应用内的全局消息提示（Toast、Snackbar 替代方案）
 class MessageManager extends StatefulWidget {
   final Widget child;
 

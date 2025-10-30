@@ -4,6 +4,8 @@ import 'package:fl_clash/providers/state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+/// for desktop
+/// 监听配置动态设置系统代理
 class ProxyManager extends ConsumerStatefulWidget {
   final Widget child;
 

@@ -9,6 +9,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
 
+// 用来开关Service，磁贴开关使用的
 class TempActivity : Activity(),
     CoroutineScope by CoroutineScope(SupervisorJob() + Dispatchers.Default) {
     override fun onCreate(savedInstanceState: Bundle?) {

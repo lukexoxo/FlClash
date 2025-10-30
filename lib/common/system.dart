@@ -130,6 +130,7 @@ class System {
 
 final system = System();
 
+/// Windows平台 创建和注册任务计划
 class Windows {
   static Windows? _instance;
   late DynamicLibrary _shell32;
