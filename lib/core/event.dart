@@ -4,6 +4,14 @@ import 'package:fl_clash/enum/enum.dart';
 import 'package:fl_clash/models/models.dart';
 import 'package:flutter/foundation.dart';
 
+/// 监听ClashCore的消息
+///
+/// onLog           日志
+/// onDelay         测速
+/// onRequest       请求
+/// onStarted       Clash启动
+/// onLoaded        Clash加载
+/// onCrash         崩溃
 abstract mixin class CoreEventListener {
   void onLog(Log log) {}
 

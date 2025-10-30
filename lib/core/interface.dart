@@ -7,6 +7,7 @@ import 'package:fl_clash/enum/enum.dart';
 import 'package:fl_clash/models/models.dart';
 import 'package:flutter/foundation.dart';
 
+/// ClashCore的接口
 mixin CoreInterface {
   Future<bool> init(InitParams params);
 
