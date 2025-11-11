@@ -7,7 +7,7 @@ import 'package:fl_clash/enum/enum.dart';
 import 'package:fl_clash/models/models.dart';
 import 'package:flutter/foundation.dart';
 
-/// ClashCore的接口
+/// ClashCore 通用接口
 mixin CoreInterface {
   Future<bool> init(InitParams params);
 
@@ -77,6 +77,7 @@ mixin CoreInterface {
   FutureOr<bool> resetConnections();
 }
 
+// 通用接口通用方法
 abstract class CoreHandlerInterface with CoreInterface {
   Completer get completer;
 

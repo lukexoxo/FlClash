@@ -12,6 +12,10 @@ import 'package:fl_clash/state.dart';
 import 'package:flutter/services.dart';
 import 'package:path/path.dart';
 
+// ClashCore 统一控制
+// Android MethodChannel->JNI->ClashCore
+// macOS 独立进程，Unix Domain Socket通信
+// Windows 独立进程（Helper Service（管理员权限），TCP Socket通信
 class CoreController {
   static CoreController? _instance;
   late CoreHandlerInterface _interface;

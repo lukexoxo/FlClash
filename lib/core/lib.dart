@@ -9,7 +9,7 @@ import 'package:fl_clash/state.dart';
 import 'interface.dart';
 
 // for android
-// ClashCore，通过MethodChannel与原生通信
+// ClashCore接口实现，通过MethodChannel与原生通信
 class CoreLib extends CoreHandlerInterface {
   static CoreLib? _instance;
 
