@@ -19,7 +19,7 @@ Future<void> main() async {
   runApp(ProviderScope(child: const Application()));
 }
 
-// 启动无界面版本App的入口
+// 启动无界面版本App的入口，如通过磁贴启动
 @pragma('vm:entry-point')
 Future<void> _service(List<String> flags) async {
   WidgetsFlutterBinding.ensureInitialized();

@@ -7,6 +7,12 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'generated/app.g.dart';
 
+/// 三种Provider
+
+/// Notifier 类（可修改状态）
+/// AutoDisposeNotifierMixin 自动管理生命周期
+/// build() 返回初始状态
+/// onUpdate() 在状态更新时同步到 globalState
 @riverpod
 class RealTunEnable extends _$RealTunEnable with AutoDisposeNotifierMixin {
   @override
@@ -198,6 +204,7 @@ class SideWidth extends _$SideWidth with AutoDisposeNotifierMixin {
   }
 }
 
+/// 计算 Provider（只读，依赖其他 Provider）
 @riverpod
 double viewWidth(Ref ref) {
   return ref.watch(viewSizeProvider).width;

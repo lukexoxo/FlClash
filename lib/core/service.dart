@@ -9,6 +9,7 @@ import 'package:fl_clash/models/core.dart';
 
 import 'interface.dart';
 
+/// macOS和Windows ClashCore接口实现
 class CoreService extends CoreHandlerInterface {
   static CoreService? _instance;
 
@@ -38,6 +39,9 @@ class CoreService extends CoreHandlerInterface {
     completer?.complete(data);
   }
 
+  // 创建Unix Domain Socket或TCP Socket服务器
+  // macOS/Linux: Unix Domain Socket
+  // Windows: TCP Socket
   Future<void> _initServer() async {
     final server = await retry(
       task: () async {
@@ -84,6 +88,9 @@ class CoreService extends CoreHandlerInterface {
     );
   }
 
+  // preload() 调用 start()，启动独立的 Go 核心进程
+  // Windows管理员权限时：通过 Helper Service 启动
+  // 普通权限时，直接启动进程
   Future<void> start() async {
     if (_process != null) {
       await shutdown();

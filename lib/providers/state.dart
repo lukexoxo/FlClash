@@ -250,6 +250,7 @@ ProfilesSelectorState profilesSelectorState(Ref ref) {
   );
 }
 
+/// 带参数的 Provider
 @riverpod
 GroupsState filterGroupsState(Ref ref, String query) {
   final currentGroups = ref.watch(currentGroupsStateProvider);
