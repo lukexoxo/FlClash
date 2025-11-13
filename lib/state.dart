@@ -27,28 +27,29 @@ import 'models/models.dart';
 
 typedef UpdateTasks = List<FutureOr Function()>;
 
+/// Provider：从外部源（File/Http）加载Rule/Proxy的配置
 class GlobalState {
   static GlobalState? _instance;
   Map<CacheTag, FixedMap<String, double>> computeHeightMapCache = {};
   Timer? timer;
-  Timer? groupsUpdateTimer;
+  Timer? groupsUpdateTimer;  // never used
   late Config config;
   late AppState appState;
-  bool isPre = true;
-  String? coreSHA256;
+  bool isPre = true; // 是否为预发布版本
+  String? coreSHA256; // Clash Core的SHA256值
   late PackageInfo packageInfo;
-  Function? updateCurrentDelayDebounce;
+  Function? updateCurrentDelayDebounce; // never used
   late Measure measure;
   late CommonTheme theme;
-  late Color accentColor;
-  CorePalette? corePalette;
-  DateTime? startTime;
-  UpdateTasks tasks = [];
+  late Color accentColor; // 动态主题颜色
+  CorePalette? corePalette; // 动态主题调色板
+  DateTime? startTime; // Clash Core启动时间
+  UpdateTasks tasks = []; // 更新任务列表
   final navigatorKey = GlobalKey<NavigatorState>();
   AppController? _appController;
-  bool isInit = false;
-  bool isUserDisconnected = false;
-  bool isService = false;
+  bool isInit = false; // state中的AppController是否初始化
+  bool isUserDisconnected = false; // ？？？用户是否断开连接
+  bool isService = false; // 是否后台服务，Android
 
   bool get isStart => startTime != null && startTime!.isBeforeNow;
 
@@ -550,6 +551,7 @@ class GlobalState {
 
 final globalState = GlobalState();
 
+/// 网络检测状态管理
 class DetectionState {
   static DetectionState? _instance;
   bool? _preIsStart;
