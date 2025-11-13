@@ -24,8 +24,8 @@ import 'models/models.dart';
 class AppController {
   int? lastProfileModified;
 
-  final BuildContext context;
-  final WidgetRef _ref;
+  final BuildContext context; // 应用上下文，用于导航和显示对话框
+  final WidgetRef _ref; // 用于访问 Riverpod Provider
 
   AppController(this.context, WidgetRef ref) : _ref = ref;
 
