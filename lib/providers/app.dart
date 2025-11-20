@@ -7,8 +7,10 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'generated/app.g.dart';
 
-/// 三种Provider
 
+/// AppState的Provider，不需要持久化
+///
+/// 三种Provider
 /// Notifier 类（可修改状态）
 /// AutoDisposeNotifierMixin 自动管理生命周期
 /// build() 返回初始状态

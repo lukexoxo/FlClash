@@ -59,6 +59,26 @@ List<DashboardWidget> dashboardWidgetsSafeFormJson(
   }
 }
 
+/// 应用设置
+/// locale: 语言
+/// dashboardWidgets: 仪表盘小部件列表
+/// onlyStatisticsProxy: 是否仅统计代理流量
+/// autoLaunch: 自动启动，for desktop
+/// silentLaunch: 静默启动，不显示窗口，for desktop
+/// autoRun: 启动时自动运行VPN
+/// openLogs: 是否启用ClashCore日志
+/// closeConnections: 切换节点后是否关闭所有连接
+/// testUrl: 测速链接
+/// isAnimateToPage: Android页面切换动画
+/// autoCheckUpdate: 是否自动检查更新
+/// showLabel: 是否显示菜单名称，还是只显示图标，for desktop
+/// disclaimerAccepted: 是否接受免责声明
+/// crashlyticsTip: 是否显示崩溃提示
+/// crashlytics: 是否启用崩溃报告
+/// minimizeOnExit: 退出时最小化，for desktop
+/// hidden: 是否隐藏
+/// developerMode: 是否启用开发者模式
+/// recoveryStrategy: 恢复策略
 @freezed
 abstract class AppSettingProps with _$AppSettingProps {
   const factory AppSettingProps({
@@ -241,6 +261,31 @@ extension ScriptPropsExt on ScriptProps {
   }
 }
 
+/// 应用设置
+/// appSetting: 应用设置
+/// profiles: 配置文件列表
+/// hotKeyActions: 快捷键列表
+/// currentProfileId: 当前配置文件ID
+/// overrideDns: 是否覆盖系统DNS
+/// dav: DAV数据同步设置
+/// networkProps: 网络设置 for windows/macos/linux
+///       systemProxy: 是否启用系统代理
+///       bypassDomain: 代理绕过域名列表
+///       routeMode: 路由模式
+///       autoSetSystemDns: 是否自动设置系统DNS
+///       appendSystemDns: 是否追加系统DNS
+/// vpnProps: VPN设置 for android
+///       enable: 是否启用VPN，开启Android的VpnService，desktop启动Tun配置在ClashConfig
+///       systemProxy: 是否为VpnService附加HTTP代理
+///       ipv6: 是否启用IPv6
+///       allowBypass: 是否允许绕过
+///       dnsHijacking: 是否启用DNS劫持
+///       accessControl: 访问控制
+/// themeProps: 主题设置
+/// proxiesStyle: 代理样式设置
+/// windowProps: 窗口设置 for windows/macos/linux
+/// patchClashConfig: Clash配置
+/// scriptProps: 脚本设置
 @freezed
 abstract class Config with _$Config {
   const factory Config({

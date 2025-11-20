@@ -42,6 +42,20 @@ abstract class SubscriptionInfo with _$SubscriptionInfo {
   }
 }
 
+/// 配置文件
+/// 
+/// id: 配置文件ID
+/// label: 配置文件名称，用于显示
+/// currentGroupName: 当前选择组
+/// url: 订阅地址
+/// lastUpdateDate: 最后更新时间
+/// autoUpdateDuration: 自动更新间隔
+/// subscriptionInfo: 订阅信息
+/// autoUpdate: 是否自动更新
+/// selectedMap: 每个Group选中的Proxy，如Proxies->HK，Global->DIRECT
+/// unfoldSet: 当前展开的组
+/// overrideData: 覆盖数据
+/// isUpdating: 是否正在更新
 @freezed
 abstract class Profile with _$Profile {
   const factory Profile({

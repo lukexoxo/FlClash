@@ -27,29 +27,42 @@ import 'models/models.dart';
 
 typedef UpdateTasks = List<FutureOr Function()>;
 
-/// Provider：从外部源（File/Http）加载Rule/Proxy的配置
+/// Clash Provider：从外部源（File/Http）加载Rule/Proxy的配置
+/// groupsUpdateTimer: never used
+/// isPre: 是否为预发布版本
+/// coreSHA256: Clash Core的SHA256值
+/// packageInfo: 包信息
+/// updateCurrentDelayDebounce: never used
+/// accentColor: 动态主题颜色
+/// corePalette: 动态主题调色板
+/// startTime: Clash Core启动时间
+/// tasks: 更新任务列表
+/// navigatorKey: 导航键
+/// isInit: state中的AppController是否初始化
+/// isUserDisconnected: ？？？用户是否断开连接
+/// isService: 是否为后台服务 Android
 class GlobalState {
   static GlobalState? _instance;
   Map<CacheTag, FixedMap<String, double>> computeHeightMapCache = {};
   Timer? timer;
-  Timer? groupsUpdateTimer;  // never used
+  Timer? groupsUpdateTimer;
   late Config config;
   late AppState appState;
-  bool isPre = true; // 是否为预发布版本
-  String? coreSHA256; // Clash Core的SHA256值
+  bool isPre = true;
+  String? coreSHA256;
   late PackageInfo packageInfo;
-  Function? updateCurrentDelayDebounce; // never used
+  Function? updateCurrentDelayDebounce;
   late Measure measure;
   late CommonTheme theme;
-  late Color accentColor; // 动态主题颜色
-  CorePalette? corePalette; // 动态主题调色板
-  DateTime? startTime; // Clash Core启动时间
-  UpdateTasks tasks = []; // 更新任务列表
+  late Color accentColor;
+  CorePalette? corePalette;
+  DateTime? startTime;
+  UpdateTasks tasks = [];
   final navigatorKey = GlobalKey<NavigatorState>();
   AppController? _appController;
-  bool isInit = false; // state中的AppController是否初始化
-  bool isUserDisconnected = false; // ？？？用户是否断开连接
-  bool isService = false; // 是否后台服务，Android
+  bool isInit = false;
+  bool isUserDisconnected = false;
+  bool isService = false;
 
   bool get isStart => startTime != null && startTime!.isBeforeNow;
 

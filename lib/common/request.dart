@@ -122,6 +122,10 @@ class Request {
     return res;
   }
 
+  // 验证windows helper service合法性
+  // Helper Service 是 Windows 上的辅助服务，用于以管理员权限启动 Clash Core
+  // Windows上 Tun模式需要管理员权限，通过系统服务可以更稳定地以高权限运行
+  // Helper Service提供Http接口，提供/ping、start、stop、logs接口
   Future<bool> pingHelper() async {
     try {
       final response = await dio

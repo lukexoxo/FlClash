@@ -5,6 +5,8 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'generated/config.g.dart';
 
+/// Config的Provider，需要持久化
+/// ClashConfig不再有Provider，在Config中直接管理
 @riverpod
 class AppSetting extends _$AppSetting with AutoDisposeNotifierMixin {
   @override
