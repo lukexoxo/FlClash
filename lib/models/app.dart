@@ -22,11 +22,11 @@ typedef DelayMap = Map<String, Map<String, int?>>;
 /// sideWidth: 侧边栏宽度
 /// delayMap: 代理测速延迟存储
 /// groups: 代理组列表
-/// checkIpNum: 用于触发本地IP检测，更新本地IP信息
+/// checkIpNum: 用于触发出口IP检测，更新出口IP信息
 /// brightness: 系统主题模式
 /// runTime: 根据startTime计算的运行时间
 /// providers: Clash提供者
-/// localIp: 本地IP
+/// localIp: 出口IP
 /// requests: 请求连接列表，Clash Core内核回调onRequest请求连接信息
 /// version: 系统版本号，windows版本号，android sdk版本号，macos版本号
 /// logs: 日志列表，Clash Core内核回调onLog日志

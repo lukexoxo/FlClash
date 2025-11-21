@@ -28,6 +28,7 @@ import 'models/models.dart';
 typedef UpdateTasks = List<FutureOr Function()>;
 
 /// Clash Provider：从外部源（File/Http）加载Rule/Proxy的配置
+/// 
 /// groupsUpdateTimer: never used
 /// isPre: 是否为预发布版本
 /// coreSHA256: Clash Core的SHA256值
@@ -36,7 +37,7 @@ typedef UpdateTasks = List<FutureOr Function()>;
 /// accentColor: 动态主题颜色
 /// corePalette: 动态主题调色板
 /// startTime: Clash Core启动时间
-/// tasks: 更新任务列表
+/// tasks: 更新任务列表，1秒执行一次
 /// navigatorKey: 导航键
 /// isInit: state中的AppController是否初始化
 /// isUserDisconnected: ？？？用户是否断开连接
@@ -99,6 +100,7 @@ class GlobalState {
     _shakingStore();
   }
 
+  // 删除不在配置中的profile和provider
   Future<void> _shakingStore() async {
     final profileIds = config.profiles.map((item) => item.id);
     final providersRootPath = await appPath.getProvidersRootPath();
@@ -130,6 +132,7 @@ class GlobalState {
     });
   }
 
+  // 初始化动态主题颜色
   Future<void> _initDynamicColor() async {
     try {
       corePalette = await DynamicColorPlugin.getCorePalette();
@@ -139,6 +142,7 @@ class GlobalState {
     } catch (_) {}
   }
 
+  // 从缓存初始化配置Config
   Future<void> init() async {
     packageInfo = await PackageInfo.fromPlatform();
     config =
@@ -152,6 +156,7 @@ class GlobalState {
 
   String get ua => config.patchClashConfig.globalUa ?? packageInfo.ua;
 
+  // 启动更新任务，1秒执行一次
   Future<void> startUpdateTasks([UpdateTasks? tasks]) async {
     if (timer != null && timer!.isActive == true) return;
     if (tasks != null) {
@@ -179,6 +184,7 @@ class GlobalState {
     timer = null;
   }
 
+  // 启动ClashCore，启动VpnService，启动更新任务
   Future<void> handleStart([UpdateTasks? tasks]) async {
     startTime ??= DateTime.now();
     await coreController.startListener();
@@ -186,6 +192,7 @@ class GlobalState {
     startUpdateTasks(tasks);
   }
 
+  // 更新Android Service运行时间
   Future updateStartTime() async {
     startTime = await service?.getRunTime();
   }
@@ -246,6 +253,7 @@ class GlobalState {
     );
   }
 
+  // 传递给Android VpnService的VPN配置
   VpnOptions getVpnOptions() {
     final vpnProps = config.vpnProps;
     final networkProps = config.networkProps;
@@ -299,6 +307,7 @@ class GlobalState {
     launchUrl(Uri.parse(url));
   }
 
+  // 迁移旧的ClashConfig到Config
   Future<void> migrateOldData(Config config) async {
     final clashConfig = await preferences.getClashConfig();
     if (clashConfig != null) {
@@ -308,6 +317,7 @@ class GlobalState {
     }
   }
 
+  // 设置ClashCore参数：selectedMap, testUrl
   Future<SetupParams> getSetupParams() async {
     final params = SetupParams(
       selectedMap: config.currentProfile?.selectedMap ?? {},
@@ -316,6 +326,7 @@ class GlobalState {
     return params;
   }
 
+  // 根据profile生成配置文件
   Future<void> genConfigFile(ClashConfig pathConfig) async {
     final configFilePath = await appPath.configFilePath;
     var config = {};
@@ -343,6 +354,7 @@ class GlobalState {
     }
   }
 
+  // 生成临时文件，用于验证配置文件ClashConfig
   Future<void> genValidateFile(String path, String data) async {
     final res = await Isolate.run<String>(() async {
       try {
@@ -379,6 +391,7 @@ class GlobalState {
     }
   }
 
+  // 同步一些Android专用的状态给原生层
   AndroidState getAndroidState() {
     return AndroidState(
       currentProfileName: config.currentProfile?.label ?? '',
@@ -388,6 +401,7 @@ class GlobalState {
     );
   }
 
+  // 组装ClashConfig -> json
   Future<Map<String, dynamic>> patchRawConfig({
     required ClashConfig patchConfig,
   }) async {
@@ -528,6 +542,7 @@ class GlobalState {
     return rawConfig;
   }
 
+  // 获取配置文件 -> json
   Future<Map<String, dynamic>> getProfileConfig(String profileId) async {
     final configMap = await coreController.getConfig(profileId);
     configMap['rules'] = configMap['rule'];
@@ -564,7 +579,7 @@ class GlobalState {
 
 final globalState = GlobalState();
 
-/// 网络检测状态管理
+/// 查询出口IP
 class DetectionState {
   static DetectionState? _instance;
   bool? _preIsStart;

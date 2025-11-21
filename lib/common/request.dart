@@ -82,6 +82,7 @@ class Request {
     'https://ipinfo.io/json': IpInfo.fromIpInfoIoJson,
   };
 
+  // 查询出口IP
   Future<Result<IpInfo?>> checkIp({CancelToken? cancelToken}) async {
     var failureCount = 0;
     final futures = _ipInfoSources.entries.map((source) async {

@@ -21,11 +21,14 @@ import 'package:url_launcher/url_launcher.dart';
 import 'common/common.dart';
 import 'models/models.dart';
 
+// lastProfileModified: 配置文件最后修改时间，从File读取
+// 应用上下文，用于导航和显示对话框
+// 用于访问 Riverpod Provider
 class AppController {
   int? lastProfileModified;
 
-  final BuildContext context; // 应用上下文，用于导航和显示对话框
-  final WidgetRef _ref; // 用于访问 Riverpod Provider
+  final BuildContext context;
+  final WidgetRef _ref;
 
   AppController(this.context, WidgetRef ref) : _ref = ref;
 
@@ -164,17 +167,20 @@ class AppController {
     }
   }
 
+  // 更新提供者列表
   Future<void> updateProviders() async {
     _ref.read(providersProvider.notifier).value = await coreController
         .getExternalProviders();
   }
 
+  // 获取本地IP
   Future<void> updateLocalIp() async {
     _ref.read(localIpProvider.notifier).value = null;
     await Future.delayed(commonDuration);
     _ref.read(localIpProvider.notifier).value = await utils.getLocalIpAddress();
   }
 
+  // 网络更新Profile
   Future<void> updateProfile(Profile profile) async {
     final newProfile = await profile.update();
     _ref
@@ -263,6 +269,7 @@ class AppController {
     }, needLoading: true);
   }
 
+  // 更新ClashConfig
   Future<void> _updateClashConfig() async {
     final updateParams = _ref.read(updateParamsProvider);
     final res = await _requestAdmin(updateParams.tun.enable);
@@ -276,6 +283,8 @@ class AppController {
     if (message.isNotEmpty) throw message;
   }
 
+  // 请求管理员权限，for windows/macos/linux
+  // android 直接 enableTun = false
   Future<Result<bool>> _requestAdmin(bool enableTun) async {
     if (system.isWindows && kDebugMode) {
       return Result.success(false);
@@ -304,6 +313,7 @@ class AppController {
     }, needLoading: true);
   }
 
+  // 设置ClashConfig，写Clash配置文件，请求管理员权限
   Future<void> _setupClashConfig() async {
     await _ref.read(currentProfileProvider)?.checkAndUpdate();
     final patchConfig = _ref.read(patchClashConfigProvider);
@@ -371,6 +381,7 @@ class AppController {
     }
   }
 
+  // 更新代理组列表
   Future<void> updateGroups() async {
     try {
       _ref.read(groupsProvider.notifier).value = await retry(
@@ -851,6 +862,7 @@ class AppController {
     });
   }
 
+  // 导出日志 到文件
   Future<bool> exportLogs() async {
     final logsRaw = _ref.read(logsProvider).list.map((item) => item.toString());
     final data = await Isolate.run<List<int>>(() async {
@@ -861,6 +873,7 @@ class AppController {
         null;
   }
 
+  // 备份数据 到zip
   Future<List<int>> backupData() async {
     final homeDirPath = await appPath.homeDirPath;
     final profilesPath = await appPath.profilesPath;
@@ -878,6 +891,7 @@ class AppController {
     tray?.update(trayState: _ref.read(trayStateProvider));
   }
 
+  // 恢复数据 从zip
   Future<void> recoveryData(
     List<int> data,
     RecoveryOption recoveryOption,
