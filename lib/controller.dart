@@ -74,6 +74,7 @@ class AppController {
     }, args: [groupName, proxyName]);
   }
 
+  // 重启ClashCore
   Future<void> restartCore() async {
     globalState.isUserDisconnected = true;
     await coreController.shutdown();
@@ -85,6 +86,7 @@ class AppController {
     }
   }
 
+  // 启动ClashCore
   Future<void> tryStartCore() async {
     if (coreController.isCompleted) {
       return;
@@ -98,6 +100,7 @@ class AppController {
     }
   }
 
+  // 开关
   Future<void> updateStatus(bool isStart) async {
     if (isStart) {
       await globalState.appController.tryStartCore();
@@ -124,6 +127,7 @@ class AppController {
     }
   }
 
+  // 更新运行时间
   void updateRunTime() {
     final startTime = globalState.startTime;
     if (startTime != null) {
@@ -135,6 +139,7 @@ class AppController {
     }
   }
 
+  // 更新流量
   Future<void> updateTraffic() async {
     final onlyStatisticsProxy = _ref.read(
       appSettingProvider.select((state) => state.onlyStatisticsProxy),
@@ -145,6 +150,7 @@ class AppController {
         .getTotalTraffic(onlyStatisticsProxy);
   }
 
+  // 添加Profile到Provider
   Future<void> addProfile(Profile profile) async {
     _ref.read(profilesProvider.notifier).setProfile(profile);
     if (_ref.read(currentProfileIdProvider) != null) return;
@@ -364,6 +370,7 @@ class AppController {
     });
   }
 
+  // 自动更新Profile文件
   Future<void> autoUpdateProfiles() async {
     for (final profile in _ref.read(profilesProvider)) {
       if (!profile.autoUpdate) continue;
@@ -480,12 +487,14 @@ class AppController {
     globalState.config = Config(themeProps: defaultThemeProps);
   }
 
+  // 自动检查版本更新
   Future<void> autoCheckUpdate() async {
     if (!_ref.read(appSettingProvider).autoCheckUpdate) return;
     final res = await request.checkForUpdate();
     checkUpdateResultHandle(data: res);
   }
 
+  // 处理版本更新结果
   Future<void> checkUpdateResultHandle({
     Map<String, dynamic>? data,
     bool handleError = false,
@@ -520,6 +529,7 @@ class AppController {
     }
   }
 
+  // 缓存损坏处理
   Future<void> _handlePreference() async {
     if (await preferences.isInit) {
       return;
@@ -538,6 +548,7 @@ class AppController {
     await handleExit();
   }
 
+  // 初始化ClashCore和工作目录
   Future<void> _initCore() async {
     final isInit = await coreController.isInit;
     if (!isInit) {
@@ -571,6 +582,7 @@ class AppController {
     _ref.read(initProvider.notifier).value = true;
   }
 
+  // 连接ClashCore
   Future<void> _connectCore() async {
     _ref.read(coreStatusProvider.notifier).value = CoreStatus.connecting;
     final result = await Future.wait([
@@ -588,6 +600,8 @@ class AppController {
     _ref.read(coreStatusProvider.notifier).value = CoreStatus.connected;
   }
 
+  // android 已运行获取运行时间
+  // desktop 根据配置设置自动启动
   Future<void> _initStatus() async {
     if (system.isAndroid) {
       await globalState.updateStartTime();
@@ -602,6 +616,7 @@ class AppController {
     }
   }
 
+  // 存储节点延迟测试结果
   void setDelay(Delay delay) {
     _ref.read(delayDataSourceProvider.notifier).setDelay(delay);
   }
@@ -668,6 +683,7 @@ class AppController {
         false;
   }
 
+  // android 显示崩溃分析收集提示
   Future<void> _showCrashlyticsTip() async {
     if (!system.isAndroid) {
       return;
@@ -685,6 +701,7 @@ class AppController {
         .updateState((state) => state.copyWith(crashlyticsTip: true));
   }
 
+  // 显示免责声明
   Future<void> _handlerDisclaimer() async {
     if (_ref.read(
       appSettingProvider.select((state) => state.disclaimerAccepted),
@@ -758,6 +775,7 @@ class AppController {
     _ref.read(providersProvider.notifier).setProvider(provider);
   }
 
+  // 清除Profile
   Future<void> clearEffect(String profileId) async {
     final profilePath = await appPath.getProfilePath(profileId);
     final providersDirPath = await appPath.getProvidersDirPath(profileId);
@@ -771,12 +789,14 @@ class AppController {
     });
   }
 
+  // 更新Tun模式的provider，实际在哪使用？
   void updateTun() {
     _ref
         .read(patchClashConfigProvider.notifier)
         .updateState((state) => state.copyWith.tun(enable: !state.tun.enable));
   }
 
+  // 更新系统代理，实际在哪使用？
   void updateSystemProxy() {
     _ref
         .read(networkSettingProvider.notifier)
@@ -785,6 +805,7 @@ class AppController {
         );
   }
 
+  // not used
   void handleCoreDisconnected() {
     _ref.read(coreStatusProvider.notifier).value = CoreStatus.disconnected;
   }
@@ -804,6 +825,7 @@ class AppController {
     updateStatus(!_ref.read(isStartProvider));
   }
 
+  // 更新当前选中的节点
   void updateCurrentSelectedMap(String groupName, String proxyName) {
     final currentProfile = _ref.read(currentProfileProvider);
     if (currentProfile != null &&
@@ -816,6 +838,7 @@ class AppController {
     }
   }
 
+  // 更新所有组名，搞不懂？
   void updateCurrentUnfoldSet(Set<String> value) {
     final currentProfile = _ref.read(currentProfileProvider);
     if (currentProfile == null) {
@@ -826,6 +849,7 @@ class AppController {
         .setProfile(currentProfile.copyWith(unfoldSet: value));
   }
 
+  // 规则、全局、直连模式切换
   void changeMode(Mode mode) {
     _ref
         .read(patchClashConfigProvider.notifier)
@@ -836,12 +860,14 @@ class AppController {
     addCheckIpNumDebounce();
   }
 
+  // 更新自动启动
   void updateAutoLaunch() {
     _ref
         .read(appSettingProvider.notifier)
         .updateState((state) => state.copyWith(autoLaunch: !state.autoLaunch));
   }
 
+  // 窗口显示/隐藏
   Future<void> updateVisible() async {
     final visible = await window?.isVisible;
     if (visible != null && !visible) {
@@ -851,6 +877,7 @@ class AppController {
     }
   }
 
+  // 切换模式，快捷键调用
   void updateMode() {
     _ref.read(patchClashConfigProvider.notifier).updateState((state) {
       final index = Mode.values.indexWhere((item) => item == state.mode);

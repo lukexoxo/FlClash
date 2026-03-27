@@ -53,7 +53,7 @@ abstract class SubscriptionInfo with _$SubscriptionInfo {
 /// subscriptionInfo: 订阅信息
 /// autoUpdate: 是否自动更新
 /// selectedMap: 每个Group选中的Proxy，如Proxies->HK，Global->DIRECT
-/// unfoldSet: 当前展开的组
+/// unfoldSet: 所有组名？用于展开所有组
 /// overrideData: 覆盖数据
 /// isUpdating: 是否正在更新
 @freezed
