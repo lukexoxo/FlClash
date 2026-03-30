@@ -3,6 +3,8 @@ import 'dart:async';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 
+// 监听网络连通性
+// results 包含当前所有网络连接状态，如 wifi、移动数据、VPN 等
 class ConnectivityManager extends StatefulWidget {
   final Function(List<ConnectivityResult> results)? onConnectivityChanged;
   final Widget child;

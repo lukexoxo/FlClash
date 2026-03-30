@@ -10,6 +10,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../providers/state.dart';
 
+// 系统栏（沉浸式、状态栏/导航栏样式）只对 Android 生效
+// （字体缩放、全局 theme/measure、FAB 主题、视图尺寸）是 全平台共用
 class ThemeManager extends ConsumerWidget {
   final Widget child;
 
