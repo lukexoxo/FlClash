@@ -7,14 +7,13 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'generated/app.g.dart';
 
-
-/// AppState的Provider，不需要持久化
+/// AppState的Provider，运行态状态
 ///
 /// 三种Provider
-/// Notifier 类（可修改状态）
-/// AutoDisposeNotifierMixin 自动管理生命周期
-/// build() 返回初始状态
-/// onUpdate() 在状态更新时同步到 globalState
+/// 1. Notifier 类（可修改状态）
+///   AutoDisposeNotifierMixin 自动管理生命周期
+///   build() 返回初始状态
+///   onUpdate() 在状态更新时同步到 globalState
 @riverpod
 class RealTunEnable extends _$RealTunEnable with AutoDisposeNotifierMixin {
   @override

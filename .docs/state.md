@@ -64,8 +64,7 @@
 2. “函数型 provider”（派生/聚合/只读）
    - 在 `lib/providers/state.dart` 中
    - 通过 `@riverpod` 生成对应的 provider
-3. 参数化 provider（family）
-   - 例如 `filterGroupsStateProvider(query)`、`getDelayProvider(proxyName/ testUrl)` 这类
+   - 分为两种：普通函数 provider（无参，单实例）和函数 provider 的 family 变体（有参，多实例）
 
 #### 3.2 代码生成
 
