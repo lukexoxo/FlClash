@@ -27,6 +27,9 @@ import 'models/models.dart';
 
 typedef UpdateTasks = List<FutureOr Function()>;
 
+/// 全局状态，全局资源、运行状态
+/// 提供通用工具方法：弹窗、通知、URL 打开、配置文件生成等
+/// 
 /// Clash Provider：从外部源（File/Http）加载Rule/Proxy的配置
 /// 
 /// groupsUpdateTimer: never used
@@ -34,12 +37,12 @@ typedef UpdateTasks = List<FutureOr Function()>;
 /// coreSHA256: Clash Core的SHA256值
 /// packageInfo: 包信息
 /// updateCurrentDelayDebounce: never used
-/// accentColor: 动态主题颜色
-/// corePalette: 动态主题调色板
-/// startTime: Clash Core启动时间
+/// accentColor: 动态主题颜色，和genColorScheme Provider同步
+/// corePalette: 动态主题调色板，和genColorScheme Provider同步
+/// startTime: Clash Core启动时间，和runTime Provider同步
 /// tasks: 更新任务列表，1秒执行一次
 /// navigatorKey: 导航键
-/// isInit: state中的AppController是否初始化
+/// isInit: state中的AppController是否初始化，和Init Provider同步
 /// isUserDisconnected: ？？？用户是否断开连接
 /// isService: 是否为后台服务 Android
 class GlobalState {

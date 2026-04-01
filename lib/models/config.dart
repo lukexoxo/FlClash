@@ -59,7 +59,7 @@ List<DashboardWidget> dashboardWidgetsSafeFormJson(
   }
 }
 
-/// 应用设置
+/// App设置
 /// locale: 语言
 /// dashboardWidgets: 仪表盘小部件列表
 /// onlyStatisticsProxy: 是否仅统计代理流量
@@ -261,7 +261,7 @@ extension ScriptPropsExt on ScriptProps {
   }
 }
 
-/// 应用设置
+/// 全局设置，持久化存储，使用riverpod同步管理
 /// appSetting: 应用设置
 /// profiles: 配置文件列表
 /// hotKeyActions: 快捷键列表
