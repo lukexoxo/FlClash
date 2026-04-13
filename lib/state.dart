@@ -27,6 +27,9 @@ import 'models/models.dart';
 
 typedef UpdateTasks = List<FutureOr Function()>;
 
+/// 全局状态，全局资源、运行状态
+/// 提供通用工具方法：弹窗、通知、URL 打开、配置文件生成等
+/// 
 /// Clash Provider：从外部源（File/Http）加载Rule/Proxy的配置
 /// 
 /// computeHeightMapCache: 按 CacheTag 缓存列表项等控件的计算高度

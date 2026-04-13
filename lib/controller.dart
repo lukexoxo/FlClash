@@ -21,9 +21,9 @@ import 'package:url_launcher/url_launcher.dart';
 import 'common/common.dart';
 import 'models/models.dart';
 
-// lastProfileModified: 配置文件最后修改时间，从File读取
-// 应用上下文，用于导航和显示对话框
+// 应用控制器，编排业务动作，操作页面
 // 用于访问 Riverpod Provider
+// lastProfileModified: 配置文件最后修改时间，从File读取
 class AppController {
   int? lastProfileModified;
 
