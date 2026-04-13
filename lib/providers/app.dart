@@ -7,7 +7,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'generated/app.g.dart';
 
-/// AppState的Provider，运行态状态
+/// App State的Provider，运行态状态
 ///
 /// 三种Provider
 /// 1. Notifier 类（可修改状态）

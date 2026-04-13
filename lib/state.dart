@@ -29,18 +29,22 @@ typedef UpdateTasks = List<FutureOr Function()>;
 
 /// Clash Provider：从外部源（File/Http）加载Rule/Proxy的配置
 /// 
+/// computeHeightMapCache: 按 CacheTag 缓存列表项等控件的计算高度
+/// timer: 1秒一次，驱动 startUpdateTasks / executorUpdateTask （流量、运行时间）
 /// groupsUpdateTimer: never used
-/// isPre: 是否为预发布版本
+/// isPre: 区分预发布/正式构建行为
 /// coreSHA256: Clash Core的SHA256值
-/// packageInfo: 包信息
+/// packageInfo: package_info_plus 的包名、版本等
 /// updateCurrentDelayDebounce: never used
+/// measure: 测量工具，用于测量列表项等控件的计算高度
+/// theme: 主题工具，用于获取主题颜色
 /// accentColor: 动态主题颜色
 /// corePalette: 动态主题调色板
 /// startTime: Clash Core启动时间
 /// tasks: 更新任务列表，1秒执行一次
 /// navigatorKey: 导航键
 /// isInit: state中的AppController是否初始化
-/// isUserDisconnected: ？？？用户是否断开连接
+/// isUserDisconnected: 区分用户主动断开/重启core还是core崩溃重启
 /// isService: 是否为后台服务 Android
 class GlobalState {
   static GlobalState? _instance;
@@ -253,7 +257,7 @@ class GlobalState {
     );
   }
 
-  // 传递给Android VpnService的VPN配置
+  // 传递给Android VpnService的配置
   VpnOptions getVpnOptions() {
     final vpnProps = config.vpnProps;
     final networkProps = config.networkProps;
