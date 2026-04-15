@@ -107,7 +107,8 @@ class GlobalState {
     _shakingStore();
   }
 
-  // 删除不在配置中的profile和provider
+  // 删除不在Config中的profile
+  // 删除profile对应的provider目录
   Future<void> _shakingStore() async {
     final profileIds = config.profiles.map((item) => item.id);
     final providersRootPath = await appPath.getProvidersRootPath();
